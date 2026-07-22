@@ -17,6 +17,9 @@ collections:
         fields:
           - { label: "Site Title & Header", name: "siteTitle", widget: "string" }
           - { label: "Tagline / Subtitle", name: "tagline", widget: "string" }
+          - { label: "SMS / Social Preview Title (og:title)", name: "ogTitle", widget: "string", required: false }
+          - { label: "SMS / Social Preview Description (og:description)", name: "ogDescription", widget: "text", required: false }
+          - { label: "SMS / Social Preview Image (og:image)", name: "ogImage", widget: "image", required: false }
           - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text" }
           - { label: "What is Camas Commons? (Paragraphs)", name: "whatIsCamasCommons", widget: "list", field: { label: "Paragraph", name: "paragraph", widget: "text" } }
           - { label: "How Can I Support? (Paragraphs)", name: "howCanISupport", widget: "list", field: { label: "Paragraph", name: "paragraph", widget: "text" } }

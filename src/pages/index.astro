@@ -4,6 +4,7 @@ import siteData from '../content/fundraiser/site-data.json';
 import Button from '../components/Button.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import Slideshow from '../components/Slideshow.astro';
+import SEO from '../components/SEO.astro';
 ---
 
 <!DOCTYPE html>
@@ -13,8 +14,13 @@ import Slideshow from '../components/Slideshow.astro';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><path d=%22M20 38C20 28 20 20 20 18%22 stroke=%22%2324472F%22 stroke-width=%222.5%22/><path d=%22M20 18C18.5 12 20 4 20 4C20 4 21.5 12 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C24.5 13.5 32 9 32 9C32 9 27.5 16.5 20 18Z%22 fill=%22%236A5ACD%22/><path d=%22M20 18C25.5 19.5 33 24 33 24C33 24 25.5 23.5 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C14.5 23.5 7 24 7 24C7 24 14.5 19.5 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C12.5 16.5 8 9 8 9C8 9 15.5 13.5 20 18Z%22 fill=%22%236A5ACD%22/><circle cx=%2220%22 cy=%2218%22 r=%222.5%22 fill=%22%23F59E0B%22/></svg>" />
     
-    <title>{siteData.siteTitle}</title>
-    <meta name="description" content={siteData.tagline} />
+    <SEO
+      title={siteData.siteTitle}
+      description={siteData.tagline}
+      ogTitle={siteData.ogTitle}
+      ogDescription={siteData.ogDescription}
+      ogImage={siteData.ogImage}
+    />
   </head>
   <body>
     <!-- Top Minimal Navigation Header -->
