@@ -1,19 +1,32 @@
 {
-  "siteTitle": "CAMAS COMMONS - A Regenerative Farming Land Trust",
-  "tagline": "Making farming more affordable.",
   "ogTitle": "Help Us Save Talking Horse Ranch — Camas Commons Land Trust",
-  "ogDescription": "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
   "ogImage": "/images/Main.jpeg",
-  "welcomeText": "Welcome to a new model for farming. We are Ally and Guisepi, two land stewards & community enthusiasts who desire to see farming continue on our little island in the PNW. We’re in a critical moment of losing young, capable producers due to lack of affordability of land so we’re creating Camas Commons to answer the call.",
-  "whatIsCamasCommons": [
-    "Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. Our goals lie in regenerating the land, supporting the local community with local goods and events, creating land accessibility for young farmers, and preserving healthy land and housing for future generations.",
-    "We are partnering with On Sacred Ground Land Trust, a local 501(c)3 non-profit, and other organizations to make this happen."
-  ],
+  "ogDescription": "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
   "howCanISupport": [
     "We have been unexpectedly entered into a competitive proposal process due in September for acquiring the land we currently live on. If chosen, we get to stay farming the land we love, in the house we’ve made a home in the place where we first fell in love and later got married. Our primary need right now is Angel Donors - people willing to leave a legacy by donating funds necessary to purchasing this land, thus making it perpetually affordable and in conservation for farmers, producers, and land stewards.",
     "Our first major fundraising deadline is mid September, when we make our final proposal to the Land Bank. Yes, it’s steep, $1.5 million! Can we do it? Let’s find out…will you help us? Every. Little. Bit. Counts."
   ],
+  "volunteerSkills": [
+    "Nonprofit management",
+    "Land use and permitting",
+    "Fundraising",
+    "Grant writing",
+    "Permaculture design"
+  ],
+  "tagline": "Making farming more affordable",
+  "welcomeText": "Welcome to a new model for farming. We are Ally and Guisepi, two land stewards & community enthusiasts who desire to see farming continue on our little island in the PNW. We’re in a critical moment of losing young, capable producers due to lack of affordability of land so we’re creating Camas Commons to answer the call.",
+  "siteTitle": "CAMAS COMMONS - A Regenerative Farming Land Trust",
+  "whatIsCamasCommons": [
+    "Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. Our goals lie in regenerating the land, supporting the local community with local goods and events, creating land accessibility for young farmers, and preserving healthy land and housing for future generations.",
+    "We are partnering with On Sacred Ground Land Trust, a local 501(c)3 non-profit, and other organizations to make this happen."
+  ],
   "whySupportingMatters": "We believe this land is meant to be shared, and with us stewarding it, you can guarantee this legacy we’ve begun will continue. This project aims to help alleviate many of the issues facing our community, like young people leaving the island, farmers aging-out, skyrocketing land and housing costs, supply chain issues, and more. Creating this land trust will help maintain a web of resilience in our local community though food sovereignty, land connection, and attracting and keeping talented makers and growers on our island.",
+  "remainingPhotos": [
+    "[PHOTO: Remaining Photo 1]",
+    "[PHOTO: Remaining Photo 2]",
+    "[PHOTO: Remaining Photo 3]"
+  ],
+  "contactEmail": "info@camascommons.org",
   "faqs": [
     {
       "q": "What is this land all about?",
@@ -60,18 +73,5 @@
         "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals."
       ]
     }
-  ],
-  "volunteerSkills": [
-    "Nonprofit management",
-    "Land use and permitting",
-    "Fundraising",
-    "Grant writing",
-    "Permaculture design"
-  ],
-  "remainingPhotos": [
-    "[PHOTO: Remaining Photo 1]",
-    "[PHOTO: Remaining Photo 2]",
-    "[PHOTO: Remaining Photo 3]"
-  ],
-  "contactEmail": "info@camascommons.org"
+  ]
 }
