@@ -1,0 +1,30 @@
+local_backend: true
+
+backend:
+  name: github
+  repo: your-github-username/camascommons
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "content"
+    label: "Site Content"
+    files:
+      - file: "src/content/fundraiser/site-data.json"
+        label: "Land Trust Content & Text"
+        name: "fundraiser"
+        fields:
+          - { label: "Site Title & Header", name: "siteTitle", widget: "string" }
+          - { label: "Tagline / Subtitle", name: "tagline", widget: "string" }
+          - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text" }
+          - { label: "What is Camas Commons? (Paragraphs)", name: "whatIsCamasCommons", widget: "list", field: { label: "Paragraph", name: "paragraph", widget: "text" } }
+          - { label: "How Can I Support? (Paragraphs)", name: "howCanISupport", widget: "list", field: { label: "Paragraph", name: "paragraph", widget: "text" } }
+          - { label: "Why Supporting Our Land Trust Matters", name: "whySupportingMatters", widget: "text" }
+          - { label: "FAQ Items", name: "faqs", widget: "list", fields: [
+              { label: "Question", name: "q", widget: "string" },
+              { label: "Answer Paragraphs", name: "a", widget: "list", field: { label: "Paragraph", name: "paragraph", widget: "text" } }
+            ]}
+          - { label: "Volunteer Skill Needs", name: "volunteerSkills", widget: "list", field: { label: "Skill", name: "skill", widget: "string" } }
+          - { label: "Contact Email", name: "contactEmail", widget: "string" }

@@ -1,0 +1,104 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  heroTitle: string;
+  heroSubtitle: string;
+  daysLeft: number;
+}
+
+const { heroTitle, heroSubtitle, daysLeft } = Astro.props;
+---
+
+<section class="hero-section">
+  <div class="container hero-container">
+    <div class="hero-badge pulse-glow">
+      <span class="badge-dot"></span>
+      <span>Community Land Preservation • {daysLeft} Days Left</span>
+    </div>
+
+    <h1 class="hero-title gradient-text">
+      {heroTitle}
+    </h1>
+
+    <p class="hero-subtitle">
+      {heroSubtitle}
+    </p>
+
+    <div class="hero-ctas">
+      <Button id="open-donate-hero" variant="gold" size="lg">
+        Make a Contribution 🤝
+      </Button>
+      <Button href="#story" variant="outline" size="lg">
+        Learn More ↓
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding: 5rem 0 3.5rem 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 860px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--color-border-glow);
+    color: var(--color-primary-light);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.75rem;
+  }
+
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 740px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    .hero-subtitle {
+      font-size: 1.05rem;
+    }
+  }
+</style>

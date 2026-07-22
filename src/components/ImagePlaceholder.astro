@@ -1,0 +1,164 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  label: string;
+  src?: string;
+  height?: string;
+  caption?: string;
+}
+
+const { label, src, height = '340px', caption } = Astro.props;
+
+// Extract base name from label (e.g. "[PHOTO: baby goats.jpg]" -> "baby goats.jpg")
+const rawFilename = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]/, '').trim();
+const baseNameWithoutExt = rawFilename.replace(/\.[^/.]+$/, '').trim();
+
+const imagesDir = path.join(process.cwd(), 'public', 'images');
+
+// Candidate filenames to look for in public/images
+const candidateNames = [
+  rawFilename,
+  `${baseNameWithoutExt}.jpeg`,
+  `${baseNameWithoutExt}.jpg`,
+  `${baseNameWithoutExt}.png`,
+  `${baseNameWithoutExt.replace(/\s+/g, '')}.jpeg`,
+  `${baseNameWithoutExt.replace(/\s+/g, '')}.jpg`,
+  `${baseNameWithoutExt.replace(/\s+/g, '')}.png`
+];
+
+let matchedFilename = '';
+if (fs.existsSync(imagesDir)) {
+  const dirFiles = fs.readdirSync(imagesDir);
+  for (const candidate of candidateNames) {
+    const found = dirFiles.find(f => f.toLowerCase() === candidate.toLowerCase());
+    if (found) {
+      matchedFilename = found;
+      break;
+    }
+  }
+}
+
+const fileExists = Boolean(matchedFilename);
+const relativeImagePath = `/images/${matchedFilename}`;
+---
+
+<figure class="field-photo-frame" style={`min-height: ${fileExists ? 'auto' : height};`}>
+  {fileExists ? (
+    <div class="photo-real-wrapper">
+      <img src={relativeImagePath} alt={label} class="real-photo-img" loading="lazy" />
+      {caption && <figcaption class="photo-caption-text">{caption}</figcaption>}
+    </div>
+  ) : (
+    <div class="photo-inner">
+      <div class="photo-badge">FIELD PHOTO PLACEHOLDER</div>
+      <span class="photo-label">{label}</span>
+      <span class="photo-path-hint">Put image file in <code>public/images/{rawFilename}</code></span>
+    </div>
+  )}
+</figure>
+
+<style>
+  .field-photo-frame {
+    width: 100%;
+    background: var(--color-card-paper);
+    border: 1px solid var(--color-border-paper);
+    border-radius: var(--radius-paper);
+    padding: 1rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow-paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .field-photo-frame:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -4px rgba(36, 71, 47, 0.09);
+    border-color: var(--color-rose-border);
+  }
+
+  /* Tape accent */
+  .field-photo-frame::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 40px;
+    width: 70px;
+    height: 18px;
+    background: rgba(224, 211, 193, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transform: rotate(-2deg);
+    z-index: 2;
+  }
+
+  .photo-real-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .real-photo-img {
+    width: 100%;
+    height: auto;
+    max-height: 540px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .photo-inner {
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg-subtle);
+    border: 1px dashed var(--color-border-subtle);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .photo-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--color-text-soft);
+    text-transform: uppercase;
+  }
+
+  .photo-label {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-rose-terracotta);
+    letter-spacing: 0.02em;
+  }
+
+  .photo-path-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .photo-path-hint code {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    color: var(--color-green-deep);
+  }
+
+  .photo-caption-text {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: 0.75rem;
+  }
+</style>

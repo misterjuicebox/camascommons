@@ -1,0 +1,236 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  venmoHandle?: string;
+  zelleInfo?: string;
+  stripeLink?: string;
+  contactEmail?: string;
+}
+
+const {
+  venmoHandle = "@CamasCommons",
+  zelleInfo = "info@camascommons.org",
+  stripeLink = "https://camascommons.org",
+  contactEmail = "info@camascommons.org",
+} = Astro.props;
+---
+
+<div id="donate-modal" class="modal-backdrop">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">Pledge or Donate to Camas Commons</h3>
+        <p class="modal-subtitle">Angel Donors & Community Supporters</p>
+      </div>
+      <button id="close-modal-btn" class="close-btn" aria-label="Close modal">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Direct Payment / Pledge Button -->
+      <div class="payment-option primary-option text-center">
+        <strong>Pledge / Angel Donor Contribution</strong>
+        <p>Our primary goal for September is acquiring the 120-acre land trust.</p>
+        <Button href={`mailto:${contactEmail}?subject=Camas%20Commons%20Pledge%20/%20Donation%20Inquiry`} variant="rose" size="md">
+          Email {contactEmail} to Pledge →
+        </Button>
+      </div>
+
+      <!-- Venmo Option -->
+      <div class="payment-option">
+        <div class="option-header">
+          <span class="option-icon">📲</span>
+          <div>
+            <strong>Venmo</strong>
+            <p>Direct mobile transfer</p>
+          </div>
+        </div>
+        <div class="copy-box">
+          <span class="copy-value">{venmoHandle}</span>
+          <button class="copy-btn" data-copy={venmoHandle}>Copy</button>
+        </div>
+      </div>
+
+      <!-- Zelle Option -->
+      <div class="payment-option">
+        <div class="option-header">
+          <span class="option-icon">🏦</span>
+          <div>
+            <strong>Zelle</strong>
+            <p>Direct bank transfer</p>
+          </div>
+        </div>
+        <div class="copy-box">
+          <span class="copy-value">{zelleInfo}</span>
+          <button class="copy-btn" data-copy={zelleInfo}>Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('donate-modal');
+    const closeBtn = document.getElementById('close-modal-btn');
+    
+    // Open triggers
+    const triggerIds = [
+      'open-donate-top',
+      'open-donate-inline-1',
+      'open-donate-faq',
+      'open-donate-bottom'
+    ];
+
+    triggerIds.forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          modal?.classList.add('active');
+        });
+      }
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      modal?.classList.remove('active');
+    });
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // Copy clipboard handler
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const textToCopy = (e.currentTarget as HTMLElement).getAttribute('data-copy');
+        if (textToCopy) {
+          navigator.clipboard.writeText(textToCopy);
+          const originalText = (e.currentTarget as HTMLElement).innerText;
+          (e.currentTarget as HTMLElement).innerText = 'Copied! ✓';
+          setTimeout(() => {
+            (e.currentTarget as HTMLElement).innerText = originalText;
+          }, 2000);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .modal-card {
+    width: 90%;
+    max-width: 500px;
+    background: var(--color-bg-cream);
+    border: 2px solid var(--color-rose-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-green-primary);
+  }
+
+  .modal-subtitle {
+    font-size: 0.875rem;
+    color: var(--color-rose-primary);
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    color: var(--color-text-bright);
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .payment-option {
+    background: var(--color-card-cream);
+    border: 1px solid var(--color-border-cream);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+  }
+
+  .primary-option {
+    border-color: var(--color-rose-border);
+    background: var(--color-rose-light);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .primary-option p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .option-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .option-header p {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .option-icon {
+    font-size: 1.4rem;
+  }
+
+  .copy-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-bg-cream-dark);
+    border: 1px solid var(--color-border-cream);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.8rem;
+    margin-top: 0.75rem;
+  }
+
+  .copy-value {
+    font-family: monospace;
+    font-size: 0.95rem;
+    color: var(--color-green-primary);
+    font-weight: 700;
+  }
+
+  .copy-btn {
+    background: var(--color-green-primary);
+    border: none;
+    color: #FFF;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .copy-btn:hover {
+    background: var(--color-green-hover);
+  }
+</style>

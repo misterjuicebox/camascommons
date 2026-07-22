@@ -1,0 +1,120 @@
+---
+interface ImpactItem {
+  icon: string;
+  title: string;
+  cost: string;
+  description: string;
+}
+
+interface Props {
+  items: ImpactItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section id="impact" class="impact-section container">
+  <div class="impact-header text-center">
+    <span class="section-label">FUND ALLOCATION</span>
+    <h2 class="impact-title">Where Your Generosity Goes</h2>
+    <p class="impact-subtitle">Clear, transparent milestones ensuring every dollar yields tangible community value.</p>
+  </div>
+
+  <div class="impact-grid">
+    {items.map((item) => (
+      <div class="glass-card impact-card">
+        <div class="impact-card-top">
+          <span class="impact-icon">{item.icon}</span>
+          <span class="cost-badge">{item.cost}</span>
+        </div>
+        <h3 class="impact-card-title">{item.title}</h3>
+        <p class="impact-card-desc">{item.description}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .impact-section {
+    padding: 4rem 0 5rem 0;
+  }
+
+  .impact-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 3rem auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+  }
+
+  .impact-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0.4rem 0 0.8rem 0;
+  }
+
+  .impact-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+
+  .impact-card {
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .impact-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .impact-icon {
+    font-size: 2.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+  }
+
+  .cost-badge {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: var(--color-accent-gold);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+  }
+
+  .impact-card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .impact-card-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .impact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

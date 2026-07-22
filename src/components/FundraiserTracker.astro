@@ -1,0 +1,207 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  targetAmount: number;
+  raisedAmount: number;
+  donorCount: number;
+  daysLeft: number;
+}
+
+const { targetAmount, raisedAmount, donorCount, daysLeft } = Astro.props;
+
+const percentage = Math.min(Math.round((raisedAmount / targetAmount) * 100), 100);
+
+const formatCurrency = (val: number) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+};
+---
+
+<section id="tracker" class="tracker-section container">
+  <div class="glass-card tracker-card">
+    <div class="tracker-header">
+      <div class="tracker-title-group">
+        <span class="section-label">LIVE FUNDRAISING CAMPAIGN</span>
+        <h2 class="tracker-heading">Target: {formatCurrency(targetAmount)}</h2>
+      </div>
+      <div class="percentage-badge">
+        {percentage}% Funded
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar-fill" style={`width: ${percentage}%;`}>
+        <div class="progress-glow"></div>
+      </div>
+    </div>
+
+    <!-- Stat Grid -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-value text-primary">{formatCurrency(raisedAmount)}</span>
+        <span class="stat-label">Raised so far</span>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-value">{formatCurrency(targetAmount)}</span>
+        <span class="stat-label">Campaign Goal</span>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-value text-gold">{donorCount}</span>
+        <span class="stat-label">Generous Donors</span>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-value">{daysLeft}</span>
+        <span class="stat-label">Days Remaining</span>
+      </div>
+    </div>
+
+    <div class="tracker-footer">
+      <p class="impact-note">✨ 100% of all contributions go directly toward local land preservation and accessibility improvements.</p>
+      <Button id="open-donate-tracker" variant="primary" size="md">
+        Contribute Now
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tracker-section {
+    padding: 1.5rem 0 4rem 0;
+  }
+
+  .tracker-card {
+    padding: 2.5rem;
+  }
+
+  .tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+  }
+
+  .tracker-heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 0.2rem;
+  }
+
+  .percentage-badge {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid var(--color-border-glow);
+    color: var(--color-primary-light);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .progress-container {
+    width: 100%;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981 0%, #34D399 70%, #F59E0B 100%);
+    border-radius: 999px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .progress-glow {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-border-glass);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text-bright);
+  }
+
+  .text-primary {
+    color: var(--color-primary-light);
+  }
+
+  .text-gold {
+    color: var(--color-accent-gold);
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .tracker-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-glass);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .impact-note {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

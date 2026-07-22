@@ -1,0 +1,499 @@
+---
+import '../styles/global.css';
+import siteData from '../content/fundraiser/site-data.json';
+import Button from '../components/Button.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import DonateModal from '../components/DonateModal.astro';
+import CamasLogo from '../components/CamasLogo.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><path d=%22M20 38C20 28 20 20 20 18%22 stroke=%22%2324472F%22 stroke-width=%222.5%22/><path d=%22M20 18C18.5 12 20 4 20 4C20 4 21.5 12 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C24.5 13.5 32 9 32 9C32 9 27.5 16.5 20 18Z%22 fill=%22%236A5ACD%22/><path d=%22M20 18C25.5 19.5 33 24 33 24C33 24 25.5 23.5 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C14.5 23.5 7 24 7 24C7 24 14.5 19.5 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C12.5 16.5 8 9 8 9C8 9 15.5 13.5 20 18Z%22 fill=%22%236A5ACD%22/><circle cx=%2220%22 cy=%2218%22 r=%222.5%22 fill=%22%23F59E0B%22/></svg>" />
+    
+    <title>{siteData.siteTitle}</title>
+    <meta name="description" content={siteData.tagline} />
+  </head>
+  <body>
+    <!-- Top Minimal Navigation Header -->
+    <header class="editorial-header">
+      <div class="container header-container">
+        <div class="brand-group">
+          <span class="brand-title">CAMAS COMMONS</span>
+        </div>
+        <Button id="open-donate-top" variant="rose" size="sm">
+          PLEDGE or DONATE HERE
+        </Button>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      <!-- Title & Hero Block -->
+      <section class="hero-block">
+        <div class="location-tag">SAN JUAN ISLAND, WASHINGTON</div>
+        <h1 class="hero-title">{siteData.siteTitle}</h1>
+        <p class="hero-tagline"><em>{siteData.tagline}</em></p>
+        
+        <ImagePlaceholder label="[PHOTO: Main.jpg]" height="380px" />
+
+        <div class="editorial-letter">
+          <p class="letter-text">{siteData.welcomeText}</p>
+          <div class="letter-signature">
+            <span class="handwritten-note">— Ally & Guisepi</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="editorial-hr"></div>
+
+      <!-- What is Camas Commons? -->
+      <section class="story-section">
+        <ImagePlaceholder label="[PHOTO: GandA.jpg]" height="340px" />
+        
+        <h2 class="section-title">What is Camas Commons?</h2>
+        <div class="narrative-body">
+          {siteData.whatIsCamasCommons.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+
+      <div class="editorial-hr"></div>
+
+      <!-- How can I support this project? (Urgent Angel Donors Section) -->
+      <section class="proposal-callout">
+        <ImagePlaceholder label="[PHOTO: Long.jpg]" height="340px" />
+
+        <div class="proposal-paper">
+          <h2 class="section-title">How can I support this project?</h2>
+          <p>{siteData.howCanISupport[0]}</p>
+
+          <div class="cta-center-box">
+            <Button id="open-donate-inline-1" variant="rose" size="lg">
+              DONATE and PLEDGE here
+            </Button>
+          </div>
+
+          <div class="milestone-box">
+            <p class="milestone-text">{siteData.howCanISupport[1]}</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="editorial-hr"></div>
+
+      <!-- Why Supporting Our Land Trust Matters… -->
+      <section class="story-section">
+        <ImagePlaceholder label="[PHOTO: community.jpg]" height="340px" />
+
+        <h2 class="section-title">Why Supporting Our Land Trust Matters…</h2>
+        <div class="narrative-body">
+          <p>{siteData.whySupportingMatters}</p>
+        </div>
+      </section>
+
+      <div class="editorial-hr"></div>
+
+      <!-- FAQ Section -->
+      <section class="faq-section">
+        <ImagePlaceholder label="[PHOTO: baby goats.jpg]" height="320px" />
+
+        <h2 class="section-title faq-main-title">FAQ:</h2>
+
+        <div class="faq-journal">
+          <!-- Q1 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[0].q}</h3>
+            <div class="faq-a">
+              {siteData.faqs[0].a.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+            <ImagePlaceholder label="[IMAGE: hay.jpeg]" height="280px" />
+          </article>
+
+          <div class="faq-sep"></div>
+
+          <!-- Q2 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[1].q}</h3>
+            <div class="faq-a">
+              {siteData.faqs[1].a.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+            <ImagePlaceholder label="[PHOTO: allygoat.jpeg]" height="280px" />
+          </article>
+
+          <div class="faq-sep"></div>
+
+          <!-- Q3 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[2].q}</h3>
+            <div class="faq-a">
+              {siteData.faqs[2].a.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+            <ImagePlaceholder label="[PHOTO: pig.jpeg]" height="280px" />
+          </article>
+
+          <div class="faq-sep"></div>
+
+          <!-- Q4 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[3].q}</h3>
+            <div class="faq-a">
+              {siteData.faqs[3].a.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+            <ImagePlaceholder label="[IMAGE: music.jpeg]" height="280px" />
+          </article>
+
+          <div class="faq-sep"></div>
+
+          <!-- Q5 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[4].q}</h3>
+            <div class="faq-a">
+              <p>
+                Applications for residential leases will open within a year of the purchase of the land. Agricultural leases may open sooner than that. If you want to be on a list, please contact us at <a href="mailto:info@camascommons.org" class="editorial-link">info@camascommons.org</a>
+              </p>
+            </div>
+          </article>
+
+          <div class="faq-sep"></div>
+
+          <!-- Q6 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[5].q}</h3>
+            <div class="faq-a">
+              <p>
+                Current Talking Horse Ranch land stewards Guisepi Spadafora and Ally Rugge have been helping facilitate a path towards this goal for the past several years. Guisepi grew up on the island, and after years of service-based travel (i.e. the Free Tea Bus [<a href="https://freeteaparty.org" target="_blank" rel="noopener" class="editorial-link">freeteaparty.org</a>]), returned to the islands with his now wife, Ally, to find the right piece of land to dedicate themselves to. He has 20 years of experience in the nonprofit world, and loves to tinker. Ally has lived and worked on Talking Horse Ranch three times in the past 15 years, learning to grow food, rehabilitate soil, and raise chickens and dairy goats ([<a href="https://www.visitsanjuans.com/account/women-who-stare-at-goats-collective" target="_blank" rel="noopener" class="editorial-link">women-who-stare-at-goats-collective</a>]). They got married on the farm in 2023.
+              </p>
+            </div>
+            <ImagePlaceholder label="[PHOTO: wedding.jpeg]" height="320px" />
+          </article>
+
+          <div class="faq-sep"></div>
+
+          <!-- Q7 -->
+          <article class="faq-entry">
+            <h3 class="faq-q">{siteData.faqs[6].q}</h3>
+            <div class="faq-a">
+              {siteData.faqs[6].a.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+
+            <div class="cta-center-box margin-top">
+              <Button id="open-donate-faq" variant="rose" size="lg">
+                PLEDGE or DONATE HERE
+              </Button>
+            </div>
+
+            <div class="volunteer-note-box">
+              <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
+              <ul class="volunteer-bullets">
+                {siteData.volunteerSkills.map((skill) => (
+                  <li>{skill}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="editorial-hr"></div>
+
+      <!-- Gallery & Final Action -->
+      <section class="closing-section text-center">
+        <ImagePlaceholder label="[slideshow or scroll of remaining photos]" height="240px" />
+
+        <div class="final-pledge-box">
+          <Button id="open-donate-bottom" variant="rose" size="lg">
+            PLEDGE or DONATE HERE
+          </Button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Donation Modal Popup -->
+    <DonateModal
+      venmoHandle="@CamasCommons"
+      zelleInfo="info@camascommons.org"
+      stripeLink="https://camascommons.org"
+      contactEmail="info@camascommons.org"
+    />
+
+    <!-- Handcrafted Footer -->
+    <footer class="editorial-footer">
+      <div class="container footer-inner text-center">
+        <p class="footer-title">CAMAS COMMONS — A Regenerative Farming Land Trust</p>
+        <p class="footer-sub">San Juan Island, Washington • <a href="mailto:info@camascommons.org" class="editorial-link">info@camascommons.org</a></p>
+        <p class="footer-admin"><a href="/admin">🔐 Admin Portal</a></p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  /* Header */
+  .editorial-header {
+    border-bottom: 1px solid var(--color-border-paper);
+    background: var(--color-bg-paper);
+    padding: 1.1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .brand-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-green-deep);
+    letter-spacing: 0.06em;
+  }
+
+  /* Main Content Layout */
+  .main-content {
+    padding-top: 3.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .location-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--color-rose-terracotta);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: var(--color-green-deep);
+    margin-bottom: 0.5rem;
+    line-height: 1.18;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    color: var(--color-rose-terracotta);
+    margin-bottom: 2rem;
+  }
+
+  .editorial-letter {
+    background: var(--color-card-paper);
+    border: 1px solid var(--color-border-paper);
+    border-left: 4px solid var(--color-green-deep);
+    padding: 2rem;
+    border-radius: var(--radius-paper);
+    margin-top: 2rem;
+    box-shadow: var(--shadow-paper);
+  }
+
+  .letter-text {
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: var(--color-text-ink);
+    margin-bottom: 1rem;
+  }
+
+  .letter-signature {
+    text-align: right;
+  }
+
+  .section-title {
+    font-size: 2.1rem;
+    font-weight: 600;
+    color: var(--color-green-deep);
+    margin: 1.5rem 0 1.25rem 0;
+  }
+
+  .narrative-body p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  /* Proposal Callout Box */
+  .proposal-callout {
+    margin: 1rem 0;
+  }
+
+  .proposal-paper {
+    background: var(--color-rose-light);
+    border: 1px solid var(--color-rose-border);
+    padding: 2.5rem;
+    border-radius: var(--radius-paper);
+  }
+
+  .cta-center-box {
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .milestone-box {
+    background: var(--color-card-paper);
+    border: 1px solid var(--color-border-paper);
+    border-left: 4px solid var(--color-rose-terracotta);
+    padding: 1.5rem;
+    border-radius: var(--radius-paper);
+  }
+
+  .milestone-text {
+    font-size: 1.08rem;
+    font-weight: 500;
+    color: var(--color-text-ink);
+    margin: 0;
+  }
+
+  /* FAQ Journal */
+  .faq-main-title {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .faq-journal {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .faq-entry {
+    background: var(--color-card-paper);
+    border: 1px solid var(--color-border-paper);
+    padding: 2.25rem;
+    border-radius: var(--radius-paper);
+    box-shadow: var(--shadow-paper);
+  }
+
+  .faq-q {
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--color-green-deep);
+    margin-bottom: 1.1rem;
+  }
+
+  .faq-a p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .faq-sep {
+    height: 1px;
+    background: var(--color-border-paper);
+    opacity: 0.5;
+  }
+
+  .editorial-link {
+    color: var(--color-rose-terracotta);
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  .editorial-link:hover {
+    color: var(--color-rose-hover);
+  }
+
+  .margin-top {
+    margin-top: 2rem;
+  }
+
+  .volunteer-note-box {
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border-subtle);
+    padding: 1.5rem;
+    border-radius: var(--radius-paper);
+    margin-top: 2rem;
+  }
+
+  .volunteer-heading {
+    font-weight: 600;
+    color: var(--color-green-deep);
+    margin-bottom: 0.75rem;
+  }
+
+  .volunteer-bullets {
+    margin-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .volunteer-bullets li {
+    font-size: 1.02rem;
+    color: var(--color-text-ink);
+  }
+
+  .final-pledge-box {
+    margin-top: 2.5rem;
+  }
+
+  /* Footer */
+  .editorial-footer {
+    border-top: 1px solid var(--color-border-paper);
+    background: var(--color-bg-subtle);
+    padding: 2.5rem 0;
+    margin-top: auto;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .footer-title {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-green-deep);
+    margin-bottom: 0.3rem;
+  }
+
+  .footer-sub {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-admin a {
+    color: var(--color-text-soft);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .footer-admin a:hover {
+    color: var(--color-green-deep);
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: 2.1rem;
+    }
+    .section-title {
+      font-size: 1.65rem;
+    }
+    .faq-entry {
+      padding: 1.5rem;
+    }
+  }
+</style>
