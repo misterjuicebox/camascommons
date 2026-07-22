@@ -13,7 +13,7 @@ const {
   description = "Making farming more affordable.",
   ogTitle = "Help Us Save Talking Horse Ranch — Camas Commons Land Trust",
   ogDescription = "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
-  ogImage = "/images/GandA.jpeg",
+  ogImage = "/images/Main.jpeg",
 } = Astro.props;
 
 // Dynamically resolve current origin (works seamlessly on localhost:4321, Netlify staging previews, and production)
@@ -46,6 +46,8 @@ const imageType = imageExtension === "png" ? "image/png" : "image/jpeg";
 <meta property="og:image" content={absoluteOgImage} />
 <meta property="og:image:secure_url" content={absoluteOgImage} />
 <meta property="og:image:type" content={imageType} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="900" />
 <meta property="og:image:alt" content="Ally and Guisepi at Camas Commons" />
 
 <!-- Twitter / X Link Preview Cards -->
