@@ -3,8 +3,6 @@ import '../styles/global.css';
 import siteData from '../content/fundraiser/site-data.json';
 import Button from '../components/Button.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
-import DonateModal from '../components/DonateModal.astro';
-import CamasLogo from '../components/CamasLogo.astro';
 ---
 
 <!DOCTYPE html>
@@ -24,7 +22,7 @@ import CamasLogo from '../components/CamasLogo.astro';
         <div class="brand-group">
           <span class="brand-title">CAMAS COMMONS</span>
         </div>
-        <Button id="open-donate-top" variant="rose" size="sm">
+        <Button variant="rose" size="sm">
           PLEDGE or DONATE HERE
         </Button>
       </div>
@@ -72,7 +70,7 @@ import CamasLogo from '../components/CamasLogo.astro';
           <p>{siteData.howCanISupport[0]}</p>
 
           <div class="cta-center-box">
-            <Button id="open-donate-inline-1" variant="rose" size="lg">
+            <Button variant="rose" size="lg">
               DONATE and PLEDGE here
             </Button>
           </div>
@@ -191,7 +189,7 @@ import CamasLogo from '../components/CamasLogo.astro';
             </div>
 
             <div class="cta-center-box margin-top">
-              <Button id="open-donate-faq" variant="rose" size="lg">
+              <Button variant="rose" size="lg">
                 PLEDGE or DONATE HERE
               </Button>
             </div>
@@ -215,20 +213,14 @@ import CamasLogo from '../components/CamasLogo.astro';
         <ImagePlaceholder label="[slideshow or scroll of remaining photos]" height="240px" />
 
         <div class="final-pledge-box">
-          <Button id="open-donate-bottom" variant="rose" size="lg">
+          <Button variant="rose" size="lg">
             PLEDGE or DONATE HERE
           </Button>
         </div>
       </section>
     </main>
 
-    <!-- Donation Modal Popup -->
-    <DonateModal
-      venmoHandle="@CamasCommons"
-      zelleInfo="info@camascommons.org"
-      stripeLink="https://camascommons.org"
-      contactEmail="info@camascommons.org"
-    />
+
 
     <!-- Handcrafted Footer -->
     <footer class="editorial-footer">
