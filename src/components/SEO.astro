@@ -1,0 +1,55 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+}
+
+const {
+  title = "CAMAS COMMONS - A Regenerative Farming Land Trust",
+  description = "Making farming more affordable.",
+  ogTitle = "Help Us Save Talking Horse Ranch — Camas Commons Land Trust",
+  ogDescription = "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
+  ogImage = "/images/GandA.jpeg",
+  canonicalUrl = Astro.url ? Astro.url.href : "https://camascommons.org",
+} = Astro.props;
+
+// Determine absolute base site URL for social link previews (iMessage / SMS / WhatsApp require absolute image URLs)
+const siteOrigin = Astro.site ? Astro.site.origin : (Astro.url?.origin || "https://camascommons.org");
+const absoluteOgImage = ogImage.startsWith("http")
+  ? ogImage
+  : `${siteOrigin}${ogImage.startsWith("/") ? "" : "/"}${ogImage}`;
+
+// Determine image MIME type
+const imageExtension = absoluteOgImage.split(".").pop()?.toLowerCase();
+const imageType = imageExtension === "png" ? "image/png" : "image/jpeg";
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="theme-color" content="#24472F" />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Open Graph / Facebook / iMessage / SMS Rich Link Previews -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content="Camas Commons" />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDescription} />
+<meta property="og:image" content={absoluteOgImage} />
+<meta property="og:image:secure_url" content={absoluteOgImage} />
+<meta property="og:image:type" content={imageType} />
+<meta property="og:image:alt" content="Ally and Guisepi at Camas Commons" />
+
+<!-- Twitter / X Link Preview Cards -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={ogTitle} />
+<meta name="twitter:description" content={ogDescription} />
+<meta name="twitter:image" content={absoluteOgImage} />
+<meta name="twitter:image:alt" content="Ally and Guisepi at Camas Commons" />
