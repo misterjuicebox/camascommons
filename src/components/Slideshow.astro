@@ -1,0 +1,100 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read all images from the public/images/slideshow directory
+const slideshowDir = path.join(process.cwd(), 'public/images/slideshow');
+let images: string[] = [];
+
+try {
+  const files = fs.readdirSync(slideshowDir);
+  images = files
+    .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
+    .map(file => `/images/slideshow/${file}`);
+} catch (e) {
+  console.error("Error reading slideshow directory", e);
+}
+
+// Duplicate the images array so the infinite scroll is seamless
+const scrollImages = [...images, ...images];
+---
+
+<div class="slideshow-wrapper">
+  <div class="slideshow-track">
+    {scrollImages.map((src, index) => (
+      <img src={src} alt={`Slideshow image ${index}`} class="slideshow-img" loading="lazy" />
+    ))}
+  </div>
+</div>
+
+<style>
+  .slideshow-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 2rem 0;
+    background: var(--color-bg-subtle, #fcfbf9);
+  }
+
+  /* Fade edges for a smoother look */
+  .slideshow-wrapper::before,
+  .slideshow-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 10%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .slideshow-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg-paper, #ffffff) 0%, transparent 100%);
+  }
+
+  .slideshow-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg-paper, #ffffff) 0%, transparent 100%);
+  }
+
+  .slideshow-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: scroll 60s linear infinite;
+  }
+
+  .slideshow-track:hover {
+    animation-play-state: paused;
+  }
+
+  .slideshow-img {
+    height: 240px;
+    width: auto;
+    object-fit: cover;
+    border-radius: var(--radius-paper, 12px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+  }
+
+  .slideshow-img:hover {
+    transform: scale(1.02);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* Shift by half the track width because we duplicated the array */
+      transform: translateX(calc(-50% - 0.75rem));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .slideshow-img {
+      height: 180px;
+    }
+  }
+</style>

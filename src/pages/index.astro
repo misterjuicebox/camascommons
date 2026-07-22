@@ -3,6 +3,7 @@ import '../styles/global.css';
 import siteData from '../content/fundraiser/site-data.json';
 import Button from '../components/Button.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import Slideshow from '../components/Slideshow.astro';
 ---
 
 <!DOCTYPE html>
@@ -198,7 +199,7 @@ import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 
       <!-- Gallery & Final Action -->
       <section class="closing-section text-center">
-        <ImagePlaceholder label="[slideshow or scroll of remaining photos]" height="240px" />
+        <Slideshow />
 
         <div class="final-pledge-box">
           <Button variant="rose" size="lg">
