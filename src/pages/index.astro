@@ -103,106 +103,94 @@ import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 
         <div class="faq-journal">
           <!-- Q1 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[0].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[0].q}</summary>
             <div class="faq-a">
               {siteData.faqs[0].a.map((p) => (
                 <p>{p}</p>
               ))}
+              <ImagePlaceholder label="[IMAGE: hay.jpeg]" height="280px" />
             </div>
-            <ImagePlaceholder label="[IMAGE: hay.jpeg]" height="280px" />
-          </article>
-
-          <div class="faq-sep"></div>
+          </details>
 
           <!-- Q2 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[1].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[1].q}</summary>
             <div class="faq-a">
               {siteData.faqs[1].a.map((p) => (
                 <p>{p}</p>
               ))}
+              <ImagePlaceholder label="[PHOTO: allygoat.jpeg]" height="280px" />
             </div>
-            <ImagePlaceholder label="[PHOTO: allygoat.jpeg]" height="280px" />
-          </article>
-
-          <div class="faq-sep"></div>
+          </details>
 
           <!-- Q3 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[2].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[2].q}</summary>
             <div class="faq-a">
               {siteData.faqs[2].a.map((p) => (
                 <p>{p}</p>
               ))}
+              <ImagePlaceholder label="[PHOTO: pig.jpeg]" height="280px" />
             </div>
-            <ImagePlaceholder label="[PHOTO: pig.jpeg]" height="280px" />
-          </article>
-
-          <div class="faq-sep"></div>
+          </details>
 
           <!-- Q4 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[3].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[3].q}</summary>
             <div class="faq-a">
               {siteData.faqs[3].a.map((p) => (
                 <p>{p}</p>
               ))}
+              <ImagePlaceholder label="[IMAGE: music.jpeg]" height="280px" />
             </div>
-            <ImagePlaceholder label="[IMAGE: music.jpeg]" height="280px" />
-          </article>
-
-          <div class="faq-sep"></div>
+          </details>
 
           <!-- Q5 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[4].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[4].q}</summary>
             <div class="faq-a">
               <p>
                 Applications for residential leases will open within a year of the purchase of the land. Agricultural leases may open sooner than that. If you want to be on a list, please contact us at <a href="mailto:info@camascommons.org" class="editorial-link">info@camascommons.org</a>
               </p>
             </div>
-          </article>
-
-          <div class="faq-sep"></div>
+          </details>
 
           <!-- Q6 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[5].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[5].q}</summary>
             <div class="faq-a">
               <p>
                 Current Talking Horse Ranch land stewards Guisepi Spadafora and Ally Rugge have been helping facilitate a path towards this goal for the past several years. Guisepi grew up on the island, and after years of service-based travel (i.e. the Free Tea Bus [<a href="https://freeteaparty.org" target="_blank" rel="noopener" class="editorial-link">freeteaparty.org</a>]), returned to the islands with his now wife, Ally, to find the right piece of land to dedicate themselves to. He has 20 years of experience in the nonprofit world, and loves to tinker. Ally has lived and worked on Talking Horse Ranch three times in the past 15 years, learning to grow food, rehabilitate soil, and raise chickens and dairy goats ([<a href="https://www.visitsanjuans.com/account/women-who-stare-at-goats-collective" target="_blank" rel="noopener" class="editorial-link">women-who-stare-at-goats-collective</a>]). They got married on the farm in 2023.
               </p>
+              <ImagePlaceholder label="[PHOTO: wedding.jpeg]" height="320px" />
             </div>
-            <ImagePlaceholder label="[PHOTO: wedding.jpeg]" height="320px" />
-          </article>
-
-          <div class="faq-sep"></div>
+          </details>
 
           <!-- Q7 -->
-          <article class="faq-entry">
-            <h3 class="faq-q">{siteData.faqs[6].q}</h3>
+          <details class="faq-entry">
+            <summary class="faq-q">{siteData.faqs[6].q}</summary>
             <div class="faq-a">
               {siteData.faqs[6].a.map((p) => (
                 <p>{p}</p>
               ))}
-            </div>
 
-            <div class="cta-center-box margin-top">
-              <Button variant="rose" size="lg">
-                PLEDGE or DONATE HERE
-              </Button>
-            </div>
+              <div class="cta-center-box margin-top">
+                <Button variant="rose" size="lg">
+                  PLEDGE or DONATE HERE
+                </Button>
+              </div>
 
-            <div class="volunteer-note-box">
-              <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
-              <ul class="volunteer-bullets">
-                {siteData.volunteerSkills.map((skill) => (
-                  <li>{skill}</li>
-                ))}
-              </ul>
+              <div class="volunteer-note-box">
+                <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
+                <ul class="volunteer-bullets">
+                  {siteData.volunteerSkills.map((skill) => (
+                    <li>{skill}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </article>
+          </details>
         </div>
       </section>
 
@@ -363,42 +351,79 @@ import ImagePlaceholder from '../components/ImagePlaceholder.astro';
     margin: 0;
   }
 
-  /* FAQ Journal */
-  .faq-main-title {
-    font-size: 2.4rem;
-    margin-bottom: 2rem;
-  }
-
+  /* FAQ Accordion */
   .faq-journal {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 0;
+    border: 1px solid var(--color-border-paper);
+    border-radius: var(--radius-paper);
+    overflow: hidden;
+    box-shadow: var(--shadow-paper);
   }
 
   .faq-entry {
     background: var(--color-card-paper);
-    border: 1px solid var(--color-border-paper);
-    padding: 2.25rem;
-    border-radius: var(--radius-paper);
-    box-shadow: var(--shadow-paper);
+    border-bottom: 1px solid var(--color-border-paper);
+  }
+
+  .faq-entry:last-child {
+    border-bottom: none;
+  }
+
+  /* Hide default browser triangle */
+  .faq-entry > summary {
+    list-style: none;
+  }
+  .faq-entry > summary::-webkit-details-marker {
+    display: none;
   }
 
   .faq-q {
-    font-size: 1.45rem;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--color-green-deep);
-    margin-bottom: 1.1rem;
+    padding: 1.35rem 1.75rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    user-select: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .faq-q:hover {
+    background: var(--color-green-light);
+    color: var(--color-green-hover);
+  }
+
+  /* Plus / minus icon via CSS pseudo-element */
+  .faq-q::after {
+    content: '+';
+    font-size: 1.6rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-rose-terracotta);
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .faq-entry[open] > .faq-q::after {
+    content: '−';
+  }
+
+  .faq-a {
+    padding: 0 1.75rem 1.75rem 1.75rem;
+    border-top: 1px solid var(--color-border-paper);
+    background: var(--color-bg-paper);
   }
 
   .faq-a p {
     font-size: 1.05rem;
     line-height: 1.75;
-  }
-
-  .faq-sep {
-    height: 1px;
-    background: var(--color-border-paper);
-    opacity: 0.5;
+    padding-top: 1.25rem;
   }
 
   .editorial-link {
