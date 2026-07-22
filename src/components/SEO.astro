@@ -14,14 +14,16 @@ const {
   ogTitle = "Help Us Save Talking Horse Ranch — Camas Commons Land Trust",
   ogDescription = "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
   ogImage = "/images/GandA.jpeg",
-  canonicalUrl = Astro.url ? Astro.url.href : "https://camascommons.org",
 } = Astro.props;
 
-// Determine absolute base site URL for social link previews (iMessage / SMS / WhatsApp require absolute image URLs)
-const siteOrigin = Astro.site ? Astro.site.origin : (Astro.url?.origin || "https://camascommons.org");
+// Dynamically resolve current origin (works seamlessly on localhost:4321, Netlify staging previews, and production)
+const currentOrigin = Astro.url?.origin || "";
+const siteOrigin = currentOrigin || (Astro.site ? Astro.site.origin : "");
+
+const canonicalUrl = Astro.props.canonicalUrl || (Astro.url ? Astro.url.href : "/");
 const absoluteOgImage = ogImage.startsWith("http")
   ? ogImage
-  : `${siteOrigin}${ogImage.startsWith("/") ? "" : "/"}${ogImage}`;
+  : (siteOrigin ? `${siteOrigin}${ogImage.startsWith("/") ? "" : "/"}${ogImage}` : ogImage);
 
 // Determine image MIME type
 const imageExtension = absoluteOgImage.split(".").pop()?.toLowerCase();
