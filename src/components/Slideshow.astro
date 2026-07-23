@@ -1,42 +1,40 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
+// Read images from the public/images/slideshow directory via Vite globbing
+const slideshowModules = import.meta.glob('/public/images/slideshow/*');
+const allImages = Object.keys(slideshowModules)
+  .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
+  .map(file => file.replace('/public', ''));
 
-// Read all images from the public/images/slideshow directory
-const slideshowDir = path.join(process.cwd(), 'public/images/slideshow');
-let images: string[] = [];
-
-try {
-  const files = fs.readdirSync(slideshowDir);
-  images = files
-    .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
-    .map(file => `/images/slideshow/${file}`);
-} catch (e) {
-  console.error("Error reading slideshow directory", e);
-}
-
-// Duplicate the images array so the infinite scroll is seamless
-const scrollImages = [...images, ...images];
+// Limit to 24 curated images to stay well within browser GPU texture width limits (prevents WebKit/Safari animation freeze)
+const images = allImages.slice(0, 24);
 ---
 
 <div class="slideshow-wrapper">
   <div class="slideshow-track">
-    {scrollImages.map((src, index) => (
-      <img src={src} alt={`Slideshow image ${index}`} class="slideshow-img" loading="lazy" />
+    {images.map((src, index) => (
+      <img src={src} alt={`Slideshow image ${index + 1}`} class="slideshow-img" loading="lazy" />
+    ))}
+  </div>
+  <div class="slideshow-track" aria-hidden="true">
+    {images.map((src, index) => (
+      <img src={src} alt="" class="slideshow-img" loading="lazy" />
     ))}
   </div>
 </div>
 
 <style>
   .slideshow-wrapper {
+    display: flex;
+    gap: 1.5rem;
     width: 100%;
     overflow: hidden;
     position: relative;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     background: var(--color-bg-subtle, #fcfbf9);
+    user-select: none;
   }
 
-  /* Fade edges for a smoother look */
+  /* Fade edges for a smooth vignette look */
   .slideshow-wrapper::before,
   .slideshow-wrapper::after {
     content: '';
@@ -61,40 +59,56 @@ const scrollImages = [...images, ...images];
   .slideshow-track {
     display: flex;
     gap: 1.5rem;
-    width: max-content;
-    animation: scroll 60s linear infinite;
+    flex-shrink: 0;
+    min-width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    animation: marquee 55s linear infinite;
+    will-change: transform;
   }
 
-  .slideshow-track:hover {
+  .slideshow-wrapper:hover .slideshow-track {
     animation-play-state: paused;
   }
 
   .slideshow-img {
-    height: 240px;
+    height: 360px;
     width: auto;
     object-fit: cover;
     border-radius: var(--radius-paper, 12px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
     transition: transform 0.3s ease;
+    flex-shrink: 0;
   }
 
   .slideshow-img:hover {
     transform: scale(1.02);
   }
 
-  @keyframes scroll {
-    0% {
+  @keyframes marquee {
+    from {
       transform: translateX(0);
     }
-    100% {
-      /* Shift by half the track width because we duplicated the array */
-      transform: translateX(calc(-50% - 0.75rem));
+    to {
+      transform: translateX(calc(-100% - 1.5rem));
     }
   }
 
   @media (max-width: 768px) {
     .slideshow-img {
-      height: 180px;
+      height: 240px;
+    }
+    .slideshow-track {
+      gap: 1rem;
+      animation-duration: 45s;
+    }
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(calc(-100% - 1rem));
+      }
     }
   }
 </style>
