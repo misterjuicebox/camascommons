@@ -6,6 +6,7 @@ interface Props {
   id?: string;
   type?: 'button' | 'submit';
   target?: string;
+  rel?: string;
   class?: string;
 }
 
@@ -16,16 +17,19 @@ const {
   id,
   type = 'button',
   target,
+  rel,
   class: customClass = '',
 } = Astro.props;
 
 const Element = href ? 'a' : 'button';
+const defaultRel = href && target === '_blank' ? 'noopener noreferrer' : undefined;
 ---
 
 <Element
   id={id}
   href={href}
   target={target}
+  rel={rel || defaultRel}
   type={href ? undefined : type}
   class={`btn btn-${variant} btn-${size} ${customClass}`}
 >

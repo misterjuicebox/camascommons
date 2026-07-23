@@ -1,7 +1,4 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
-
 interface Props {
   label: string;
   src?: string;
@@ -15,7 +12,9 @@ const { label, src, height = '340px', caption } = Astro.props;
 const rawFilename = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]/, '').trim();
 const baseNameWithoutExt = rawFilename.replace(/\.[^/.]+$/, '').trim();
 
-const imagesDir = path.join(process.cwd(), 'public', 'images');
+// Query files in public/images at build time via Vite globbing (compatible everywhere)
+const imageModules = import.meta.glob('/public/images/*');
+const filenames = Object.keys(imageModules).map((p) => p.replace('/public/images/', ''));
 
 // Candidate filenames to look for in public/images
 const candidateNames = [
@@ -29,14 +28,11 @@ const candidateNames = [
 ];
 
 let matchedFilename = '';
-if (fs.existsSync(imagesDir)) {
-  const dirFiles = fs.readdirSync(imagesDir);
-  for (const candidate of candidateNames) {
-    const found = dirFiles.find(f => f.toLowerCase() === candidate.toLowerCase());
-    if (found) {
-      matchedFilename = found;
-      break;
-    }
+for (const candidate of candidateNames) {
+  const found = filenames.find((f) => f.toLowerCase() === candidate.toLowerCase());
+  if (found) {
+    matchedFilename = found;
+    break;
   }
 }
 
