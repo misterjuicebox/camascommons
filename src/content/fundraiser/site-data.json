@@ -53,13 +53,6 @@
       "image": "/images/pig.jpeg"
     },
     {
-      "image": "",
-      "q": "again new",
-      "a": [
-        "againnew"
-      ]
-    },
-    {
       "q": "What will this project offer the local community?",
       "a": [
         "Members of Camas Commons will be producing agricultural products, like fruits, vegetables, eggs and more, as well as useful and traditional crafts and land-connection events. There may also be educational workshops, seasonal gatherings, petting zoos, live music, a farm store and more."
@@ -86,13 +79,6 @@
         "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals."
       ],
       "image": ""
-    },
-    {
-      "image": "",
-      "q": "will it work",
-      "a": [
-        "willitwork"
-      ]
     }
   ]
 }
