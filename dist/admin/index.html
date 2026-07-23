@@ -1,4 +1,7 @@
 <!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Camas Commons Content Admin</title><!-- Explicitly set the CMS config URL so Decap CMS never gets a 404 regardless of trailing slash --><link href="/admin/config.yml" type="text/yaml" rel="cms-config-url"><script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script></head> <body> <!-- Decap CMS Script --> <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script> <script>
+      if (window.CMS) {
+        window.CMS.registerPreviewTemplate("fundraiser", () => null);
+      }
       if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", (user) => {
           if (!user) {
