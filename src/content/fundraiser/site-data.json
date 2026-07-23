@@ -74,6 +74,13 @@
       "image": "/images/wedding.jpeg"
     },
     {
+      "image": "",
+      "q": "new faq",
+      "a": [
+        "faq details"
+      ]
+    },
+    {
       "q": "How can I support Camas Commons?",
       "a": [
         "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals."
@@ -82,9 +89,9 @@
     },
     {
       "image": "",
-      "q": "new faq",
+      "q": "newer faq",
       "a": [
-        "faq details"
+        "new faq"
       ]
     }
   ]
