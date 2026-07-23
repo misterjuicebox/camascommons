@@ -67,18 +67,18 @@
       "image": ""
     },
     {
+      "image": "",
+      "q": "newer faq",
+      "a": [
+        "new faq"
+      ]
+    },
+    {
       "q": "Who is spearheading Camas Commons?",
       "a": [
         "Current Talking Horse Ranch land stewards Guisepi Spadafora and Ally Rugge have been helping facilitate a path towards this goal for the past several years. Guisepi grew up on the island, and after years of service-based travel (i.e. the Free Tea Bus [freeteaparty.org](https://freeteaparty.org)), returned to the islands with his now wife, Ally, to find the right piece of land to dedicate themselves to. He has 20 years of experience in the nonprofit world, and loves to tinker. Ally has lived and worked on Talking Horse Ranch three times in the past 15 years, learning to grow food, rehabilitate soil, and raise chickens and dairy goats ([women-who-stare-at-goats-collective](https://www.visitsanjuans.com/account/women-who-stare-at-goats-collective)). They got married on the farm in 2023."
       ],
       "image": "/images/wedding.jpeg"
-    },
-    {
-      "image": "",
-      "q": "new faq",
-      "a": [
-        "faq details"
-      ]
     },
     {
       "q": "How can I support Camas Commons?",
@@ -89,9 +89,9 @@
     },
     {
       "image": "",
-      "q": "newer faq",
+      "q": "again new",
       "a": [
-        "new faq"
+        "againnew"
       ]
     }
   ]
