@@ -21,6 +21,19 @@ import SEO from '../components/SEO.astro';
       ogDescription={siteData.ogDescription}
       ogImage={siteData.ogImage}
     />
+
+    <!-- Automatically forward Netlify Identity email tokens (confirmation, invite, recovery) to /admin/ -->
+    <script is:inline>
+      if (window.location.hash && (
+        window.location.hash.indexOf('confirmation_token=') !== -1 ||
+        window.location.hash.indexOf('invite_token=') !== -1 ||
+        window.location.hash.indexOf('recovery_token=') !== -1 ||
+        window.location.hash.indexOf('email_change_token=') !== -1 ||
+        window.location.hash.indexOf('access_token=') !== -1
+      )) {
+        window.location.href = '/admin/' + window.location.hash;
+      }
+    </script>
   </head>
   <body>
     <!-- Top Minimal Navigation Header -->
