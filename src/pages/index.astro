@@ -6,6 +6,12 @@ import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import Slideshow from '../components/Slideshow.astro';
 import SEO from '../components/SEO.astro';
 
+// Load all FAQ files dynamically from src/content/faqs/*.json
+const faqModules = import.meta.glob('../content/faqs/*.json', { eager: true });
+const allFaqs = Object.values(faqModules).map((mod: any) => mod.default || mod);
+// Sort FAQs by order number
+allFaqs.sort((a: any, b: any) => (a.order || 99) - (b.order || 99));
+
 function formatParagraph(text: string) {
   if (!text) return '';
   // Convert email addresses to mailto links
@@ -93,7 +99,7 @@ function formatParagraph(text: string) {
         
         <h2 class="section-title">What is Camas Commons?</h2>
         <div class="narrative-body">
-          {siteData.whatIsCamasCommons.map((paragraph) => (
+          {(typeof siteData.whatIsCamasCommons === 'string' ? siteData.whatIsCamasCommons.split(/\n\n|\n/) : siteData.whatIsCamasCommons).map((paragraph) => (
             <p>{paragraph}</p>
           ))}
         </div>
@@ -107,17 +113,26 @@ function formatParagraph(text: string) {
 
         <div class="proposal-paper">
           <h2 class="section-title">How can I support this project?</h2>
-          <p>{siteData.howCanISupport[0]}</p>
+          {(() => {
+            const paragraphs = typeof siteData.howCanISupport === 'string' ? siteData.howCanISupport.split(/\n\n|\n/) : siteData.howCanISupport;
+            return (
+              <>
+                <p>{paragraphs[0]}</p>
 
-          <div class="cta-center-box">
-            <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
-              PLEDGE or DONATE
-            </Button>
-          </div>
+                <div class="cta-center-box">
+                  <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                    PLEDGE or DONATE
+                  </Button>
+                </div>
 
-          <div class="milestone-box">
-            <p class="milestone-text">{siteData.howCanISupport[1]}</p>
-          </div>
+                {paragraphs[1] && (
+                  <div class="milestone-box">
+                    <p class="milestone-text">{paragraphs[1]}</p>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       </section>
 
@@ -142,11 +157,11 @@ function formatParagraph(text: string) {
         <h2 class="section-title faq-main-title">FAQ:</h2>
 
         <div class="faq-journal">
-          {siteData.faqs.map((faq) => (
+          {allFaqs.map((faq) => (
             <details class="faq-entry">
               <summary class="faq-q">{faq.q}</summary>
               <div class="faq-a">
-                {faq.a && (Array.isArray(faq.a) ? faq.a : [faq.a]).map((p) => (
+                {faq.a && (typeof faq.a === 'string' ? faq.a.split(/\n\n|\n/) : faq.a).map((p) => (
                   <p set:html={formatParagraph(p)} />
                 ))}
                 {faq.image && (
@@ -164,7 +179,7 @@ function formatParagraph(text: string) {
                       <div class="volunteer-note-box">
                         <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
                         <ul class="volunteer-bullets">
-                          {siteData.volunteerSkills.map((skill) => (
+                          {(typeof siteData.volunteerSkills === 'string' ? siteData.volunteerSkills.split(/\n\n|\n/) : siteData.volunteerSkills).map((skill) => (
                             <li>{skill}</li>
                           ))}
                         </ul>

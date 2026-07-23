@@ -26,13 +26,23 @@ collections:
           - { label: "SMS / Social Preview Description (og:description)", name: "ogDescription", widget: "text", required: false }
           - { label: "SMS / Social Preview Image (og:image)", name: "ogImage", widget: "image", required: false }
           - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text" }
-          - { label: "What is Camas Commons? (Paragraphs)", name: "whatIsCamasCommons", widget: "list" }
-          - { label: "How Can I Support? (Paragraphs)", name: "howCanISupport", widget: "list" }
+          - { label: "What is Camas Commons? (Paragraphs)", name: "whatIsCamasCommons", widget: "text" }
+          - { label: "How Can I Support? (Paragraphs)", name: "howCanISupport", widget: "text" }
           - { label: "Why Supporting Our Land Trust Matters", name: "whySupportingMatters", widget: "text" }
-          - { label: "FAQ Items", name: "faqs", widget: "list", fields: [
-              { label: "Question", name: "q", widget: "string" },
-              { label: "Answer Paragraphs", name: "a", widget: "list" },
-              { label: "Optional Image", name: "image", widget: "image", default: "", required: false }
-            ]}
-          - { label: "Volunteer Skill Needs", name: "volunteerSkills", widget: "list" }
+          - { label: "Volunteer Skill Needs (One per line)", name: "volunteerSkills", widget: "text" }
           - { label: "Contact Email", name: "contactEmail", widget: "string" }
+
+  - name: "faqs"
+    label: "FAQs"
+    folder: "src/content/faqs"
+    create: true
+    format: "json"
+    identifier_field: "q"
+    sortable_fields: ["order", "q"]
+    editor:
+      preview: false
+    fields:
+      - { label: "Order Number (for sorting)", name: "order", widget: "number", default: 10, value_type: "int" }
+      - { label: "Question", name: "q", widget: "string", default: "" }
+      - { label: "Answer Paragraphs", name: "a", widget: "text", default: "" }
+      - { label: "Optional Image (e.g. /images/hay.jpeg)", name: "image", widget: "string", default: "", required: false }
