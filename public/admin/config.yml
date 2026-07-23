@@ -7,6 +7,9 @@ backend:
 media_folder: "public/images"
 public_folder: "/images"
 
+editor:
+  preview: false
+
 collections:
   - name: "content"
     label: "Site Content"
@@ -14,6 +17,8 @@ collections:
       - file: "src/content/fundraiser/site-data.json"
         label: "Land Trust Content & Text"
         name: "fundraiser"
+        editor:
+          preview: false
         fields:
           - { label: "Site Title & Header", name: "siteTitle", widget: "string" }
           - { label: "Tagline / Subtitle", name: "tagline", widget: "string" }
