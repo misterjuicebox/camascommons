@@ -79,6 +79,13 @@
         "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals."
       ],
       "image": ""
+    },
+    {
+      "image": "",
+      "q": "new faq",
+      "a": [
+        "faq details"
+      ]
     }
   ]
 }
