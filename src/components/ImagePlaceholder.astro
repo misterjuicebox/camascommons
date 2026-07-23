@@ -8,8 +8,9 @@ interface Props {
 
 const { label, src, height = '340px', caption } = Astro.props;
 
-// Extract base name from label (e.g. "[PHOTO: baby goats.jpg]" -> "baby goats.jpg")
-const rawFilename = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]/, '').trim();
+// Extract base name from label or src (e.g. "/images/hay.jpeg" -> "hay.jpeg")
+const initialPath = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]/, '').trim();
+const rawFilename = initialPath.replace(/^\/?(images\/)+/, '');
 const baseNameWithoutExt = rawFilename.replace(/\.[^/.]+$/, '').trim();
 
 // Query files in public/images at build time via Vite globbing (compatible everywhere)

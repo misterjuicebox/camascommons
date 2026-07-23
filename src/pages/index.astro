@@ -5,6 +5,26 @@ import Button from '../components/Button.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import Slideshow from '../components/Slideshow.astro';
 import SEO from '../components/SEO.astro';
+
+function formatParagraph(text: string) {
+  if (!text) return '';
+  // Convert email addresses to mailto links
+  let formatted = text.replace(
+    /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+    '<a href="mailto:$1" class="editorial-link">$1</a>'
+  );
+  // Convert markdown links like [text](url) to HTML links
+  formatted = formatted.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
+  );
+  // Convert plain URLs starting with http(s) (if not already inside an href)
+  formatted = formatted.replace(
+    /(?<!href="|href='|>)(https?:\/\/[^\s<]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
+  );
+  return formatted;
+}
 ---
 
 <!DOCTYPE html>
@@ -122,95 +142,39 @@ import SEO from '../components/SEO.astro';
         <h2 class="section-title faq-main-title">FAQ:</h2>
 
         <div class="faq-journal">
-          <!-- Q1 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[0].q}</summary>
-            <div class="faq-a">
-              {siteData.faqs[0].a.map((p) => (
-                <p>{p}</p>
-              ))}
-              <ImagePlaceholder label="[IMAGE: hay.jpeg]" height="280px" />
-            </div>
-          </details>
+          {siteData.faqs.map((faq) => (
+            <details class="faq-entry">
+              <summary class="faq-q">{faq.q}</summary>
+              <div class="faq-a">
+                {faq.a && (Array.isArray(faq.a) ? faq.a : [faq.a]).map((p) => (
+                  <p set:html={formatParagraph(p)} />
+                ))}
+                {faq.image && (
+                  <ImagePlaceholder src={faq.image} label={faq.q} height="280px" />
+                )}
+                {faq.q.toLowerCase().includes('support') && (
+                  <>
+                    <div class="cta-center-box margin-top">
+                      <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                        PLEDGE or DONATE
+                      </Button>
+                    </div>
 
-          <!-- Q2 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[1].q}</summary>
-            <div class="faq-a">
-              {siteData.faqs[1].a.map((p) => (
-                <p>{p}</p>
-              ))}
-              <ImagePlaceholder label="[PHOTO: allygoat.jpeg]" height="280px" />
-            </div>
-          </details>
-
-          <!-- Q3 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[2].q}</summary>
-            <div class="faq-a">
-              {siteData.faqs[2].a.map((p) => (
-                <p>{p}</p>
-              ))}
-              <ImagePlaceholder label="[PHOTO: pig.jpeg]" height="280px" />
-            </div>
-          </details>
-
-          <!-- Q4 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[3].q}</summary>
-            <div class="faq-a">
-              {siteData.faqs[3].a.map((p) => (
-                <p>{p}</p>
-              ))}
-              <ImagePlaceholder label="[IMAGE: music.jpeg]" height="280px" />
-            </div>
-          </details>
-
-          <!-- Q5 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[4].q}</summary>
-            <div class="faq-a">
-              <p>
-                Applications for residential leases will open within a year of the purchase of the land. Agricultural leases may open sooner than that. If you want to be on a list, please contact us at <a href="mailto:info@camascommons.org" class="editorial-link">info@camascommons.org</a>
-              </p>
-            </div>
-          </details>
-
-          <!-- Q6 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[5].q}</summary>
-            <div class="faq-a">
-              <p>
-                Current Talking Horse Ranch land stewards Guisepi Spadafora and Ally Rugge have been helping facilitate a path towards this goal for the past several years. Guisepi grew up on the island, and after years of service-based travel (i.e. the Free Tea Bus [<a href="https://freeteaparty.org" target="_blank" rel="noopener" class="editorial-link">freeteaparty.org</a>]), returned to the islands with his now wife, Ally, to find the right piece of land to dedicate themselves to. He has 20 years of experience in the nonprofit world, and loves to tinker. Ally has lived and worked on Talking Horse Ranch three times in the past 15 years, learning to grow food, rehabilitate soil, and raise chickens and dairy goats ([<a href="https://www.visitsanjuans.com/account/women-who-stare-at-goats-collective" target="_blank" rel="noopener" class="editorial-link">women-who-stare-at-goats-collective</a>]). They got married on the farm in 2023.
-              </p>
-              <ImagePlaceholder label="[PHOTO: wedding.jpeg]" height="320px" />
-            </div>
-          </details>
-
-          <!-- Q7 -->
-          <details class="faq-entry">
-            <summary class="faq-q">{siteData.faqs[6].q}</summary>
-            <div class="faq-a">
-              {siteData.faqs[6].a.map((p) => (
-                <p>{p}</p>
-              ))}
-
-              <div class="cta-center-box margin-top">
-                <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
-                  PLEDGE or DONATE
-                </Button>
+                    {siteData.volunteerSkills && siteData.volunteerSkills.length > 0 && (
+                      <div class="volunteer-note-box">
+                        <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
+                        <ul class="volunteer-bullets">
+                          {siteData.volunteerSkills.map((skill) => (
+                            <li>{skill}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-
-              <div class="volunteer-note-box">
-                <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
-                <ul class="volunteer-bullets">
-                  {siteData.volunteerSkills.map((skill) => (
-                    <li>{skill}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </details>
+            </details>
+          ))}
         </div>
       </section>
 
