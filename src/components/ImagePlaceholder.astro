@@ -4,9 +4,10 @@ interface Props {
   src?: string;
   height?: string;
   caption?: string;
+  clickable?: boolean;
 }
 
-const { label, src, height = '340px', caption } = Astro.props;
+const { label, src, height = '340px', caption, clickable = false } = Astro.props;
 
 // Extract base name from label or src (e.g. "/images/hay.jpeg" -> "hay.jpeg")
 const initialPath = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]/, '').trim();
@@ -41,10 +42,21 @@ const fileExists = Boolean(matchedFilename);
 const relativeImagePath = `/images/${matchedFilename}`;
 ---
 
-<figure class="field-photo-frame" style={`min-height: ${fileExists ? 'auto' : height};`}>
+<figure class={`field-photo-frame ${clickable && fileExists ? 'is-clickable' : ''}`} style={`min-height: ${fileExists ? 'auto' : height};`}>
   {fileExists ? (
-    <div class="photo-real-wrapper">
+    <div class="photo-real-wrapper" data-zoom-src={clickable ? relativeImagePath : undefined}>
       <img src={relativeImagePath} alt={label} class="real-photo-img" loading="lazy" />
+      {clickable && (
+        <span class="zoom-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          Click to enlarge
+        </span>
+      )}
       {caption && <figcaption class="photo-caption-text">{caption}</figcaption>}
     </div>
   ) : (
@@ -55,6 +67,42 @@ const relativeImagePath = `/images/${matchedFilename}`;
     </div>
   )}
 </figure>
+
+<script is:inline>
+  if (!window.__lightboxScriptInitialized) {
+    window.__lightboxScriptInitialized = true;
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('[data-zoom-src]');
+      if (!target) return;
+      const src = target.getAttribute('data-zoom-src');
+      if (!src) return;
+
+      let modal = document.getElementById('global-lightbox-modal');
+      if (!modal) {
+        modal = document.createElement('dialog');
+        modal.id = 'global-lightbox-modal';
+        modal.className = 'lightbox-dialog';
+        modal.innerHTML = `
+          <div class="lightbox-wrapper">
+            <button class="lightbox-close-btn" aria-label="Close image">&times;</button>
+            <img class="lightbox-modal-img" src="" alt="Enlarged full size view" />
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', (evt) => {
+          if (evt.target === modal || evt.target.classList.contains('lightbox-close-btn') || evt.target.classList.contains('lightbox-wrapper')) {
+            modal.close();
+          }
+        });
+      }
+
+      const img = modal.querySelector('.lightbox-modal-img');
+      if (img) img.src = src;
+      modal.showModal();
+    });
+  }
+</script>
 
 <style>
   .field-photo-frame {
@@ -70,6 +118,10 @@ const relativeImagePath = `/images/${matchedFilename}`;
     justify-content: center;
     position: relative;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .field-photo-frame.is-clickable {
+    cursor: pointer;
   }
 
   .field-photo-frame:hover {
@@ -97,6 +149,7 @@ const relativeImagePath = `/images/${matchedFilename}`;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
   }
 
   .real-photo-img {
@@ -107,6 +160,30 @@ const relativeImagePath = `/images/${matchedFilename}`;
     object-position: top center;
     border-radius: 4px;
     border: 1px solid var(--color-border-subtle);
+  }
+
+  .zoom-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(36, 71, 47, 0.85);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(4px);
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  .photo-real-wrapper:hover .zoom-badge {
+    opacity: 1;
+    transform: scale(1.04);
   }
 
   .photo-inner {

@@ -2,4 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://camascommons.org',
+  vite: {
+    assetsInclude: ['**/*.heic', '**/*.HEIC'],
+  },
 });

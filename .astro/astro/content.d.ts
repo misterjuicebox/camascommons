@@ -144,11 +144,43 @@ declare module 'astro:content' {
 	};
 
 	type DataEntryMap = {
-		"faqs": Record<string, {
-  id: string;
+		"faqs": {
+"01-land": {
+	id: "01-land";
   collection: "faqs";
-  data: any;
-}>;
+  data: any
+};
+"02-leases": {
+	id: "02-leases";
+  collection: "faqs";
+  data: any
+};
+"03-people": {
+	id: "03-people";
+  collection: "faqs";
+  data: any
+};
+"04-community": {
+	id: "04-community";
+  collection: "faqs";
+  data: any
+};
+"05-get-lease": {
+	id: "05-get-lease";
+  collection: "faqs";
+  data: any
+};
+"06-spearheading": {
+	id: "06-spearheading";
+  collection: "faqs";
+  data: any
+};
+"07-support": {
+	id: "07-support";
+  collection: "faqs";
+  data: any
+};
+};
 "fundraiser": {
 "site-data": {
 	id: "site-data";

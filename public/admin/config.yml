@@ -25,12 +25,52 @@ collections:
           - { label: "SMS / Social Preview Title (og:title)", name: "ogTitle", widget: "string", required: false }
           - { label: "SMS / Social Preview Description (og:description)", name: "ogDescription", widget: "text", required: false }
           - { label: "SMS / Social Preview Image (og:image)", name: "ogImage", widget: "image", required: false }
-          - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text" }
-          - { label: "What is Camas Commons? (Paragraphs)", name: "whatIsCamasCommons", widget: "text" }
-          - { label: "How Can I Support? (Paragraphs)", name: "howCanISupport", widget: "text" }
-          - { label: "Why Supporting Our Land Trust Matters", name: "whySupportingMatters", widget: "text" }
-          - { label: "Volunteer Skill Needs (One per line)", name: "volunteerSkills", widget: "text" }
-          - { label: "Contact Email", name: "contactEmail", widget: "string" }
+          - label: "Homepage Sections (Add, Edit, Re-order Any Section)"
+            name: "sections"
+            widget: "list"
+            types:
+              - label: "Welcome Message & Main Photo"
+                name: "welcome_block"
+                widget: "object"
+                fields:
+                  - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text", default: "", required: false }
+                  - { label: "Signature Note", name: "signature", widget: "string", default: "— Ally & Guisepi", required: false }
+                  - { label: "Section Photo", name: "image", widget: "image", default: "/images/Main.jpeg", required: false }
+                  - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
+              - label: "Custom Content Section"
+                name: "custom_section"
+                widget: "object"
+                fields:
+                  - { label: "Section Title (Optional)", name: "title", widget: "string", default: "", required: false }
+                  - { label: "Content Paragraphs (Optional)", name: "content", widget: "text", default: "", required: false }
+                  - { label: "Section Photo", name: "image", widget: "image", default: "", required: false }
+                  - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
+                  - { label: "Section Style / Layout", name: "style", widget: "select", default: "story", options: [
+                      { label: "Standard Story Section", value: "story" },
+                      { label: "Highlighted Callout Box (with Pledge Button)", value: "callout" }
+                    ] }
+              - label: "FAQ Accordion Section"
+                name: "faq_block"
+                widget: "object"
+                fields:
+                  - { label: "Section Title", name: "title", widget: "string", default: "FAQ:", required: false }
+                  - { label: "Section Header Photo", name: "image", widget: "image", default: "/images/babygoats.jpeg", required: false }
+                  - { label: "Make Section Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false }
+                  - { label: "FAQ Questions & Answers (Drag = handles to re-order)", name: "items", widget: "list", required: false, fields: [
+                      { label: "Question", name: "q", widget: "string", default: "", required: false },
+                      { label: "Answer Paragraphs", name: "a", widget: "text", default: "", required: false },
+                      { label: "FAQ Photo", name: "image", widget: "image", default: "", required: false },
+                      { label: "Make Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false }
+                    ] }
+                  - { label: "Volunteer Skill Needs (One per line)", name: "volunteerSkills", widget: "text", required: false }
+              - label: "Photo Gallery Slideshow"
+                name: "slideshow_block"
+                widget: "object"
+                fields:
+                  - { label: "Section Title (Optional)", name: "title", widget: "string", default: "", required: false }
+                  - { label: "Section Header Photo (Optional)", name: "image", widget: "image", default: "", required: false }
+                  - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
+          - { label: "Contact Email", name: "contactEmail", widget: "string", required: false }
 
   - name: "faqs"
     label: "FAQs"
@@ -43,6 +83,7 @@ collections:
       preview: false
     fields:
       - { label: "Order Number (for sorting)", name: "order", widget: "number", default: 10, value_type: "int" }
-      - { label: "Question", name: "q", widget: "string", default: "" }
-      - { label: "Answer Paragraphs", name: "a", widget: "text", default: "" }
+      - { label: "Question", name: "q", widget: "string", default: "", required: false }
+      - { label: "Answer Paragraphs (Optional)", name: "a", widget: "text", default: "", required: false }
       - { label: "Optional Image (e.g. /images/hay.jpeg)", name: "image", widget: "string", default: "", required: false }
+      - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }

@@ -12,6 +12,48 @@ const allFaqs = Object.values(faqModules).map((mod: any) => mod.default || mod);
 // Sort FAQs by order number
 allFaqs.sort((a: any, b: any) => (a.order || 99) - (b.order || 99));
 
+const defaultSections = [
+  {
+    type: 'welcome_block',
+    welcomeText: siteData.welcomeText,
+    signature: '— Ally & Guisepi',
+    image: '/images/Main.jpeg'
+  },
+  {
+    type: 'custom_section',
+    title: (siteData as any).titleWhatIsCamasCommons || 'What is Camas Commons?',
+    content: siteData.whatIsCamasCommons,
+    image: '/images/GandA.jpeg',
+    style: 'story'
+  },
+  {
+    type: 'custom_section',
+    title: (siteData as any).titleHowCanISupport || 'How can I support this project?',
+    content: siteData.howCanISupport,
+    image: '/images/Long.jpeg',
+    style: 'callout'
+  },
+  {
+    type: 'custom_section',
+    title: (siteData as any).titleWhySupportingMatters || 'Why Supporting Our Land Trust Matters…',
+    content: siteData.whySupportingMatters,
+    image: '/images/community.jpg',
+    style: 'story'
+  },
+  {
+    type: 'faq_block',
+    title: (siteData as any).titleFaqs || 'FAQ:'
+  },
+  {
+    type: 'slideshow_block',
+    title: (siteData as any).titleSlideshow || ''
+  }
+];
+
+const activeSections = (siteData as any).sections && (siteData as any).sections.length > 0
+  ? (siteData as any).sections
+  : defaultSections;
+
 function formatParagraph(text: string) {
   if (!text) return '';
   // Convert email addresses to mailto links
@@ -75,136 +117,143 @@ function formatParagraph(text: string) {
     </header>
 
     <main class="container main-content">
-      <!-- Title & Hero Block -->
+      <!-- Title & Header Banner -->
       <section class="hero-block">
         <div class="location-tag">SAN JUAN ISLAND, WASHINGTON</div>
         <h1 class="hero-title">{siteData.siteTitle}</h1>
         <p class="hero-tagline"><em>{siteData.tagline}</em></p>
-        
-        <ImagePlaceholder label="[PHOTO: Main.jpg]" height="380px" />
-
-        <div class="editorial-letter">
-          <p class="letter-text">{siteData.welcomeText}</p>
-          <div class="letter-signature">
-            <span class="handwritten-note">— Ally & Guisepi</span>
-          </div>
-        </div>
       </section>
 
-      <div class="editorial-hr"></div>
+      {activeSections.map((section: any, index: number) => (
+        <>
+          {index > 0 && <div class="editorial-hr"></div>}
 
-      <!-- What is Camas Commons? -->
-      <section class="story-section">
-        <ImagePlaceholder label="[PHOTO: GandA.jpg]" height="340px" />
-        
-        <h2 class="section-title">What is Camas Commons?</h2>
-        <div class="narrative-body">
-          {(typeof siteData.whatIsCamasCommons === 'string' ? siteData.whatIsCamasCommons.split(/\n\n|\n/) : siteData.whatIsCamasCommons).map((paragraph) => (
-            <p>{paragraph}</p>
-          ))}
-        </div>
-      </section>
+          {section.type === 'welcome_block' && (
+            <div class="hero-welcome-wrapper">
+              <ImagePlaceholder src={section.image || '/images/Main.jpeg'} label="[PHOTO: Main.jpg]" height="380px" clickable={Boolean(section.clickableImage)} />
 
-      <div class="editorial-hr"></div>
-
-      <!-- How can I support this project? (Urgent Angel Donors Section) -->
-      <section class="proposal-callout">
-        <ImagePlaceholder label="[PHOTO: Long.jpg]" height="340px" />
-
-        <div class="proposal-paper">
-          <h2 class="section-title">How can I support this project?</h2>
-          {(() => {
-            const paragraphs = typeof siteData.howCanISupport === 'string' ? siteData.howCanISupport.split(/\n\n|\n/) : siteData.howCanISupport;
-            return (
-              <>
-                <p>{paragraphs[0]}</p>
-
-                <div class="cta-center-box">
-                  <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
-                    PLEDGE or DONATE
-                  </Button>
+              <div class="editorial-letter">
+                <p class="letter-text">{section.welcomeText || siteData.welcomeText}</p>
+                <div class="letter-signature">
+                  <span class="handwritten-note">{section.signature || "— Ally & Guisepi"}</span>
                 </div>
-
-                {paragraphs[1] && (
-                  <div class="milestone-box">
-                    <p class="milestone-text">{paragraphs[1]}</p>
-                  </div>
-                )}
-              </>
-            );
-          })()}
-        </div>
-      </section>
-
-      <div class="editorial-hr"></div>
-
-      <!-- Why Supporting Our Land Trust Matters… -->
-      <section class="story-section">
-        <ImagePlaceholder label="[PHOTO: community.jpg]" height="340px" />
-
-        <h2 class="section-title">Why Supporting Our Land Trust Matters…</h2>
-        <div class="narrative-body">
-          <p>{siteData.whySupportingMatters}</p>
-        </div>
-      </section>
-
-      <div class="editorial-hr"></div>
-
-      <!-- FAQ Section -->
-      <section class="faq-section">
-        <ImagePlaceholder label="[PHOTO: baby goats.jpg]" height="320px" />
-
-        <h2 class="section-title faq-main-title">FAQ:</h2>
-
-        <div class="faq-journal">
-          {allFaqs.map((faq) => (
-            <details class="faq-entry">
-              <summary class="faq-q">{faq.q}</summary>
-              <div class="faq-a">
-                {faq.a && (typeof faq.a === 'string' ? faq.a.split(/\n\n|\n/) : faq.a).map((p) => (
-                  <p set:html={formatParagraph(p)} />
-                ))}
-                {faq.image && (
-                  <ImagePlaceholder src={faq.image} label={faq.q} height="280px" />
-                )}
-                {faq.q.toLowerCase().includes('support') && (
-                  <>
-                    <div class="cta-center-box margin-top">
-                      <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
-                        PLEDGE or DONATE
-                      </Button>
-                    </div>
-
-                    {siteData.volunteerSkills && siteData.volunteerSkills.length > 0 && (
-                      <div class="volunteer-note-box">
-                        <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
-                        <ul class="volunteer-bullets">
-                          {(typeof siteData.volunteerSkills === 'string' ? siteData.volunteerSkills.split(/\n\n|\n/) : siteData.volunteerSkills).map((skill) => (
-                            <li>{skill}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </>
-                )}
               </div>
-            </details>
-          ))}
-        </div>
-      </section>
+            </div>
+          )}
 
-      <div class="editorial-hr"></div>
+          {section.type === 'custom_section' && (
+            section.style === 'callout' ? (
+              <!-- Highlighted Callout Box -->
+              <section class="proposal-callout">
+                {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />}
 
-      <!-- Gallery & Final Action -->
-      <section class="closing-section text-center">
-        <Slideshow />
+                <div class="proposal-paper">
+                  {section.title && <h2 class="section-title">{section.title}</h2>}
+                  {(() => {
+                    const paragraphs = typeof section.content === 'string' ? section.content.split(/\n\n|\n/) : (section.content || []);
+                    return (
+                      <>
+                        {paragraphs[0] && <p>{paragraphs[0]}</p>}
 
-        <div class="final-pledge-box">
-          <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
-            PLEDGE or DONATE
-          </Button>
-        </div>
-      </section>
+                        <div class="cta-center-box">
+                          <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                            PLEDGE or DONATE
+                          </Button>
+                        </div>
+
+                        {paragraphs.slice(1).map((p: string) => (
+                          <div class="milestone-box">
+                            <p class="milestone-text">{p}</p>
+                          </div>
+                        ))}
+                      </>
+                    );
+                  })()}
+                </div>
+              </section>
+            ) : (
+              <!-- Standard Story Section -->
+              <section class="story-section">
+                {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />}
+                
+                {section.title && <h2 class="section-title">{section.title}</h2>}
+                <div class="narrative-body">
+                  {(typeof section.content === 'string' ? section.content.split(/\n\n|\n/) : (section.content || [])).map((paragraph: string) => (
+                    <p set:html={formatParagraph(paragraph)}></p>
+                  ))}
+                </div>
+              </section>
+            )
+          )}
+
+          {section.type === 'faq_block' && (
+            <!-- FAQ Section -->
+            <section class="faq-section">
+              <ImagePlaceholder src={section.image || '/images/babygoats.jpeg'} label="[PHOTO: baby goats.jpg]" height="320px" clickable={Boolean(section.clickableImage)} />
+
+              <h2 class="section-title faq-main-title">{section.title || "FAQ:"}</h2>
+
+              <div class="faq-journal">
+                {(section.items && section.items.length > 0 ? section.items : allFaqs).map((faq: any) => (
+                  <details class="faq-entry">
+                    <summary class="faq-q">{faq.q}</summary>
+                    <div class="faq-a">
+                      {faq.a && (typeof faq.a === 'string' ? faq.a.split(/\n\n|\n/) : faq.a).map((p: string) => (
+                        <p set:html={formatParagraph(p)} />
+                      ))}
+                      {faq.image && (
+                        <ImagePlaceholder src={faq.image} label={faq.q} height="280px" clickable={Boolean(faq.clickableImage)} />
+                      )}
+                      {faq.q.toLowerCase().includes('support') && (
+                        <>
+                          <div class="cta-center-box margin-top">
+                            <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                              PLEDGE or DONATE
+                            </Button>
+                          </div>
+
+                          {(() => {
+                            const skills = section.volunteerSkills || (siteData as any).volunteerSkills;
+                            return skills && skills.length > 0 && (
+                              <div class="volunteer-note-box">
+                                <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
+                                <ul class="volunteer-bullets">
+                                  {(typeof skills === 'string' ? skills.split(/\n\n|\n/) : skills).map((skill: string) => (
+                                    <li>{skill}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            );
+                          })()}
+                        </>
+                      )}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {section.type === 'slideshow_block' && (
+            <!-- Gallery & Final Action -->
+            <section class="closing-section text-center">
+              {section.image && (
+                <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="320px" clickable={Boolean(section.clickableImage)} />
+              )}
+              {section.title && (
+                <h2 class="section-title text-center margin-bottom">{section.title}</h2>
+              )}
+              <Slideshow />
+
+              <div class="final-pledge-box">
+                <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                  PLEDGE or DONATE
+                </Button>
+              </div>
+            </section>
+          )}
+        </>
+      ))}
     </main>
 
 
