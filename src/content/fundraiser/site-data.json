@@ -1,5 +1,5 @@
 {
-  "ogTitle": "Help Us Save Talking Horse Ranch — Camas Commons Land Trust",
+  "ogTitle": "Camas Commons - A Regenerative Farming Land Trust",
   "ogImage": "/images/Main.jpeg",
   "ogDescription": "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
   "sections": [
@@ -28,8 +28,8 @@
     },
     {
       "type": "custom_section",
-      "title": "Why Supporting Our Land Trust Matters…",
-      "content": "We believe this land is meant to be shared, and with us stewarding it, you can guarantee this legacy we’ve begun will continue. This project aims to help alleviate many of the issues facing our community, like young people leaving the island, farmers aging-out, skyrocketing land and housing costs, supply chain issues, and more. Creating this land trust will help maintain a web of resilience in our local community though food sovereignty, land connection, and attracting and keeping talented makers and growers on our island.",
+      "title": "Learn more about Camas Commons in our FAQ below. ",
+      "content": "",
       "image": "/images/community.jpg",
       "clickableImage": false,
       "style": "story"
@@ -78,7 +78,7 @@
         },
         {
           "q": "How can I support Camas Commons?",
-          "a": "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals.",
+          "a": "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals.\n\nOur donate button will take you to the website of our collaborating non-profit, On Sacred Ground Land Trust. ",
           "image": "",
           "clickableImage": false
         }
