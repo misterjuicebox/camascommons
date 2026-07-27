@@ -13,7 +13,7 @@
     {
       "type": "custom_section",
       "title": "What is Camas Commons?",
-      "content": "Based at Talking Horse Ranch Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. In a time when talented young makers and producers are priced out of life on San Juan. Camas Commons provides land accessibility and affordable housing for young farmers regenerates the land and supports the local community with healthy food and community events.",
+      "content": "Based at Talking Horse Ranch, Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. In a time when talented young makers and producers are priced out of life on the island, Camas Commons provides land accessibility and affordable housing for young farmers, regenerates the land, and supports the local community with healthy food and community events.",
       "image": "/images/GandA.jpeg",
       "clickableImage": false,
       "style": "story"
@@ -21,7 +21,7 @@
     {
       "type": "custom_section",
       "title": "How can I support this project?",
-      "content": "Our proposal to acquire Talking Horse Ranch is due in September and the time to secure its future is now. We are ready to continue stewarding this land as a working farm, a place of conservation and a lasting community resource. But we cannot do it without significant financial support. We are seeking lead donors prepared to make transformational gifts toward the purchase of the ranch. Your support can help protect this land from speculation keep it affordable for future farmers and producers and preserve it in service to the community for generations to come. \n\nOur first major fundraising deadline is in mid-September, when we submit our final proposal to the Land Bank. To make that proposal competitive, we need to raise $1.5 million.\nIt is an ambitious goal, but the opportunity is extraordinary: to secure the future of Talking Horse Ranch as protected farmland and a lasting community resource. Every contribution brings us closer—and every donor becomes part of preserving this land for generations to come.",
+      "content": "Our proposal to acquire Talking Horse Ranch is due in September and the time to secure its future is now. \n\nWe are ready to continue stewarding this land as a working farm, a place of conservation and a lasting community resource. But we cannot do it without significant financial support. \n\nWe are seeking lead donors prepared to make transformational gifts toward the purchase of the ranch. Your support can help protect this land from speculation, keep it affordable for future farmers and producers, and preserve it in service to the community for generations to come. \n\nClicking the 'PLEDGE or DONATE' button will bring you to the donation portal on our collaborating non-profit's website. \n\nOur first major fundraising deadline is in mid-September, when we submit our final proposal to the Land Bank. To make that proposal competitive, we need to raise $1.5 million.\nIt is an ambitious goal, but the opportunity is extraordinary: to secure the future of Talking Horse Ranch as protected farmland and a lasting community resource. Every contribution brings us closer—and every donor becomes part of preserving this land for generations to come.",
       "image": "/images/Long.jpeg",
       "clickableImage": false,
       "style": "callout"
@@ -42,32 +42,38 @@
       "items": [
         {
           "q": "What is this land all about?",
-          "a": "This 120-acre farm has seen a lot — a historic dairy, an eccentric follower of the spiritual leader Ramtha, a golf course, and an organic farm. For the past 20 years, this farm has been known as Talking Horse Ranch, after the famed “talking horse” purchased by previous owner Ernie Kanzler Jr. from the channeler of his spiritual guru, Ramtha.\n\nFor these past 20-years the farm has been under-managed, and kept running at a low-idle. Most of the infrastructure is in disrepair, but not beyond the point-of-no-return.\n\nDespite all this, the land is a wonderfully magical place — with excellent topography, landscape, a seasonal creek, 6 ponds, enchanting forests, and incredibly cool and quirky buildings and landscaping. Most of the developed land is south facing slope with excellent sun, the wells produce an incredible 45 and 70 GPM, and the big barn offers 13,000 square feet of usable indoor space. These are just a few of the significant attributes.\n\n40 of the 120 acres will be purchased for Camas Commons, with the other 80 acres entering into perpetual conservation through the San Juan Conservation Land Bank. Together, public access will be included in this plan with a walking trail that connects the Beaverton Marsh Preserve to the top of Beaver Hill, through Camas Commons.",
+          "a": "This 120-acre farm has seen a lot — an historic dairy, an eccentric follower of the spiritual leader Ramtha, a golf course, and an organic farm. For the past 20 years, this farm has been known as Talking Horse Ranch, after the famed “talking horse” purchased by previous owner Ernie Kanzler Jr. from the channeler of his spiritual guru, Ramtha.\n\nFor these past 20-years the farm has been under-managed and kept running at a low-idle. Most of the infrastructure is in disrepair, but not beyond the point-of-no-return.\n\nDespite all this, the land is a wonderfully magical place — with excellent topography, landscape, a seasonal creek, 6 ponds, enchanting forests, and incredibly cool and quirky buildings and landscaping. Most of the developed land is south facing slope with excellent sun, the wells produce an incredible 45 and 70 GPM, and the big barn offers 13,000 square feet of usable indoor space. These are just a few of the significant attributes.\n\n40 of the 120 acres will be purchased for Camas Commons, with the other 80 acres entering into perpetual conservation through the San Juan Conservation Land Bank. Together, public access will be included in this plan with a walking trail that connects the Beaverton Marsh Preserve to the top of Beaver Hill, through Camas Commons.",
           "image": "/images/hay.jpeg",
           "clickableImage": false
         },
         {
+          "q": "How does this project further the Land Bank's mandate? ",
+          "a": "The Land Bank's mandate is \"To preserve in perpetuity areas in the county that have environmental, agricultural, aesthetic, cultural, scientific, historic, scenic or low-intensity recreational value and to protect existing and future sources of potable water.\" \n\nCamas Commons aligns with the Land Bank's mandate in many ways. First, creating an agricultural land trust preserves this land in perpetuity. Second, we believe that farmland isn't farmland unless it is being farmed, so this project makes sure that conserved land is actually farmed. Third, this land is beautiful, and deserves to be shared. Working with the Land Bank to make a trail across Camas Commons, and onwards to the top of Beaver Hill fulfills the low-intensity recreation and protection of aesthetic and scenic areas elements of the mandate. And finally, the water here is plentiful. We plan to diligently work towards water conservation, while also using that water to grow things to share with our community. \n\nThis collaboration with the Land Bank finds a balance between conservation and sustainable development. For the 80 acres that the Land Bank will own, there will be no housing, and the land will be preserved for farming, recreation, and more. The 40 acres that Camas Commons will own will have the ability to have up to 4 houses and one ADU, clustered along the northern half of the property, preserving most of the existing pasture and farmland. We pledge to build housing that is low-impact, both visually and environmentally, using natural, reclaimed, and non-toxic materials. ",
+          "image": "",
+          "clickableImage": true
+        },
+        {
           "q": "How do the leases work?",
-          "a": "Residential Members will have the option to own their own home and sign a 99-year lease, or lease a home from the land trust. They, and Non-Residential Members, will have the opportunity to lease land, infrastructure, or buildings with short-term leases for agricultural, traditional craft, forestry, or other sustainability-related endeavors.",
+          "a": "Residential Members will have the option to own their own home and sign a 99-year lease, or lease a home from the nonprofit. They, and Non-Residential Members, will have the opportunity to lease land, infrastructure, or buildings with short-term leases for agricultural, traditional craft, forestry, or other sustainability-related endeavors.",
           "image": "/images/allygoat.jpeg",
-          "clickableImage": false
-        },
-        {
-          "q": "How many people will live at Camas Commons?",
-          "a": "Based on the allowed density, four houses plus the existing ADU are permissible. Averaging 2-3 people per house, we see 10-15 full time residents. At least one member from each house must be involved in agriculture, sustainability-adjacent activities, or an administrative role.",
-          "image": "/images/pig.jpeg",
-          "clickableImage": false
-        },
-        {
-          "q": "What will this project offer the local community?",
-          "a": "Members of Camas Commons will be producing agricultural products, like fruits, vegetables, eggs and more, as well as useful and traditional crafts and land-connection events. There may also be educational workshops, seasonal gatherings, petting zoos, live music, a farm store and more.",
-          "image": "/images/music.jpeg",
           "clickableImage": false
         },
         {
           "q": "How can I get a lease at Camas Commons?",
           "a": "Applications for residential leases will open within a year of the purchase of the land. Agricultural leases may open sooner than that. If you want to be on a list, please contact us at info@camascommons.org",
           "image": "",
+          "clickableImage": false
+        },
+        {
+          "q": "How many people will live at Camas Commons?",
+          "a": "Based on the allowed density, four houses plus the existing ADU are permissible. Averaging 2-4 people per house, we see 10-20 full time residents (including children). At least one member from each house must be involved in agriculture, sustainability-adjacent activities, or an administrative role.",
+          "image": "/images/pig.jpeg",
+          "clickableImage": false
+        },
+        {
+          "q": "What will this project offer the local community?",
+          "a": "Members of Camas Commons will be producing agricultural products, like fruits, vegetables, eggs, meat, and more, as well as useful and traditional crafts and land-connection events. There will also be activities like educational workshops, seasonal gatherings, petting zoos, live music, a farm store and more.",
+          "image": "/images/music.jpeg",
           "clickableImage": false
         },
         {
