@@ -142,7 +142,7 @@ function formatParagraph(text: string) {
         <div class="brand-group">
           <span class="brand-title">CAMAS COMMONS</span>
         </div>
-        <Button variant="rose" size="sm" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+        <Button variant="rose" size="sm" href="#pledge-donate">
           PLEDGE or DONATE
         </Button>
       </div>
@@ -188,7 +188,7 @@ function formatParagraph(text: string) {
                         {paragraphs[0] && <p set:html={formatParagraph(paragraphs[0])}></p>}
 
                         <div class="cta-center-box">
-                          <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                          <Button variant="rose" size="lg" href="#pledge-donate">
                             PLEDGE or DONATE
                           </Button>
                         </div>
@@ -223,6 +223,57 @@ function formatParagraph(text: string) {
                 </div>
               </section>
             )
+          )}
+
+          {section.type === 'pledge_donate_block' && (
+            <!-- Dedicated Pledge & Donate Action Section -->
+            <section id="pledge-donate" class="pledge-donate-section">
+              <div class="pledge-donate-card">
+                {section.title && <h2 class="section-title text-center margin-bottom">{section.title}</h2>}
+
+                {section.introText && (
+                  <p class="pledge-intro-text" set:html={formatParagraph(section.introText)}></p>
+                )}
+
+                {section.impactPoints && (
+                  <ul class="flower-bullets impact-bullets margin-bottom">
+                    {(typeof section.impactPoints === 'string' ? section.impactPoints.split(/\n\n|\n/) : section.impactPoints).map((pt: string) => (
+                      <li set:html={formatParagraph(pt)} />
+                    ))}
+                  </ul>
+                )}
+
+                {section.image && (
+                  <div class="pledge-section-photo margin-bottom">
+                    <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />
+                  </div>
+                )}
+
+                {section.pledgeText && (
+                  <div class="pledge-definition-box margin-bottom">
+                    <p set:html={formatParagraph(section.pledgeText)}></p>
+                  </div>
+                )}
+
+                <!-- Dual Action Buttons: Separate PLEDGE and DONATE -->
+                <div class="dual-action-buttons margin-bottom">
+                  <Button variant="rose" size="lg" href={section.pledgeUrl || "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header"} target="_blank">
+                    {section.pledgeButtonText || "MAKE A PLEDGE"}
+                  </Button>
+                  <Button variant="green" size="lg" href={section.donateUrl || "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA"} target="_blank">
+                    {section.donateButtonText || "DONATE NOW (PAYPAL)"}
+                  </Button>
+                </div>
+
+                {section.additionalInfo && (
+                  <div class="pledge-additional-info">
+                    {(typeof section.additionalInfo === 'string' ? section.additionalInfo.split(/\n\n|\n/) : section.additionalInfo).map((p: string) => (
+                      <p set:html={formatParagraph(p)}></p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           )}
 
           {section.type === 'faq_block' && (
@@ -277,7 +328,7 @@ function formatParagraph(text: string) {
               <Slideshow />
 
               <div class="final-pledge-box">
-                <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
+                <Button variant="rose" size="lg" href="#pledge-donate">
                   PLEDGE or DONATE
                 </Button>
               </div>
