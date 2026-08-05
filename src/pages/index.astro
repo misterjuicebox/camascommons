@@ -56,8 +56,10 @@ const activeSections = (siteData as any).sections && (siteData as any).sections.
 
 function formatParagraph(text: string) {
   if (!text) return '';
+  let formatted = text.trim();
+
   // Convert markdown bold **text** to <strong>text</strong>
-  let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
   // Convert email addresses to mailto links
   formatted = formatted.replace(
@@ -80,8 +82,14 @@ function formatParagraph(text: string) {
     '<img src="/images/blue-flower-icon.png" alt="Camas Flower" class="inline-flower-icon" />'
   );
 
-  // Convert bullet lines starting with ~, -, *, or + into blue flower bullet list items
-  if (formatted.includes('~') || formatted.includes('\n- ') || formatted.includes('\n* ') || formatted.startsWith('- ') || formatted.startsWith('* ') || formatted.startsWith('+ ')) {
+  // If this paragraph starts with ~, -, *, or +, convert directly into a flower bullet item!
+  if (formatted.startsWith('~') || formatted.startsWith('- ') || formatted.startsWith('* ') || formatted.startsWith('+ ')) {
+    const itemContent = formatted.replace(/^~\s*|^-\s*|^\*\s*|^\+\s*/, '');
+    return `<ul class="flower-bullets"><li>${itemContent}</li></ul>`;
+  }
+
+  // Convert multiline text starting with ~, -, *, or + into blue flower bullet list items
+  if (formatted.includes('~') || formatted.includes('\n- ') || formatted.includes('\n* ')) {
     const lines = formatted.split('\n');
     const processedLines = lines.map(line => {
       const trimmed = line.trim();
@@ -177,7 +185,7 @@ function formatParagraph(text: string) {
                     const paragraphs = typeof section.content === 'string' ? section.content.split(/\n\n|\n/) : (section.content || []);
                     return (
                       <>
-                        {paragraphs[0] && <p>{paragraphs[0]}</p>}
+                        {paragraphs[0] && <p set:html={formatParagraph(paragraphs[0])}></p>}
 
                         <div class="cta-center-box">
                           <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
@@ -187,7 +195,7 @@ function formatParagraph(text: string) {
 
                         {paragraphs.slice(1).map((p: string) => (
                           <div class="milestone-box">
-                            <p class="milestone-text">{p}</p>
+                            <p class="milestone-text" set:html={formatParagraph(p)}></p>
                           </div>
                         ))}
                       </>
@@ -230,37 +238,29 @@ function formatParagraph(text: string) {
                     <summary class="faq-q">{faq.q}</summary>
                     <div class="faq-a">
                       {faq.a && (typeof faq.a === 'string' ? faq.a.split(/\n\n|\n/) : faq.a).map((p: string) => (
-                        <p set:html={formatParagraph(p)} />
+                        <p set:html={formatParagraph(p)}></p>
                       ))}
                       {faq.image && (
-                        <ImagePlaceholder src={faq.image} label={faq.q} height="280px" clickable={Boolean(faq.clickableImage)} />
-                      )}
-                      {faq.q.toLowerCase().includes('support') && (
-                        <>
-                          <div class="cta-center-box margin-top">
-                            <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
-                              PLEDGE or DONATE
-                            </Button>
-                          </div>
-
-                          {(() => {
-                            const skills = section.volunteerSkills || (siteData as any).volunteerSkills;
-                            return skills && skills.length > 0 && (
-                              <div class="volunteer-note-box">
-                                <p class="volunteer-heading">Secondarily, please let us know if you or someone you know wants to volunteer and has skills in:</p>
-                                <ul class="volunteer-bullets">
-                                  {(typeof skills === 'string' ? skills.split(/\n\n|\n/) : skills).map((skill: string) => (
-                                    <li>{skill}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            );
-                          })()}
-                        </>
+                        <div class="faq-inline-image">
+                          <ImagePlaceholder src={faq.image} label={faq.q || '[FAQ PHOTO]'} height="260px" clickable={Boolean(faq.clickableImage)} />
+                        </div>
                       )}
                     </div>
                   </details>
                 ))}
+                {section.volunteerSkills && (() => {
+                  const skills = section.volunteerSkills;
+                  return (
+                    <div class="volunteer-box margin-top text-center">
+                      <h3 class="volunteer-title">Volunteer Skill Needs:</h3>
+                      <ul class="volunteer-bullets">
+                        {(typeof skills === 'string' ? skills.split(/\n\n|\n/) : skills).map((skill: string) => (
+                          <li>{skill}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })()}
               </div>
             </section>
           )}
@@ -293,7 +293,7 @@ function formatParagraph(text: string) {
                 {(section.members || []).map((member: any) => (
                   <div class="advisory-card">
                     <div class="advisory-avatar-wrapper">
-                      {member.image ? (
+                      {member.image && member.image.trim() !== '' ? (
                         <div class="advisory-circle-placeholder">
                           <img src={member.image} alt={member.name} class="real-photo-img" />
                         </div>
