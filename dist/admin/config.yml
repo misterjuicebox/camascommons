@@ -85,20 +85,23 @@ collections:
                       { label: "Make Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false },
                       { label: "Summary / Bio Text", name: "bio", widget: "text", default: "", required: false }
                     ] }
-              - label: "Pledge & Donate Section (Dual Buttons)"
+              - label: "Pledge & Donate Section (Symmetrical Dual Cards)"
                 name: "pledge_donate_block"
                 widget: "object"
                 fields:
-                  - { label: "Section Title", name: "title", widget: "string", default: "Support Camas Commons — Pledge or Donate", required: false }
-                  - { label: "Introduction Text", name: "introText", widget: "text", default: "All donations will provide necessary financial support at the time of the submission deadline that will include:", required: false }
-                  - { label: "Donation Impact Points (One per line)", name: "impactPoints", widget: "text", default: "Purchasing Power - it is very important that we raise as much funds as we can in this window in order to be considered seriously as a purchaser.\nStart Up Costs - leading up to the submission deadline\nIf Selected - donations will go to the purchase of the land & associated costs\nIf Not Selected - donations will stay in the public realm & go towards a similar project", required: false }
-                  - { label: "Section Photo", name: "image", widget: "image", default: "/images/community.jpg", required: false }
-                  - { label: "Pledge Definition Text", name: "pledgeText", widget: "text", default: "A pledge is a commitment to donate your specified pledge amount to Camas Commons upon the selection of the proposal by the San Juan County Conservation Land Bank.", required: false }
-                  - { label: "Pledge Button Label", name: "pledgeButtonText", widget: "string", default: "MAKE A PLEDGE", required: false }
-                  - { label: "Pledge Form URL", name: "pledgeUrl", widget: "string", default: "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header", required: false }
+                  - { label: "Section Main Title", name: "title", widget: "string", default: "Support Camas Commons — Pledge or Donate", required: false }
+                  - { label: "Donate Column Title", name: "donateTitle", widget: "string", default: "DONATE", required: false }
+                  - { label: "Donate Column Intro", name: "donateIntro", widget: "text", default: "All donations provide necessary financial support leading up to and at the time of the submission deadline:", required: false }
+                  - { label: "Donate Bullet Points (One per line)", name: "donateBullets", widget: "text", default: "Purchasing Power - it is very important that we raise as much funds as we can in this window in order to be considered seriously as a purchaser.\nStart Up Costs - leading up to the submission deadline\nIf Selected - donations will go to the purchase of the land & associated costs\nIf Not Selected - donations will stay in the public realm & go towards a similar project", required: false }
                   - { label: "Donate Button Label", name: "donateButtonText", widget: "string", default: "DONATE NOW (PAYPAL)", required: false }
-                  - { label: "Donate Form URL", name: "donateUrl", widget: "string", default: "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA", required: false }
-                  - { label: "Additional Info & Mail-in Check Details", name: "additionalInfo", widget: "text", default: "We rely on these funds to be available at the time of purchase at the end of December 2026.\n\nTo donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nWe need as many pledges and donations as possible for the mid-September proposal deadline. This will convey that we have raised enough money to be a serious purchaser.\n\nPlease email questions to info@camascommons.org", required: false }
+                  - { label: "Donate URL", name: "donateUrl", widget: "string", default: "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA", required: false }
+                  - { label: "Pledge Column Title", name: "pledgeTitle", widget: "string", default: "PLEDGE", required: false }
+                  - { label: "Pledge Column Intro", name: "pledgeIntro", widget: "text", default: "A pledge is a commitment to donate your specified pledge amount upon selection of our proposal by the Land Bank:", required: false }
+                  - { label: "Pledge Bullet Points (One per line)", name: "pledgeBullets", widget: "text", default: "Proposal Strength - we need as many pledges as possible for the mid-September proposal deadline to convey we are a serious purchaser.\nFunds Timeline - pledged funds are relied upon to be available at the time of purchase at the end of December 2026.\nTax-Deductible - all pledges & donations are tax-deductible through On Sacred Ground Land Trust.\nCommunity Impact - every pledged dollar helps preserve 40 acres of farmland in perpetuity.", required: false }
+                  - { label: "Pledge Button Label", name: "pledgeButtonText", widget: "string", default: "MAKE A PLEDGE", required: false }
+                  - { label: "Pledge URL", name: "pledgeUrl", widget: "string", default: "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header", required: false }
+                  - { label: "Section Photo (Optional)", name: "image", widget: "image", default: "/images/Long.jpeg", required: false }
+                  - { label: "Mail-in Check & Contact Info", name: "additionalInfo", widget: "text", default: "To donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nPlease email questions to info@camascommons.org", required: false }
           - { label: "Contact Email", name: "contactEmail", widget: "string", required: false }
 
   - name: "faqs"

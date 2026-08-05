@@ -56,6 +56,33 @@ body {
   background: var(--color-bg-paper);
 }
 
+/* Editorial Header Layout (Stacked on Separate Lines) */
+.editorial-header {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--color-border-paper);
+  background: var(--color-bg-paper);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-green-deep);
+  text-transform: uppercase;
+}
+
 /* Editorial Typography */
 h1, h2, h3, h4 {
   font-family: var(--font-serif);
@@ -239,39 +266,76 @@ html {
   box-shadow: 0 12px 36px -6px rgba(197, 116, 109, 0.18);
 }
 
-.pledge-intro-text {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--color-green-deep);
-  margin-bottom: 1.25rem;
-}
-
-.impact-bullets li {
-  font-size: 1.05rem;
-}
-
-.pledge-definition-box {
-  background: rgba(197, 116, 109, 0.08);
-  border-left: 4px solid var(--color-rose-terracotta);
-  padding: 1.25rem 1.5rem;
-  border-radius: 0 var(--radius-paper) var(--radius-paper) 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-text-main);
-  margin: 1.75rem 0;
-}
-
-.dual-action-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
+/* Symmetrical Dual Support Grid (DONATE vs PLEDGE) */
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 2rem;
   margin: 2rem 0;
 }
 
-.dual-action-buttons .btn {
-  min-width: 240px;
+.support-card {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-paper);
+  border-radius: var(--radius-paper);
+  padding: 2rem 1.75rem;
+  box-shadow: 0 4px 18px rgba(36, 71, 47, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.support-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(36, 71, 47, 0.1);
+}
+
+.support-card-donate {
+  border-top: 4px solid var(--color-green-deep);
+}
+
+.support-card-pledge {
+  border-top: 4px solid var(--color-rose-terracotta);
+}
+
+.support-card-header {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.support-card-donate .support-card-header {
+  color: var(--color-green-deep);
+}
+
+.support-card-pledge .support-card-header {
+  color: var(--color-rose-terracotta);
+}
+
+.support-card-intro {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.support-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.support-card .flower-bullets {
+  margin: 1rem 0 2rem 0;
+}
+
+.support-card .btn {
+  width: 100%;
+  margin-top: auto;
 }
 
 .pledge-additional-info {
@@ -285,6 +349,7 @@ html {
   font-size: 1.02rem;
   color: var(--color-text-main);
   line-height: 1.65;
+  margin-top: 1.5rem;
 }
 
 /* Volunteer Skills Box Styling */

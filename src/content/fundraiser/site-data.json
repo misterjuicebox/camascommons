@@ -100,16 +100,19 @@
     {
       "type": "pledge_donate_block",
       "title": "Support Camas Commons — Pledge or Donate",
-      "introText": "All donations will provide necessary financial support at the time of the submission deadline that will include:",
-      "impactPoints": "Purchasing Power - it is very important that we raise as much funds as we can in this window in order to be considered seriously as a purchaser.\nStart Up Costs - leading up to the submission deadline\nIf Selected - donations will go to the purchase of the land & associated costs\nIf Not Selected - donations will stay in the public realm & go towards a similar project",
-      "image": "/images/Long.jpeg",
-      "clickableImage": false,
-      "pledgeText": "A pledge is a commitment to donate your specified pledge amount to Camas Commons upon the selection of the proposal by the San Juan County Conservation Land Bank.",
-      "pledgeButtonText": "MAKE A PLEDGE",
-      "pledgeUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header",
+      "donateTitle": "DONATE",
+      "donateIntro": "All donations provide necessary financial support leading up to and at the time of the submission deadline:",
+      "donateBullets": "Purchasing Power - it is very important that we raise as much funds as we can in this window in order to be considered seriously as a purchaser.\nStart Up Costs - leading up to the submission deadline.\nIf Selected - donations will go to the purchase of the land & associated costs.\nIf Not Selected - donations will stay in the public realm & go towards a similar project.",
       "donateButtonText": "DONATE NOW (PAYPAL)",
       "donateUrl": "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA",
-      "additionalInfo": "We rely on these funds to be available at the time of purchase at the end of December 2026.\n\nTo donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nWe need as many pledges and donations as possible for the mid-September proposal deadline. This will convey that we have raised enough money to be a serious purchaser.\n\nPlease email questions to info@camascommons.org"
+      "pledgeTitle": "PLEDGE",
+      "pledgeIntro": "A pledge is a commitment to donate your specified pledge amount upon selection of our proposal by the Land Bank:",
+      "pledgeBullets": "Proposal Strength - we need as many pledges as possible for the mid-September proposal deadline to convey that we have raised enough money to be a serious purchaser.\nFunds Timeline - pledged funds are relied upon to be available at the time of purchase at the end of December 2026.\nTax-Deductible - all pledges & donations are tax-deductible through our partner On Sacred Ground Land Trust.\nCommunity Impact - every pledged dollar helps preserve 40 acres of farmland in perpetuity.",
+      "pledgeButtonText": "MAKE A PLEDGE",
+      "pledgeUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header",
+      "image": "",
+      "clickableImage": false,
+      "additionalInfo": "To donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nPlease email questions to info@camascommons.org"
     },
     {
       "type": "advisory_block",
