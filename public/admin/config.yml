@@ -29,12 +29,13 @@ collections:
           - label: "Homepage Sections (Add, Edit, Re-order Any Section)"
             name: "sections"
             widget: "list"
+            hint: "💡 FORMATTING TIPS: 1) BOLD TEXT: Wrap words in **double asterisks** (e.g. **bold text**). 2) FLOWER BULLETS: Start lines with ~ or - or * (e.g. ~ Bullet item), or type :flower: inline anywhere."
             types:
               - label: "Welcome Message & Main Photo"
                 name: "welcome_block"
                 widget: "object"
                 fields:
-                  - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text", default: "", required: false }
+                  - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text", default: "", required: false, hint: "💡 Use **text** for bold text." }
                   - { label: "Signature Note", name: "signature", widget: "string", default: "— Ally & Guisepi", required: false }
                   - { label: "Section Photo", name: "image", widget: "image", default: "/images/Main.jpeg", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
@@ -43,7 +44,8 @@ collections:
                 widget: "object"
                 fields:
                   - { label: "Section Title (Optional)", name: "title", widget: "string", default: "", required: false }
-                  - { label: "Content Paragraphs (Optional)", name: "content", widget: "text", default: "", required: false }
+                  - { label: "Content Paragraphs (Optional)", name: "content", widget: "text", default: "", required: false, hint: "💡 TIP: Use **text** for bold text. Start lines with ~ or - or * for Camas Flower Bullets." }
+                  - { label: "Camas Flower Bullet Points (One per line - Optional)", name: "bulletPoints", widget: "text", required: false }
                   - { label: "Section Photo", name: "image", widget: "image", default: "", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
                   - { label: "Section Style / Layout", name: "style", widget: "select", default: "story", options: [
@@ -71,6 +73,18 @@ collections:
                   - { label: "Section Title (Optional)", name: "title", widget: "string", default: "", required: false }
                   - { label: "Section Header Photo (Optional)", name: "image", widget: "image", default: "", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
+              - label: "Advisory Board & Team Section"
+                name: "advisory_block"
+                widget: "object"
+                fields:
+                  - { label: "Section Title", name: "title", widget: "string", default: "Advisory Board & Team", required: false }
+                  - { label: "Advisory Members (Drag = handles to re-order)", name: "members", widget: "list", required: false, fields: [
+                      { label: "Full Name", name: "name", widget: "string", default: "", required: false },
+                      { label: "Title / Subtitle", name: "role", widget: "string", default: "Advisory Board Member", required: false },
+                      { label: "Circle Headshot Photo", name: "image", widget: "image", default: "", required: false },
+                      { label: "Make Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false },
+                      { label: "Summary / Bio Text", name: "bio", widget: "text", default: "", required: false }
+                    ] }
           - { label: "Contact Email", name: "contactEmail", widget: "string", required: false }
 
   - name: "faqs"

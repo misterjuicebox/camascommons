@@ -56,8 +56,11 @@ const activeSections = (siteData as any).sections && (siteData as any).sections.
 
 function formatParagraph(text: string) {
   if (!text) return '';
+  // Convert markdown bold **text** to <strong>text</strong>
+  let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
   // Convert email addresses to mailto links
-  let formatted = text.replace(
+  formatted = formatted.replace(
     /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
     '<a href="mailto:$1" class="editorial-link">$1</a>'
   );
@@ -71,6 +74,27 @@ function formatParagraph(text: string) {
     /(?<!href="|href='|>)(https?:\/\/[^\s<]+)/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
   );
+  // Convert inline :flower: or [flower] shortcodes into blue flower icon
+  formatted = formatted.replace(
+    /(:flower:|\[flower\]|\(flower\))/gi,
+    '<img src="/images/blue-flower-icon.png" alt="Camas Flower" class="inline-flower-icon" />'
+  );
+
+  // Convert bullet lines starting with ~, -, *, or + into blue flower bullet list items
+  if (formatted.includes('~') || formatted.includes('\n- ') || formatted.includes('\n* ') || formatted.startsWith('- ') || formatted.startsWith('* ') || formatted.startsWith('+ ')) {
+    const lines = formatted.split('\n');
+    const processedLines = lines.map(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('~') || trimmed.startsWith('- ') || trimmed.startsWith('* ') || trimmed.startsWith('+ ')) {
+        const itemContent = trimmed.replace(/^~\s*|^-\s*|^\*\s*|^\+\s*/, '');
+        return `<li>${itemContent}</li>`;
+      }
+      return line;
+    });
+    if (processedLines.some(l => l.startsWith('<li>'))) {
+      return `<ul class="flower-bullets">${processedLines.join('')}</ul>`;
+    }
+  }
   return formatted;
 }
 ---
@@ -80,7 +104,7 @@ function formatParagraph(text: string) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><path d=%22M20 38C20 28 20 20 20 18%22 stroke=%22%2324472F%22 stroke-width=%222.5%22/><path d=%22M20 18C18.5 12 20 4 20 4C20 4 21.5 12 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C24.5 13.5 32 9 32 9C32 9 27.5 16.5 20 18Z%22 fill=%22%236A5ACD%22/><path d=%22M20 18C25.5 19.5 33 24 33 24C33 24 25.5 23.5 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C14.5 23.5 7 24 7 24C7 24 14.5 19.5 20 18Z%22 fill=%22%237B68EE%22/><path d=%22M20 18C12.5 16.5 8 9 8 9C8 9 15.5 13.5 20 18Z%22 fill=%22%236A5ACD%22/><circle cx=%2220%22 cy=%2218%22 r=%222.5%22 fill=%22%23F59E0B%22/></svg>" />
+    <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />
     
     <SEO
       title={siteData.siteTitle}
@@ -179,8 +203,15 @@ function formatParagraph(text: string) {
                 {section.title && <h2 class="section-title">{section.title}</h2>}
                 <div class="narrative-body">
                   {(typeof section.content === 'string' ? section.content.split(/\n\n|\n/) : (section.content || [])).map((paragraph: string) => (
-                    <p set:html={formatParagraph(paragraph)}></p>
+                    <div set:html={formatParagraph(paragraph)}></div>
                   ))}
+                  {section.bulletPoints && (
+                    <ul class="flower-bullets">
+                      {(typeof section.bulletPoints === 'string' ? section.bulletPoints.split(/\n\n|\n/) : section.bulletPoints).map((pt: string) => (
+                        <li set:html={formatParagraph(pt)} />
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </section>
             )
@@ -249,6 +280,35 @@ function formatParagraph(text: string) {
                 <Button variant="rose" size="lg" href="https://www.onsacredgroundlandtrust.org/farm-partners.html" target="_blank">
                   PLEDGE or DONATE
                 </Button>
+              </div>
+            </section>
+          )}
+
+          {section.type === 'advisory_block' && (
+            <!-- Advisory Board & Team Section -->
+            <section class="advisory-section text-center">
+              {section.title && <h2 class="section-title text-center margin-bottom">{section.title}</h2>}
+
+              <div class="advisory-grid">
+                {(section.members || []).map((member: any) => (
+                  <div class="advisory-card">
+                    <div class="advisory-avatar-wrapper">
+                      {member.image ? (
+                        <div class="advisory-circle-placeholder">
+                          <img src={member.image} alt={member.name} class="real-photo-img" />
+                        </div>
+                      ) : (
+                        <div class="advisory-circle-placeholder">
+                          <img src="/images/blue-flower-icon.png" alt={member.name} class="avatar-fallback-icon" />
+                        </div>
+                      )}
+                    </div>
+
+                    <h3 class="advisory-name">{member.name}</h3>
+                    {member.role && <p class="advisory-role">{member.role}</p>}
+                    {member.bio && <p class="advisory-bio" set:html={formatParagraph(member.bio)} />}
+                  </div>
+                ))}
               </div>
             </section>
           )}
