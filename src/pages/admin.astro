@@ -9,7 +9,6 @@
     <title>Camas Commons Content Admin</title>
     <!-- Explicitly set the CMS config URL so Decap CMS never gets a 404 regardless of trailing slash -->
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
-    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
     <!-- Netlify / Decap CMS Script -->
@@ -24,15 +23,6 @@
         window.CMS.registerPreviewTemplate("content", PreviewPlaceholder);
         window.CMS.registerPreviewTemplate("fundraiser", PreviewPlaceholder);
         window.CMS.registerPreviewTemplate("faqs", PreviewPlaceholder);
-      }
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", (user) => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
       }
     </script>
   </body>

@@ -1,8 +1,9 @@
-local_backend: true
-
 backend:
-  name: git-gateway
+  name: github
+  repo: misterjuicebox/camascommons
   branch: main
+  base_url: https://camascommons-cms-oauth.bootsyeppesen.workers.dev
+  auth_endpoint: /auth
 
 media_folder: "public/images"
 public_folder: "/images"
