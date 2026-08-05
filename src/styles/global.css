@@ -56,7 +56,7 @@ body {
   background: var(--color-bg-paper);
 }
 
-/* Editorial Header Layout (Stacked on Separate Lines) */
+/* Editorial Header Layout (Horizontal Left Title / Right Button) */
 .editorial-header {
   padding: 1.1rem 0;
   border-bottom: 1px solid var(--color-border-paper);
@@ -68,10 +68,21 @@ body {
 
 .header-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  text-align: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.header-logo-icon {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
 }
 
 .brand-title {
