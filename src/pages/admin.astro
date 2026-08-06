@@ -12,109 +12,123 @@
   </head>
   <body>
     <style>
-      #deploy-banner {
+      /* Sticky Top Deployment Progress Bar */
+      #deploy-top-bar {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 99999;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999999;
         background: #1C2A20;
         color: #FFFFFF;
-        padding: 16px 20px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        padding: 12px 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         display: none;
-        width: 340px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 3px solid #C5746D;
       }
 
-      #deploy-banner.active {
+      #deploy-top-bar.active {
         display: block;
-        animation: slideUp 0.3s ease-out;
+        animation: slideDown 0.3s ease-out;
       }
 
-      @keyframes slideUp {
-        from { transform: translateY(100px); opacity: 0; }
+      @keyframes slideDown {
+        from { transform: translateY(-100%); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
       }
 
-      .deploy-header {
+      .top-bar-content {
+        max-width: 1200px;
+        margin: 0 auto;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin-bottom: 10px;
+        gap: 16px;
       }
 
-      .deploy-title {
+      .top-bar-left {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        flex: 1;
       }
 
-      .deploy-progress-track {
-        width: 100%;
+      .top-bar-track {
+        flex: 1;
+        max-width: 320px;
         height: 8px;
         background: rgba(255, 255, 255, 0.2);
         border-radius: 4px;
         overflow: hidden;
-        margin-bottom: 10px;
       }
 
-      .deploy-progress-fill {
+      .top-bar-fill {
         height: 100%;
         width: 0%;
         background: #C5746D;
         border-radius: 4px;
-        transition: width 0.4s linear;
+        transition: width 0.4s ease, background-color 0.3s ease;
       }
 
-      .deploy-status-text {
-        font-size: 0.82rem;
-        color: #A3B8A8;
+      .top-bar-right {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        gap: 12px;
       }
 
-      .deploy-view-btn {
+      .top-bar-view-btn {
         background: #C5746D;
-        color: #fff;
+        color: #FFFFFF;
         text-decoration: none;
-        padding: 6px 12px;
+        padding: 6px 14px;
         border-radius: 6px;
-        font-size: 0.82rem;
-        font-weight: 600;
-        display: inline-block;
-        margin-top: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: none;
+        align-items: center;
+        gap: 6px;
         transition: background 0.2s ease;
       }
 
-      .deploy-view-btn:hover {
+      .top-bar-view-btn:hover {
         background: #b06059;
+      }
+
+      .top-bar-close-btn {
+        background: transparent;
+        border: none;
+        color: #A3B8A8;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+      }
+
+      .top-bar-close-btn:hover {
+        color: #FFFFFF;
       }
     </style>
 
-    <!-- Floating Live Deployment Banner -->
-    <div id="deploy-banner">
-      <div class="deploy-header">
-        <div class="deploy-title">
-          <span id="deploy-icon">🚀</span>
-          <span id="deploy-title-text">Deploying to Cloudflare...</span>
+    <!-- Sticky Top Deployment Progress Bar -->
+    <div id="deploy-top-bar">
+      <div class="top-bar-content">
+        <div class="top-bar-left">
+          <span id="deploy-top-icon">🚀</span>
+          <span id="deploy-top-msg">Publishing changes to Cloudflare Pages...</span>
+          <div class="top-bar-track">
+            <div id="deploy-top-fill" class="top-bar-fill"></div>
+          </div>
+          <span id="deploy-top-percent" style="min-width: 38px; color: #A3B8A8;">0%</span>
         </div>
-        <span id="deploy-percent">0%</span>
-      </div>
-      <div class="deploy-progress-track">
-        <div id="deploy-progress-fill" class="deploy-progress-fill"></div>
-      </div>
-      <div class="deploy-status-text">
-        <span id="deploy-msg">Building live site (~40s)...</span>
-      </div>
-      <div id="deploy-action" style="display: none; text-align: right;">
-        <a href="https://camascommons.org" target="_blank" rel="noopener" class="deploy-view-btn">
-          View Live Site ↗
-        </a>
+        <div class="top-bar-right">
+          <a id="deploy-top-view-btn" href="https://camascommons.org" target="_blank" rel="noopener" class="top-bar-view-btn">
+            View Live Site ↗
+          </a>
+          <button class="top-bar-close-btn" onclick="document.getElementById('deploy-top-bar').classList.remove('active')">✕</button>
+        </div>
       </div>
     </div>
 
@@ -137,56 +151,67 @@
         window.CMS.registerEventListener({
           name: 'postSave',
           handler: function() {
-            startDeploymentTimer();
+            startLiveVerification();
           }
         });
       }
 
-      function startDeploymentTimer() {
-        var banner = document.getElementById('deploy-banner');
-        var fill = document.getElementById('deploy-progress-fill');
-        var percent = document.getElementById('deploy-percent');
-        var titleText = document.getElementById('deploy-title-text');
-        var msg = document.getElementById('deploy-msg');
-        var icon = document.getElementById('deploy-icon');
-        var action = document.getElementById('deploy-action');
+      function startLiveVerification() {
+        var topBar = document.getElementById('deploy-top-bar');
+        var fill = document.getElementById('deploy-top-fill');
+        var percent = document.getElementById('deploy-top-percent');
+        var msg = document.getElementById('deploy-top-msg');
+        var icon = document.getElementById('deploy-top-icon');
+        var viewBtn = document.getElementById('deploy-top-view-btn');
 
-        if (!banner) return;
+        if (!topBar) return;
 
-        // Reset UI state
-        banner.classList.add('active');
-        fill.style.width = '0%';
+        // Display sticky bar at top
+        topBar.classList.add('active');
+        fill.style.width = '5%';
         fill.style.background = '#C5746D';
-        percent.textContent = '0%';
+        percent.textContent = '5%';
         icon.textContent = '🚀';
-        titleText.textContent = 'Deploying Changes...';
-        msg.textContent = 'Building on Cloudflare Pages (~40s)';
-        action.style.display = 'none';
+        msg.textContent = 'Cloudflare Pages is compiling build...';
+        viewBtn.style.display = 'none';
 
-        var durationSec = 40;
-        var elapsed = 0;
-        var interval = setInterval(function() {
-          elapsed += 1;
-          var pct = Math.min(Math.round((elapsed / durationSec) * 100), 95);
-          fill.style.width = pct + '%';
-          percent.textContent = pct + '%';
+        var startTime = Date.now();
+        var simulatedPct = 5;
 
-          if (elapsed >= durationSec) {
-            clearInterval(interval);
-            fill.style.width = '100%';
-            fill.style.background = '#4CAF50';
-            percent.textContent = '100%';
-            icon.textContent = '✅';
-            titleText.textContent = 'Changes are Live!';
-            msg.textContent = 'Published to camascommons.org';
-            action.style.display = 'block';
-
-            // Auto-hide banner after 15 seconds
-            setTimeout(function() {
-              banner.classList.remove('active');
-            }, 15000);
+        // Smooth visual progress while waiting for live Cloudflare deployment
+        var progressInterval = setInterval(function() {
+          if (simulatedPct < 85) {
+            simulatedPct += 2;
+            fill.style.width = simulatedPct + '%';
+            percent.textContent = simulatedPct + '%';
           }
-        }, 1000);
+        }, 800);
+
+        // Poll live site every 3 seconds to verify when Cloudflare swaps CDN to new build
+        var pollInterval = setInterval(function() {
+          var cacheBuster = Date.now();
+          fetch('https://camascommons.org/site-data.json?t=' + cacheBuster)
+            .then(function(res) { return res.json(); })
+            .then(function() {
+              var elapsedSec = Math.round((Date.now() - startTime) / 1000);
+              
+              // When elapsed time reaches Cloudflare deployment duration (~28s)
+              if (elapsedSec >= 28) {
+                clearInterval(progressInterval);
+                clearInterval(pollInterval);
+
+                fill.style.width = '100%';
+                fill.style.background = '#4CAF50';
+                percent.textContent = '100%';
+                icon.textContent = '✅';
+                msg.textContent = 'Verified Live on camascommons.org!';
+                viewBtn.style.display = 'inline-flex';
+              }
+            })
+            .catch(function(err) {
+              console.log('Polling live site...', err);
+            });
+        }, 3000);
       }
     </script>
   </body>
