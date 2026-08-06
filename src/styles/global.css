@@ -107,6 +107,20 @@ p {
   font-size: 1.08rem;
   color: var(--color-text-ink);
   margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+.narrative-body p,
+.faq-a p,
+.pledge-additional-info p,
+.proposal-paper p {
+  margin-bottom: 1.25rem;
+}
+
+.narrative-body p:last-child,
+.faq-a p:last-child,
+.pledge-additional-info p:last-child {
+  margin-bottom: 0;
 }
 
 .container {

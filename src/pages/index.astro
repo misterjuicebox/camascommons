@@ -103,6 +103,10 @@ function formatParagraph(text: string) {
       return `<ul class="flower-bullets">${processedLines.join('')}</ul>`;
     }
   }
+
+  // Convert single line breaks to <br /> so line breaks entered in Decap CMS are respected
+  formatted = formatted.replace(/\r?\n/g, '<br />');
+
   return formatted;
 }
 ---
@@ -112,26 +116,24 @@ function formatParagraph(text: string) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />
-    
-    <SEO
-      title={siteData.siteTitle}
-      description={siteData.tagline}
-      ogTitle={siteData.ogTitle}
-      ogDescription={siteData.ogDescription}
-      ogImage={siteData.ogImage}
-    />
+    <title>{siteData.siteTitle}</title>
+    <meta name="description" content={siteData.tagline} />
 
-    <!-- Automatically forward Netlify Identity email tokens (confirmation, invite, recovery) to /admin/ -->
-    <script is:inline>
-      if (window.location.hash && (
-        window.location.hash.indexOf('confirmation_token=') !== -1 ||
-        window.location.hash.indexOf('invite_token=') !== -1 ||
-        window.location.hash.indexOf('recovery_token=') !== -1 ||
-        window.location.hash.indexOf('email_change_token=') !== -1 ||
-        window.location.hash.indexOf('access_token=') !== -1
-      )) {
-        window.location.href = '/admin/' + window.location.hash;
+    <!-- Blue Camas Flower Favicon -->
+    <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />
+    <link rel="apple-touch-icon" href="/images/blue-flower-icon.png" />
+
+    <!-- Netlify Identity Widget for CMS Auth -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user: any) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
       }
     </script>
   </head>
@@ -154,19 +156,18 @@ function formatParagraph(text: string) {
       <section class="hero-block">
         <div class="location-tag">SAN JUAN ISLAND, WASHINGTON</div>
         <h1 class="hero-title">{siteData.siteTitle}</h1>
-        <p class="hero-tagline"><em>{siteData.tagline}</em></p>
+        <p class="hero-subtitle">{siteData.tagline}</p>
       </section>
 
-      {activeSections.map((section: any, index: number) => (
+      {activeSections.map((section: any) => (
         <>
-          {index > 0 && <div class="editorial-hr"></div>}
-
           {section.type === 'welcome_block' && (
+            <!-- Welcome Letter & Main Photo -->
             <div class="hero-welcome-wrapper">
               <ImagePlaceholder src={section.image || '/images/Main.jpeg'} label="[PHOTO: Main.jpg]" height="380px" clickable={Boolean(section.clickableImage)} />
 
               <div class="editorial-letter">
-                <p class="letter-text">{section.welcomeText || siteData.welcomeText}</p>
+                <p class="letter-text" set:html={formatParagraph(section.welcomeText || siteData.welcomeText)}></p>
                 <div class="letter-signature">
                   <span class="handwritten-note">{section.signature || "— Ally & Guisepi"}</span>
                 </div>
@@ -183,7 +184,7 @@ function formatParagraph(text: string) {
                 <div class="proposal-paper">
                   {section.title && <h2 class="section-title">{section.title}</h2>}
                   {(() => {
-                    const paragraphs = typeof section.content === 'string' ? section.content.split(/\n\n|\n/) : (section.content || []);
+                    const paragraphs = typeof section.content === 'string' ? section.content.split(/\r?\n\r?\n+/) : (section.content || []);
                     return (
                       <>
                         {paragraphs[0] && <p set:html={formatParagraph(paragraphs[0])}></p>}
@@ -211,12 +212,12 @@ function formatParagraph(text: string) {
                 
                 {section.title && <h2 class="section-title">{section.title}</h2>}
                 <div class="narrative-body">
-                  {(typeof section.content === 'string' ? section.content.split(/\n\n|\n/) : (section.content || [])).map((paragraph: string) => (
-                    <div set:html={formatParagraph(paragraph)}></div>
+                  {(typeof section.content === 'string' ? section.content.split(/\r?\n\r?\n+/) : (section.content || [])).map((paragraph: string) => (
+                    <p set:html={formatParagraph(paragraph)}></p>
                   ))}
                   {section.bulletPoints && (
                     <ul class="flower-bullets">
-                      {(typeof section.bulletPoints === 'string' ? section.bulletPoints.split(/\n\n|\n/) : section.bulletPoints).map((pt: string) => (
+                      {(typeof section.bulletPoints === 'string' ? section.bulletPoints.split(/\r?\n\r?\n+|\r?\n/) : section.bulletPoints).map((pt: string) => (
                         <li set:html={formatParagraph(pt)} />
                       ))}
                     </ul>
@@ -248,7 +249,7 @@ function formatParagraph(text: string) {
                       
                       {section.donateBullets && (
                         <ul class="flower-bullets">
-                          {(typeof section.donateBullets === 'string' ? section.donateBullets.split(/\n\n|\n/) : section.donateBullets).map((pt: string) => (
+                          {(typeof section.donateBullets === 'string' ? section.donateBullets.split(/\r?\n\r?\n+|\r?\n/) : section.donateBullets).map((pt: string) => (
                             <li set:html={formatParagraph(pt)} />
                           ))}
                         </ul>
@@ -268,7 +269,7 @@ function formatParagraph(text: string) {
                       
                       {section.pledgeBullets && (
                         <ul class="flower-bullets">
-                          {(typeof section.pledgeBullets === 'string' ? section.pledgeBullets.split(/\n\n|\n/) : section.pledgeBullets).map((pt: string) => (
+                          {(typeof section.pledgeBullets === 'string' ? section.pledgeBullets.split(/\r?\n\r?\n+|\r?\n/) : section.pledgeBullets).map((pt: string) => (
                             <li set:html={formatParagraph(pt)} />
                           ))}
                         </ul>
@@ -283,7 +284,7 @@ function formatParagraph(text: string) {
 
                 {section.additionalInfo && (
                   <div class="pledge-additional-info">
-                    {(typeof section.additionalInfo === 'string' ? section.additionalInfo.split(/\n\n|\n/) : section.additionalInfo).map((p: string) => (
+                    {(typeof section.additionalInfo === 'string' ? section.additionalInfo.split(/\r?\n\r?\n+/) : section.additionalInfo).map((p: string) => (
                       <p set:html={formatParagraph(p)}></p>
                     ))}
                   </div>
@@ -304,7 +305,7 @@ function formatParagraph(text: string) {
                   <details class="faq-entry">
                     <summary class="faq-q">{faq.q}</summary>
                     <div class="faq-a">
-                      {faq.a && (typeof faq.a === 'string' ? faq.a.split(/\n\n|\n/) : faq.a).map((p: string) => (
+                      {faq.a && (typeof faq.a === 'string' ? faq.a.split(/\r?\n\r?\n+/) : faq.a).map((p: string) => (
                         <p set:html={formatParagraph(p)}></p>
                       ))}
                       {faq.image && (
@@ -321,7 +322,7 @@ function formatParagraph(text: string) {
                     <div class="volunteer-box margin-top text-center">
                       <h3 class="volunteer-title">Volunteer Skill Needs:</h3>
                       <ul class="volunteer-bullets">
-                        {(typeof skills === 'string' ? skills.split(/\n\n|\n/) : skills).map((skill: string) => (
+                        {(typeof skills === 'string' ? skills.split(/\r?\n\r?\n+|\r?\n/) : skills).map((skill: string) => (
                           <li>{skill}</li>
                         ))}
                       </ul>
