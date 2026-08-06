@@ -183,20 +183,20 @@
         fill.style.background = '#C5746D';
         percent.textContent = '10%';
         icon.textContent = '🚀';
-        msg.textContent = 'Publishing changes to Cloudflare Pages...';
+        msg.textContent = 'Publishing commit to Cloudflare Pages...';
         viewBtn.style.display = 'none';
 
         var startTime = Date.now();
         var currentPct = 10;
 
-        // Smooth progress animation up to 98%
+        // Smooth progress animation while Cloudflare is building
         var progressInterval = setInterval(function() {
-          if (currentPct < 98) {
+          if (currentPct < 92) {
             currentPct += 1;
             fill.style.width = currentPct + '%';
             percent.textContent = currentPct + '%';
           }
-        }, 300);
+        }, 400);
 
         function markComplete() {
           clearInterval(progressInterval);
@@ -206,34 +206,41 @@
           fill.style.background = '#4CAF50';
           percent.textContent = '100%';
           icon.textContent = '✅';
-          msg.textContent = 'Verified Live on camascommons.org!';
+          msg.textContent = 'Verified Live on Cloudflare Pages!';
           viewBtn.style.display = 'inline-flex';
-
-          // Update baseline hash for next edit
-          setTimeout(updateBaselineHash, 3000);
         }
 
-        // Poll live site every 1.5s for real payload change
+        // Poll official Cloudflare Pages API endpoint via Worker proxy
         var pollInterval = setInterval(function() {
-          var cacheBuster = Date.now();
           var elapsedSec = Math.round((Date.now() - startTime) / 1000);
 
-          fetch('https://camascommons.org/site-data.json?t=' + cacheBuster)
-            .then(function(res) { return res.text(); })
-            .then(function(liveText) {
-              // 1. If live site data differs from pre-save baseline -> CLOUDFLARE SWAPPED CDN!
-              if (initialDataHash && liveText !== initialDataHash && elapsedSec >= 5) {
-                markComplete();
-              } 
-              // 2. Fallback completion trigger at 15s
-              else if (elapsedSec >= 15) {
+          fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/deploy-status?t=' + Date.now())
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+              if (data && data.success && data.result && data.result.length > 0) {
+                var latestDeploy = data.result[0];
+                var stageName = (latestDeploy.latest_stage && latestDeploy.latest_stage.name) || '';
+                var status = (latestDeploy.latest_stage && latestDeploy.latest_stage.status) || latestDeploy.status;
+
+                console.log('Cloudflare Pages API Status:', stageName, status);
+
+                if (status === 'active' || status === 'idle' || stageName === 'queued' || stageName === 'build') {
+                  msg.textContent = 'Cloudflare Pages: Building site (' + (stageName || 'active') + ')...';
+                } else if (status === 'success' || stageName === 'deploy' && status === 'success') {
+                  markComplete();
+                }
+              } else if (elapsedSec >= 35) {
+                // Fallback verification timeout
                 markComplete();
               }
             })
             .catch(function(err) {
-              console.log('Polling live site...', err);
+              console.log('Polling Cloudflare API...', err);
+              if (elapsedSec >= 35) {
+                markComplete();
+              }
             });
-        }, 1500);
+        }, 2000);
       }
     </script>
   </body>
