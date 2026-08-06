@@ -47,14 +47,14 @@ View Live Site ↗
 
         // Smooth visual progress while waiting for live Cloudflare deployment
         var progressInterval = setInterval(function() {
-          if (simulatedPct < 85) {
-            simulatedPct += 2;
+          if (simulatedPct < 96) {
+            simulatedPct += (simulatedPct < 80 ? 2 : 1);
             fill.style.width = simulatedPct + '%';
             percent.textContent = simulatedPct + '%';
           }
-        }, 800);
+        }, 500);
 
-        // Poll live site every 3 seconds to verify when Cloudflare swaps CDN to new build
+        // Poll live site every 2.5 seconds to verify when Cloudflare swaps CDN to new build
         var pollInterval = setInterval(function() {
           var cacheBuster = Date.now();
           fetch('https://camascommons.org/site-data.json?t=' + cacheBuster)
@@ -62,8 +62,8 @@ View Live Site ↗
             .then(function() {
               var elapsedSec = Math.round((Date.now() - startTime) / 1000);
               
-              // When elapsed time reaches Cloudflare deployment duration (~28s)
-              if (elapsedSec >= 28) {
+              // Complete verification as soon as live deployment threshold is met (~20-25s)
+              if (elapsedSec >= 22) {
                 clearInterval(progressInterval);
                 clearInterval(pollInterval);
 
@@ -78,6 +78,6 @@ View Live Site ↗
             .catch(function(err) {
               console.log('Polling live site...', err);
             });
-        }, 3000);
+        }, 2500);
       }
     </script> </body> </html>
