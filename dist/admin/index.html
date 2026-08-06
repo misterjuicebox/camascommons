@@ -1,12 +1,72 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Camas Commons Content Admin</title><!-- Explicitly set the CMS config URL so Decap CMS never gets a 404 regardless of trailing slash --><link href="/admin/config.yml" type="text/yaml" rel="cms-config-url"></head> <body> <!-- Netlify / Decap CMS Script --> <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script> <script>
-      if (window.CMS && window.createReactClass && window.h) {
-        var PreviewPlaceholder = window.createReactClass({
-          render: function() {
-            return window.h('div', { style: { padding: '24px', color: '#666', fontFamily: 'sans-serif' } }, 'Camas Commons Editor Active');
+<!DOCTYPE html><html lang="en" data-astro-cid-2zp6q64z> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Camas Commons Content Admin</title><!-- Explicitly set the CMS config URL so Decap CMS never gets a 404 regardless of trailing slash --><link href="/admin/config.yml" type="text/yaml" rel="cms-config-url"><style>#deploy-banner[data-astro-cid-2zp6q64z]{position:fixed;bottom:20px;right:20px;z-index:99999;background:#1c2a20;color:#fff;padding:16px 20px;border-radius:12px;box-shadow:0 10px 30px #0000004d;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;display:none;width:340px;border:1px solid rgba(255,255,255,.15)}#deploy-banner[data-astro-cid-2zp6q64z].active{display:block;animation:slideUp .3s ease-out}@keyframes slideUp{0%{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}.deploy-header[data-astro-cid-2zp6q64z]{display:flex;align-items:center;justify-content:space-between;font-size:.95rem;font-weight:600;margin-bottom:10px}.deploy-title[data-astro-cid-2zp6q64z]{display:flex;align-items:center;gap:8px}.deploy-progress-track[data-astro-cid-2zp6q64z]{width:100%;height:8px;background:#fff3;border-radius:4px;overflow:hidden;margin-bottom:10px}.deploy-progress-fill[data-astro-cid-2zp6q64z]{height:100%;width:0%;background:#c5746d;border-radius:4px;transition:width .4s linear}.deploy-status-text[data-astro-cid-2zp6q64z]{font-size:.82rem;color:#a3b8a8;display:flex;justify-content:space-between;align-items:center}.deploy-view-btn[data-astro-cid-2zp6q64z]{background:#c5746d;color:#fff;text-decoration:none;padding:6px 12px;border-radius:6px;font-size:.82rem;font-weight:600;display:inline-block;margin-top:8px;transition:background .2s ease}.deploy-view-btn[data-astro-cid-2zp6q64z]:hover{background:#b06059}
+</style></head> <body data-astro-cid-2zp6q64z>  <!-- Floating Live Deployment Banner --> <div id="deploy-banner" data-astro-cid-2zp6q64z> <div class="deploy-header" data-astro-cid-2zp6q64z> <div class="deploy-title" data-astro-cid-2zp6q64z> <span id="deploy-icon" data-astro-cid-2zp6q64z>🚀</span> <span id="deploy-title-text" data-astro-cid-2zp6q64z>Deploying to Cloudflare...</span> </div> <span id="deploy-percent" data-astro-cid-2zp6q64z>0%</span> </div> <div class="deploy-progress-track" data-astro-cid-2zp6q64z> <div id="deploy-progress-fill" class="deploy-progress-fill" data-astro-cid-2zp6q64z></div> </div> <div class="deploy-status-text" data-astro-cid-2zp6q64z> <span id="deploy-msg" data-astro-cid-2zp6q64z>Building live site (~40s)...</span> </div> <div id="deploy-action" style="display: none; text-align: right;" data-astro-cid-2zp6q64z> <a href="https://camascommons.org" target="_blank" rel="noopener" class="deploy-view-btn" data-astro-cid-2zp6q64z>
+View Live Site ↗
+</a> </div> </div> <!-- Netlify / Decap CMS Script --> <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script> <script>
+      if (window.CMS) {
+        if (window.createReactClass && window.h) {
+          var PreviewPlaceholder = window.createReactClass({
+            render: function() {
+              return window.h('div', { style: { padding: '24px', color: '#666', fontFamily: 'sans-serif' } }, 'Camas Commons Editor Active');
+            }
+          });
+          window.CMS.registerPreviewTemplate("content", PreviewPlaceholder);
+          window.CMS.registerPreviewTemplate("fundraiser", PreviewPlaceholder);
+          window.CMS.registerPreviewTemplate("faqs", PreviewPlaceholder);
+        }
+
+        // Listen for postSave / publish events in Decap CMS
+        window.CMS.registerEventListener({
+          name: 'postSave',
+          handler: function() {
+            startDeploymentTimer();
           }
         });
-        window.CMS.registerPreviewTemplate("content", PreviewPlaceholder);
-        window.CMS.registerPreviewTemplate("fundraiser", PreviewPlaceholder);
-        window.CMS.registerPreviewTemplate("faqs", PreviewPlaceholder);
+      }
+
+      function startDeploymentTimer() {
+        var banner = document.getElementById('deploy-banner');
+        var fill = document.getElementById('deploy-progress-fill');
+        var percent = document.getElementById('deploy-percent');
+        var titleText = document.getElementById('deploy-title-text');
+        var msg = document.getElementById('deploy-msg');
+        var icon = document.getElementById('deploy-icon');
+        var action = document.getElementById('deploy-action');
+
+        if (!banner) return;
+
+        // Reset UI state
+        banner.classList.add('active');
+        fill.style.width = '0%';
+        fill.style.background = '#C5746D';
+        percent.textContent = '0%';
+        icon.textContent = '🚀';
+        titleText.textContent = 'Deploying Changes...';
+        msg.textContent = 'Building on Cloudflare Pages (~40s)';
+        action.style.display = 'none';
+
+        var durationSec = 40;
+        var elapsed = 0;
+        var interval = setInterval(function() {
+          elapsed += 1;
+          var pct = Math.min(Math.round((elapsed / durationSec) * 100), 95);
+          fill.style.width = pct + '%';
+          percent.textContent = pct + '%';
+
+          if (elapsed >= durationSec) {
+            clearInterval(interval);
+            fill.style.width = '100%';
+            fill.style.background = '#4CAF50';
+            percent.textContent = '100%';
+            icon.textContent = '✅';
+            titleText.textContent = 'Changes are Live!';
+            msg.textContent = 'Published to camascommons.org';
+            action.style.display = 'block';
+
+            // Auto-hide banner after 15 seconds
+            setTimeout(function() {
+              banner.classList.remove('active');
+            }, 15000);
+          }
+        }, 1000);
       }
     </script> </body> </html>
