@@ -2,6 +2,17 @@
 </style></head> <body data-astro-cid-2zp6q64z>  <!-- Sticky Top Deployment Progress Bar --> <div id="deploy-top-bar" data-astro-cid-2zp6q64z> <div class="top-bar-content" data-astro-cid-2zp6q64z> <div class="top-bar-left" data-astro-cid-2zp6q64z> <span id="deploy-top-icon" data-astro-cid-2zp6q64z>🚀</span> <span id="deploy-top-msg" data-astro-cid-2zp6q64z>Publishing changes to Cloudflare Pages...</span> <div class="top-bar-track" data-astro-cid-2zp6q64z> <div id="deploy-top-fill" class="top-bar-fill" data-astro-cid-2zp6q64z></div> </div> <span id="deploy-top-percent" style="min-width: 38px; color: #A3B8A8;" data-astro-cid-2zp6q64z>0%</span> </div> <div class="top-bar-right" data-astro-cid-2zp6q64z> <a id="deploy-top-view-btn" href="https://camascommons.org" target="_blank" rel="noopener" class="top-bar-view-btn" data-astro-cid-2zp6q64z>
 View Live Site ↗
 </a> <button class="top-bar-close-btn" onclick="document.getElementById('deploy-top-bar').classList.remove('active')" data-astro-cid-2zp6q64z>✕</button> </div> </div> </div> <!-- Netlify / Decap CMS Script --> <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script> <script>
+      var initialDataHash = null;
+
+      // Capture pre-save baseline data hash from live site
+      function updateBaselineHash() {
+        fetch('https://camascommons.org/site-data.json?t=' + Date.now())
+          .then(function(r) { return r.text(); })
+          .then(function(t) { initialDataHash = t; })
+          .catch(function() {});
+      }
+      updateBaselineHash();
+
       if (window.CMS) {
         if (window.createReactClass && window.h) {
           var PreviewPlaceholder = window.createReactClass({
@@ -33,51 +44,62 @@ View Live Site ↗
 
         if (!topBar) return;
 
-        // Display sticky bar at top
+        // Reset UI state
         topBar.classList.add('active');
-        fill.style.width = '5%';
+        fill.style.width = '10%';
         fill.style.background = '#C5746D';
-        percent.textContent = '5%';
+        percent.textContent = '10%';
         icon.textContent = '🚀';
-        msg.textContent = 'Cloudflare Pages is compiling build...';
+        msg.textContent = 'Publishing changes to Cloudflare Pages...';
         viewBtn.style.display = 'none';
 
         var startTime = Date.now();
-        var simulatedPct = 5;
+        var currentPct = 10;
 
-        // Smooth visual progress while waiting for live Cloudflare deployment
+        // Smooth progress animation up to 98%
         var progressInterval = setInterval(function() {
-          if (simulatedPct < 96) {
-            simulatedPct += (simulatedPct < 80 ? 2 : 1);
-            fill.style.width = simulatedPct + '%';
-            percent.textContent = simulatedPct + '%';
+          if (currentPct < 98) {
+            currentPct += 1;
+            fill.style.width = currentPct + '%';
+            percent.textContent = currentPct + '%';
           }
-        }, 500);
+        }, 300);
 
-        // Poll live site every 2.5 seconds to verify when Cloudflare swaps CDN to new build
+        function markComplete() {
+          clearInterval(progressInterval);
+          clearInterval(pollInterval);
+
+          fill.style.width = '100%';
+          fill.style.background = '#4CAF50';
+          percent.textContent = '100%';
+          icon.textContent = '✅';
+          msg.textContent = 'Verified Live on camascommons.org!';
+          viewBtn.style.display = 'inline-flex';
+
+          // Update baseline hash for next edit
+          setTimeout(updateBaselineHash, 3000);
+        }
+
+        // Poll live site every 1.5s for real payload change
         var pollInterval = setInterval(function() {
           var cacheBuster = Date.now();
-          fetch('https://camascommons.org/site-data.json?t=' + cacheBuster)
-            .then(function(res) { return res.json(); })
-            .then(function() {
-              var elapsedSec = Math.round((Date.now() - startTime) / 1000);
-              
-              // Complete verification as soon as live deployment threshold is met (~20-25s)
-              if (elapsedSec >= 22) {
-                clearInterval(progressInterval);
-                clearInterval(pollInterval);
+          var elapsedSec = Math.round((Date.now() - startTime) / 1000);
 
-                fill.style.width = '100%';
-                fill.style.background = '#4CAF50';
-                percent.textContent = '100%';
-                icon.textContent = '✅';
-                msg.textContent = 'Verified Live on camascommons.org!';
-                viewBtn.style.display = 'inline-flex';
+          fetch('https://camascommons.org/site-data.json?t=' + cacheBuster)
+            .then(function(res) { return res.text(); })
+            .then(function(liveText) {
+              // 1. If live site data differs from pre-save baseline -> CLOUDFLARE SWAPPED CDN!
+              if (initialDataHash && liveText !== initialDataHash && elapsedSec >= 5) {
+                markComplete();
+              } 
+              // 2. Fallback completion trigger at 15s
+              else if (elapsedSec >= 15) {
+                markComplete();
               }
             })
             .catch(function(err) {
               console.log('Polling live site...', err);
             });
-        }, 2500);
+        }, 1500);
       }
     </script> </body> </html>
