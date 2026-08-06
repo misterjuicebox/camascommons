@@ -29,13 +29,13 @@ collections:
           - label: "Homepage Sections (Add, Edit, Re-order Any Section)"
             name: "sections"
             widget: "list"
-            hint: "💡 FORMATTING TIPS: 1) BOLD TEXT: Wrap words in double asterisks `**like this**` (e.g. `**bold text**`). 2) FLOWER BULLETS: Start lines with ~ or - or * (e.g. ~ Bullet item), or type :flower: inline anywhere."
+            hint: "💡 FORMATTING TIPS: 1) BOLD: Wrap words in `**double asterisks**`. 2) LINE BREAKS & PARAGRAPHS: Press Enter twice (leave a blank line) between paragraphs. Press Enter once for a line break. 3) FLOWER BULLETS: Start lines with ~ or - or * (e.g. ~ Bullet item), or type :flower: inline anywhere."
             types:
               - label: "Welcome Message & Main Photo"
                 name: "welcome_block"
                 widget: "object"
                 fields:
-                  - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text", default: "", required: false, hint: "💡 TIP: Wrap words in double asterisks `**like this**` for bold text." }
+                  - { label: "Welcome Message (Ally & Guisepi)", name: "welcomeText", widget: "text", default: "", required: false, hint: "💡 TIP: Wrap words in `**double asterisks**` for bold. Press Enter twice (blank line) for paragraph space, or Enter once for a line break." }
                   - { label: "Signature Note", name: "signature", widget: "string", default: "— Ally & Guisepi", required: false }
                   - { label: "Section Photo", name: "image", widget: "image", default: "/images/Main.jpeg", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
@@ -44,8 +44,8 @@ collections:
                 widget: "object"
                 fields:
                   - { label: "Section Title (Optional)", name: "title", widget: "string", default: "", required: false }
-                  - { label: "Content Paragraphs (Optional)", name: "content", widget: "text", default: "", required: false, hint: "💡 TIP: Wrap words in double asterisks `**like this**` for bold text. Start lines with ~ or - or * for Camas Flower Bullets." }
-                  - { label: "Camas Flower Bullet Points (One per line - Optional)", name: "bulletPoints", widget: "text", required: false }
+                  - { label: "Content Paragraphs (Optional)", name: "content", widget: "text", default: "", required: false, hint: "💡 TIP: Wrap words in `**double asterisks**` for bold. Press Enter twice (blank line) for paragraph space, or Enter once for a line break. Start lines with ~ or - or * for Camas Flower Bullets." }
+                  - { label: "Camas Flower Bullet Points (One per line - Optional)", name: "bulletPoints", widget: "text", required: false, hint: "💡 TIP: Put each bullet on its own line. Start lines with ~ or - or * for blue flower bullets." }
                   - { label: "Section Photo", name: "image", widget: "image", default: "", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
                   - { label: "Section Style / Layout", name: "style", widget: "select", default: "story", options: [
@@ -61,7 +61,7 @@ collections:
                   - { label: "Make Section Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false }
                   - { label: "FAQ Questions & Answers (Drag = handles to re-order)", name: "items", widget: "list", required: false, fields: [
                       { label: "Question", name: "q", widget: "string", default: "", required: false },
-                      { label: "Answer Paragraphs", name: "a", widget: "text", default: "", required: false },
+                      { label: "Answer Paragraphs", name: "a", widget: "text", default: "", required: false, hint: "💡 TIP: Press Enter twice (blank line) for paragraph space, or Enter once for a line break." },
                       { label: "FAQ Photo", name: "image", widget: "image", default: "", required: false },
                       { label: "Make Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false }
                     ] }
@@ -83,7 +83,7 @@ collections:
                       { label: "Title / Subtitle", name: "role", widget: "string", default: "Advisory Board Member", required: false },
                       { label: "Circle Headshot Photo", name: "image", widget: "image", default: "", required: false },
                       { label: "Make Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false },
-                      { label: "Summary / Bio Text", name: "bio", widget: "text", default: "", required: false }
+                      { label: "Summary / Bio Text", name: "bio", widget: "text", default: "", required: false, hint: "💡 TIP: Press Enter twice (blank line) for paragraph space, or Enter once for a line break." }
                     ] }
               - label: "Pledge & Donate Section (Symmetrical Dual Cards)"
                 name: "pledge_donate_block"
@@ -101,7 +101,7 @@ collections:
                   - { label: "Pledge Button Label", name: "pledgeButtonText", widget: "string", default: "MAKE A PLEDGE", required: false }
                   - { label: "Pledge URL", name: "pledgeUrl", widget: "string", default: "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header", required: false }
                   - { label: "Section Photo (Optional)", name: "image", widget: "image", default: "/images/Long.jpeg", required: false }
-                  - { label: "Mail-in Check & Contact Info", name: "additionalInfo", widget: "text", default: "To donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nPlease email questions to info@camascommons.org", required: false }
+                  - { label: "Mail-in Check & Contact Info", name: "additionalInfo", widget: "text", default: "To donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nPlease email questions to info@camascommons.org", required: false, hint: "💡 TIP: Press Enter twice (blank line) for paragraph space, or Enter once for a line break." }
           - { label: "Contact Email", name: "contactEmail", widget: "string", required: false }
 
   - name: "faqs"
@@ -116,6 +116,6 @@ collections:
     fields:
       - { label: "Order Number (for sorting)", name: "order", widget: "number", default: 10, value_type: "int" }
       - { label: "Question", name: "q", widget: "string", default: "", required: false }
-      - { label: "Answer Paragraphs (Optional)", name: "a", widget: "text", default: "", required: false }
+      - { label: "Answer Paragraphs (Optional)", name: "a", widget: "text", default: "", required: false, hint: "💡 TIP: Press Enter twice (blank line) for paragraph space, or Enter once for a line break." }
       - { label: "Optional Image (e.g. /images/hay.jpeg)", name: "image", widget: "string", default: "", required: false }
       - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
