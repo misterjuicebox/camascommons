@@ -58,12 +58,12 @@ View Live Site ↗
 
         // Smooth progress animation while Cloudflare is building
         var progressInterval = setInterval(function() {
-          if (currentPct < 92) {
+          if (currentPct < 94) {
             currentPct += 1;
             fill.style.width = currentPct + '%';
             percent.textContent = currentPct + '%';
           }
-        }, 400);
+        }, 600);
 
         function markComplete() {
           clearInterval(progressInterval);
@@ -77,7 +77,7 @@ View Live Site ↗
           viewBtn.style.display = 'inline-flex';
         }
 
-        // Poll official Cloudflare Pages API endpoint via Worker proxy
+        // Poll Cloudflare API via Worker proxy every 2.5 seconds
         var pollInterval = setInterval(function() {
           var elapsedSec = Math.round((Date.now() - startTime) / 1000);
 
@@ -85,28 +85,42 @@ View Live Site ↗
             .then(function(res) { return res.json(); })
             .then(function(data) {
               if (data && data.success && data.result && data.result.length > 0) {
-                var latestDeploy = data.result[0];
-                var stageName = (latestDeploy.latest_stage && latestDeploy.latest_stage.name) || '';
-                var status = (latestDeploy.latest_stage && latestDeploy.latest_stage.status) || latestDeploy.status;
+                // Find deployment created AFTER user clicked Publish (subtract 12s for clock tolerance)
+                var newDeploy = data.result.find(function(dep) {
+                  var createdMs = new Date(dep.created_on).getTime();
+                  return createdMs >= (startTime - 12000);
+                });
 
-                console.log('Cloudflare Pages API Status:', stageName, status);
+                if (newDeploy) {
+                  var stageName = (newDeploy.latest_stage && newDeploy.latest_stage.name) || '';
+                  var status = (newDeploy.latest_stage && newDeploy.latest_stage.status) || newDeploy.status;
 
-                if (status === 'active' || status === 'idle' || stageName === 'queued' || stageName === 'build') {
-                  msg.textContent = 'Cloudflare Pages: Building site (' + (stageName || 'active') + ')...';
-                } else if (status === 'success' || stageName === 'deploy' && status === 'success') {
-                  markComplete();
+                  console.log('New Cloudflare Deployment Stage/Status:', stageName, status);
+
+                  if (status === 'success' || (stageName === 'deploy' && status === 'success')) {
+                    markComplete();
+                  } else if (status === 'failure') {
+                    clearInterval(progressInterval);
+                    clearInterval(pollInterval);
+                    msg.textContent = 'Build failed on Cloudflare';
+                    fill.style.background = '#E53935';
+                  } else {
+                    msg.textContent = 'Cloudflare Pages: Building (' + (stageName || 'active') + ')...';
+                  }
+                } else {
+                  // New build hasn't registered in API yet (first 5-10s)
+                  msg.textContent = 'Cloudflare Pages: Triggering build runner (' + elapsedSec + 's)...';
                 }
-              } else if (elapsedSec >= 35) {
-                // Fallback verification timeout
+              } else if (elapsedSec >= 45) {
                 markComplete();
               }
             })
             .catch(function(err) {
               console.log('Polling Cloudflare API...', err);
-              if (elapsedSec >= 35) {
+              if (elapsedSec >= 45) {
                 markComplete();
               }
             });
-        }, 2000);
+        }, 2500);
       }
     </script> </body> </html>
