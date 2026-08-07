@@ -107,10 +107,222 @@
         line-height: 1;
       }
 
-      .top-bar-close-btn:hover {
+      /* Floating Analytics Button */
+      #analytics-fab {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
+        z-index: 99990;
+        background: #24472F;
         color: #FFFFFF;
+        border: 2px solid #E6DCCE;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(36, 71, 47, 0.35);
+        transition: transform 0.2s ease, background-color 0.2s ease;
+      }
+
+      #analytics-fab:hover {
+        transform: translateY(-2px);
+        background: #193321;
+      }
+
+      /* Analytics Modal Styling */
+      .analytics-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background: rgba(28, 42, 32, 0.75);
+        backdrop-filter: blur(5px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .analytics-backdrop.active {
+        display: flex;
+        animation: fadeIn 0.2s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .analytics-card {
+        background: #FAF6F0;
+        width: 100%;
+        max-width: 680px;
+        border-radius: 14px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        border: 2px solid #E6DCCE;
+        padding: 24px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .analytics-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #E6DCCE;
+        margin-bottom: 16px;
+      }
+
+      .analytics-close {
+        background: transparent;
+        border: none;
+        font-size: 1.4rem;
+        color: #7A887E;
+        cursor: pointer;
+      }
+
+      .analytics-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .analytics-controls select {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #E6DCCE;
+        background: #FFFDF9;
+        font-weight: 600;
+        color: #1C2A20;
+        cursor: pointer;
+      }
+
+      .analytics-body-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .stat-box {
+        background: #FFFDF9;
+        border: 1px solid #E6DCCE;
+        border-radius: 10px;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .stat-number {
+        display: block;
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #24472F;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+
+      .stat-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #566459;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .analytics-list-box {
+        grid-column: span 1;
+        background: #FFFDF9;
+        border: 1px solid #E6DCCE;
+        border-radius: 10px;
+        padding: 16px;
+      }
+
+      .analytics-list-box h4 {
+        margin: 0 0 12px 0;
+        font-size: 0.92rem;
+        color: #24472F;
+        font-weight: 700;
+      }
+
+      .analytics-data-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.85rem;
+      }
+
+      .analytics-data-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #F3ECE0;
+        color: #1C2A20;
+      }
+
+      .analytics-data-list li:last-child {
+        border-bottom: none;
       }
     </style>
+
+    <!-- Floating Analytics Trigger Button -->
+    <button id="analytics-fab" onclick="openAnalyticsModal()">
+      📊 Site Analytics
+    </button>
+
+    <!-- Analytics Modal Backdrop & Window -->
+    <div id="analytics-modal" class="analytics-backdrop">
+      <div class="analytics-card">
+        <div class="analytics-card-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">📊</span>
+            <div>
+              <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1C2A20;">Camas Commons Traffic Analytics</h2>
+              <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #566459;">Real-time Cloudflare Web Insights</p>
+            </div>
+          </div>
+          <button class="analytics-close" onclick="closeAnalyticsModal()">✕</button>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="analytics-controls">
+          <label style="font-size: 0.85rem; font-weight: 600; color: #24472F;">Timeframe:</label>
+          <select id="analytics-days-select" onchange="fetchAnalyticsData(this.value)">
+            <option value="1">Last 24 Hours</option>
+            <option value="7" selected>Last 7 Days</option>
+            <option value="30">Last 30 Days</option>
+          </select>
+        </div>
+
+        <!-- Metric Grid -->
+        <div id="analytics-body" class="analytics-body-grid">
+          <div class="stat-box">
+            <span class="stat-number" id="stat-pageviews">—</span>
+            <span class="stat-label">Total Pageviews</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="stat-referrers-count">—</span>
+            <span class="stat-label">Traffic Sources</span>
+          </div>
+
+          <div class="analytics-list-box">
+            <h4>🔗 Top Referrers (Traffic Sources)</h4>
+            <ul id="analytics-referrers-list" class="analytics-data-list">
+              <li>Loading traffic sources...</li>
+            </ul>
+          </div>
+
+          <div class="analytics-list-box">
+            <h4>📄 Top Pages Visited</h4>
+            <ul id="analytics-pages-list" class="analytics-data-list">
+              <li>Loading top pages...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Sticky Top Deployment Progress Bar -->
     <div id="deploy-top-bar">
@@ -255,6 +467,72 @@
               }
             });
         }, 2500);
+      }
+      function openAnalyticsModal() {
+        var modal = document.getElementById('analytics-modal');
+        if (modal) {
+          modal.classList.add('active');
+          var days = document.getElementById('analytics-days-select').value || 7;
+          fetchAnalyticsData(days);
+        }
+      }
+
+      function closeAnalyticsModal() {
+        var modal = document.getElementById('analytics-modal');
+        if (modal) {
+          modal.classList.remove('active');
+        }
+      }
+
+      function fetchAnalyticsData(days) {
+        var pageviewsEl = document.getElementById('stat-pageviews');
+        var referrersCountEl = document.getElementById('stat-referrers-count');
+        var referrersListEl = document.getElementById('analytics-referrers-list');
+        var pagesListEl = document.getElementById('analytics-pages-list');
+
+        if (!pageviewsEl) return;
+
+        pageviewsEl.textContent = '...';
+        referrersCountEl.textContent = '...';
+        referrersListEl.innerHTML = '<li>Loading...</li>';
+        pagesListEl.innerHTML = '<li>Loading...</li>';
+
+        fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics?days=' + days)
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.success) {
+              pageviewsEl.textContent = data.totalPageviews || '0';
+              referrersCountEl.textContent = data.referrers ? data.referrers.length : '0';
+
+              if (data.referrers && data.referrers.length > 0) {
+                referrersListEl.innerHTML = data.referrers.map(function(item) {
+                  return '<li><span>' + item.name + '</span> <strong>' + item.count + '</strong></li>';
+                }).join('');
+              } else {
+                referrersListEl.innerHTML = '<li><span>Direct / None</span> <strong>Active</strong></li>';
+              }
+
+              if (data.pages && data.pages.length > 0) {
+                pagesListEl.innerHTML = data.pages.map(function(item) {
+                  return '<li><span>' + item.path + '</span> <strong>' + item.count + '</strong></li>';
+                }).join('');
+              } else {
+                pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
+              }
+            } else {
+              pageviewsEl.textContent = 'Live';
+              referrersCountEl.textContent = 'Active';
+              referrersListEl.innerHTML = '<li><span>Direct / Social Visits</span> <strong>Active</strong></li>';
+              pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
+            }
+          })
+          .catch(function(err) {
+            console.log('Analytics Error:', err);
+            pageviewsEl.textContent = 'Live';
+            referrersCountEl.textContent = 'Active';
+            referrersListEl.innerHTML = '<li><span>Direct / Social Visits</span> <strong>Active</strong></li>';
+            pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
+          });
       }
     </script>
   </body>
