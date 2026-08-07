@@ -290,8 +290,8 @@
         <div class="analytics-controls">
           <label style="font-size: 0.85rem; font-weight: 600; color: #24472F;">Timeframe:</label>
           <select id="analytics-days-select" onchange="fetchAnalyticsData(this.value)">
-            <option value="1">Last 24 Hours</option>
-            <option value="7" selected>Last 7 Days</option>
+            <option value="1" selected>Last 24 Hours</option>
+            <option value="7">Last 7 Days</option>
             <option value="30">Last 30 Days</option>
           </select>
         </div>
@@ -300,7 +300,7 @@
         <div id="analytics-body" class="analytics-body-grid">
           <div class="stat-box">
             <span class="stat-number" id="stat-pageviews">—</span>
-            <span class="stat-label">Total Pageviews</span>
+            <span class="stat-label">Total Visits & Pageviews</span>
           </div>
           <div class="stat-box">
             <span class="stat-number" id="stat-referrers-count">—</span>
@@ -472,7 +472,7 @@
         var modal = document.getElementById('analytics-modal');
         if (modal) {
           modal.classList.add('active');
-          var days = document.getElementById('analytics-days-select').value || 7;
+          var days = document.getElementById('analytics-days-select').value || 1;
           fetchAnalyticsData(days);
         }
       }
