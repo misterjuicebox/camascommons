@@ -129,7 +129,7 @@
         {
           "name": "Roger Ellison",
           "role": "President of The Grange",
-          "image": "",
+          "image": "/images/roger.jpeg",
           "clickableImage": true,
           "bio": "Farmer and Permaculturist at Thornbush Farm, Advisor for Overmarsh Farm Commons."
         },
@@ -143,14 +143,14 @@
         {
           "name": "Lisa Lawrence",
           "role": "Former Chair of the Land Bank Commission",
-          "image": "",
+          "image": "/images/lisa.jpeg",
           "clickableImage": true,
           "bio": "Swinomish Tribal elder, former Real Estate Agent, Farmer, Artist, Commercial fisherwoman."
         },
         {
           "name": "David Hassin",
           "role": "Sustainable Development Professional",
-          "image": "",
+          "image": "/images/david.jpeg",
           "clickableImage": true,
           "bio": "40+ years of property acquisition, creative reuse, and sustainable construction, delivering public/private consulting with community-centered outcomes."
         }
