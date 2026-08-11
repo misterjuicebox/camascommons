@@ -13,7 +13,7 @@
     {
       "type": "custom_section",
       "title": "What is Camas Commons?",
-      "content": "Based at Talking Horse Ranch, Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. In a time when talented young makers and producers are priced out of life on the island, Camas Commons provides affordable land accessibility and housing for young farmers, regenerates the land, and supports the local community with healthy food and community events.\n\n\nWe are entering a Request For Proposal process with the Land Bank to maintain being the current occupants & stewards and to nurture the next iteration of this farm. This chapter is not just about us, but will not happen if we aren't here. We're devoted to sharing this land with fellow farmers and producers. ",
+      "content": "Based at Talking Horse Ranch, Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. In a time when talented young makers and producers are priced out of life on the island, Camas Commons provides affordable land accessibility and housing for young farmers, regenerates the land, and supports the local community with healthy food and community events.\n\n\nWe are entering a tight deadline with the Request For Proposal process from the Land Bank. We aim to maintain being the current occupants & stewards and to nurture the next iteration of this farm. This chapter is not just about us, but will not happen if we aren't here. We're devoted to sharing this land with fellow farmers and producers. ",
       "image": "/images/GandA.jpeg",
       "clickableImage": false,
       "style": "story"
@@ -29,7 +29,7 @@
     {
       "type": "custom_section",
       "title": "How can I support this project?",
-      "content": "We are seeking **ANGEL DONORS** prepared to make transformational gifts toward the purchase of the ranch. Your support can help protect this land from speculation, keep it affordable for future farmers and producers, and preserve it in service to the community for generations to come. \n\nAll **PLEDGES & DONATIONS** are tax-deductible through our collaborating partner On Sacred Ground Land Trust. Clicking the 'PLEDGE or DONATE' button will bring you to the donation portal.\n\nWe are ready to continue stewarding this land as a working farm, a place of conservation and a lasting community resource. But we cannot do it without significant financial support. \n\nOur first major fundraising deadline is in late-September, when we submit our final proposal to the Land Bank. To make that proposal competitive, we are raising **$1.5 million**.\n\nIt is an ambitious goal, but the opportunity is extraordinary: to secure the future of Talking Horse Ranch as protected farmland and a lasting community resource. Every contribution brings us closer—and every donor becomes part of preserving this land for generations to come.",
+      "content": "We are seeking **ANGEL DONORS** prepared to make transformational gifts toward the purchase of the ranch. Your support can help protect this land from speculation, keep it affordable for future farmers and producers, and preserve it in service to the community for generations to come. \n\nAll **PLEDGES & DONATIONS** are tax-deductible through our collaborating partner On Sacred Ground Land Trust. \n\nWe are ready to continue stewarding this land as a working farm, a place of conservation and a lasting community resource. But we cannot do it without significant financial support. \n\nOur first major fundraising deadline is in late-September, when we submit our final proposal to the Land Bank. To make that proposal competitive, we are raising **$1.5 million**.\n\nIt is an ambitious goal, but the opportunity is extraordinary: to secure the future of Talking Horse Ranch as protected farmland and a lasting community resource. Every contribution brings us closer—and every donor becomes part of preserving this land for generations to come.",
       "image": "/images/Long.jpeg",
       "clickableImage": false,
       "style": "callout"
@@ -37,7 +37,7 @@
     {
       "type": "custom_section",
       "title": "How Camas Commons Benefits the Community",
-      "content": "~ Offers farmers & producers the ability to affordably live on farmland and to own & build their own homes.\n\n~ Allows other farmers & producers to have access to farmland through affordable agricultural leases. \n\n~ Transitions the farm out of conventional agriculture by adopting regenerative agricultural practices to restore the health of the land as a whole.\n\n~ Creates a more effective use of energy & money through shared resources, infrastructure, and equipment.\n\n~ Supports a more sustainable & affordable approach to farming with different farmers operating their own businesses, which helps utilize the full potential of the land by providing different products & services that serve the farm as a whole, and the community in which we serve.\n\n~ Helps grow island food security.\n\n~ Supports community connection through hands-on education, workshops, and learning exchanges, as well as a variety of events, a farm store and gatherings centered around the seasonal festivities of the farm.\n",
+      "content": "~ Offers farmers & producers the ability to affordably live on farmland and to build & own their own homes.\n\n~ Allows other farmers & producers to have access to farmland through affordable agricultural leases. \n\n~ Transitions the farm out of conventional agriculture by adopting regenerative agricultural practices to restore the health of the land as a whole.\n\n~ Creates a more effective use of energy & money through shared resources, infrastructure, and equipment.\n\n~ Supports a more sustainable & affordable approach to farming with different farmers operating their own businesses, which helps utilize the full potential of the land by providing different products & services that serve the farm as a whole, and the community in which we serve.\n\n~ Helps grow island food security.\n\n~ Supports community connection through hands-on education, workshops, and learning exchanges, as well as a variety of events, a farm store and gatherings centered around the seasonal festivities of the farm.\n",
       "image": "/images/wedding_event.jpg",
       "clickableImage": false,
       "style": "story"
@@ -86,7 +86,7 @@
         },
         {
           "q": "How many people will live at Camas Commons?",
-          "a": "Based on the allowed density, four houses plus the existing ADU are permissible. Averaging 2-4 people per house, we see 10-20 full time residents (including children). At least one member from each house must be involved in agriculture, sustainability-adjacent activities, an administrative role, or maintenance.",
+          "a": "Based on the allowed density, four houses plus the existing mother-in-law unit are permissible. Averaging 2-4 people per house, we see 10-20 full time residents (including children). At least one member from each house must be involved substantially in agriculture, sustainability-adjacent activities, an administrative role, or maintenance.",
           "image": "/images/pig.jpeg",
           "clickableImage": false
         },
@@ -98,7 +98,7 @@
         },
         {
           "q": "How can I support Camas Commons?",
-          "a": "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals.\n\nOur donate button will take you to the website of our collaborating non-profit, On Sacred Ground Land Trust. All DONATIONS & PLEDGES are tax-deductible.",
+          "a": "Please consider pledging or donating money to our cause. All pledges will only be collected if our proposal is chosen and we make our fundraising goals.\n\nAll DONATIONS & PLEDGES are tax-deductible through our collaborating nonprofit, On Sacred Ground Land Trust.",
           "image": "",
           "clickableImage": false
         }
@@ -153,6 +153,13 @@
           "image": "/images/david.jpeg",
           "clickableImage": true,
           "bio": "40+ years of property acquisition, creative reuse, and sustainable construction, delivering public/private consulting with community-centered outcomes."
+        },
+        {
+          "name": "Dr. Jessa Madosky",
+          "role": "Land Use Permitting Expert in San Juan County",
+          "image": "",
+          "clickableImage": true,
+          "bio": "Fundraiser Chair for SJI Pride Foundation, Chair of Mutual Aid Committee at the SJI Grange, small business owner and artist at Raven’s Glen Pottery, Conservation Biologist, and Farmer."
         }
       ]
     },
