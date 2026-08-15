@@ -73,6 +73,11 @@ collections:
                   - { label: "Section Title (Optional)", name: "title", widget: "string", default: "", required: false }
                   - { label: "Section Header Photo (Optional)", name: "image", widget: "image", default: "", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
+                  - label: "Slideshow Photos (Add new photos, remove photos, or drag = handles to change order)"
+                    name: "photos"
+                    widget: "list"
+                    required: false
+                    field: { label: "Photo", name: "image", widget: "image" }
               - label: "Advisory Board & Team Section"
                 name: "advisory_block"
                 widget: "object"

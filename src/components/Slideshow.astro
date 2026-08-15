@@ -1,22 +1,35 @@
 ---
-// Read images from the public/images/slideshow directory via Vite globbing
+interface Props {
+  photos?: (string | { image?: string })[];
+  images?: (string | { image?: string })[];
+}
+
+const { photos, images } = Astro.props;
+
+// Read images from the public/images/slideshow directory via Vite globbing as fallback
 const slideshowModules = import.meta.glob('/public/images/slideshow/*');
-const allImages = Object.keys(slideshowModules)
+const defaultImages = Object.keys(slideshowModules)
   .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
   .map(file => file.replace('/public', ''));
 
-// Limit to 24 curated images to stay well within browser GPU texture width limits (prevents WebKit/Safari animation freeze)
-const images = allImages.slice(0, 24);
+const rawList = photos || images;
+const imagesList = (rawList && Array.isArray(rawList) && rawList.length > 0)
+  ? rawList.map(item => {
+      if (typeof item === 'string') return item;
+      if (item && typeof item === 'object') return item.image || item.photo || item.src || '';
+      return '';
+    }).filter(src => Boolean(src) && src.trim() !== '')
+  : defaultImages.slice(0, 24);
 ---
 
 <div class="slideshow-wrapper">
   <div class="slideshow-track">
-    {images.map((src, index) => (
+    {imagesList.map((src, index) => (
       <img src={src} alt={`Slideshow image ${index + 1}`} class="slideshow-img" loading="lazy" />
     ))}
   </div>
   <div class="slideshow-track" aria-hidden="true">
-    {images.map((src, index) => (
+    {imagesList.map((src, index) => (
       <img src={src} alt="" class="slideshow-img" loading="lazy" />
     ))}
   </div>

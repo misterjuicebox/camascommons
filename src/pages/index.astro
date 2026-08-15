@@ -342,7 +342,7 @@ function formatParagraph(text: string) {
               {section.title && (
                 <h2 class="section-title text-center margin-bottom">{section.title}</h2>
               )}
-              <Slideshow />
+              <Slideshow photos={section.photos || section.images} />
 
               <div class="final-pledge-box">
                 <Button variant="rose" size="lg" href="#pledge-donate">

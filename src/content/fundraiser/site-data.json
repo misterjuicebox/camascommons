@@ -172,7 +172,33 @@
     },
     {
       "type": "slideshow_block",
-      "title": ""
+      "title": "",
+      "photos": [
+        "/images/slideshow/IMG_0350.jpeg",
+        "/images/slideshow/IMG_0398.jpeg",
+        "/images/slideshow/IMG_0673.jpeg",
+        "/images/slideshow/IMG_1063.jpeg",
+        "/images/slideshow/IMG_1093.jpeg",
+        "/images/slideshow/IMG_1110.jpeg",
+        "/images/slideshow/IMG_1285.jpeg",
+        "/images/slideshow/IMG_1978.jpeg",
+        "/images/slideshow/IMG_2013.jpeg",
+        "/images/slideshow/IMG_2172.jpeg",
+        "/images/slideshow/IMG_2407.jpeg",
+        "/images/slideshow/IMG_2454.jpeg",
+        "/images/slideshow/IMG_2470.jpeg",
+        "/images/slideshow/IMG_2536.jpeg",
+        "/images/slideshow/IMG_2590.jpeg",
+        "/images/slideshow/IMG_2614.jpeg",
+        "/images/slideshow/IMG_2788.jpeg",
+        "/images/slideshow/IMG_2912.jpeg",
+        "/images/slideshow/IMG_3618.jpeg",
+        "/images/slideshow/IMG_3828.jpeg",
+        "/images/slideshow/IMG_3836.jpeg",
+        "/images/slideshow/IMG_3840.jpeg",
+        "/images/slideshow/IMG_3856.jpeg",
+        "/images/slideshow/IMG_4524.jpeg"
+      ]
     },
     {
       "type": "custom_section",
