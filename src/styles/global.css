@@ -473,19 +473,33 @@ html {
 
 .advisory-avatar-wrapper .field-photo-frame {
   margin: 0;
-  padding: 4px;
+  padding: 0;
   border-radius: 50%;
   width: 140px;
   height: 140px;
   overflow: hidden;
+  border: 3px solid var(--color-rose-border, #E6DCCE);
   box-shadow: 0 4px 16px rgba(36, 71, 47, 0.15);
 }
 
-.advisory-avatar-wrapper .real-photo-img {
-  width: 130px;
-  height: 130px;
+.advisory-avatar-wrapper .field-photo-frame::before {
+  display: none;
+}
+
+.advisory-avatar-wrapper .photo-real-wrapper {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
+  overflow: hidden;
+}
+
+.advisory-avatar-wrapper .real-photo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: none;
   object-fit: cover;
+  object-position: center;
 }
 
 .advisory-circle-placeholder {
