@@ -167,6 +167,13 @@
           "image": "",
           "clickableImage": true,
           "bio": "Founder of the Duvall Food Forest, Edible and Ecological Landscape Designer at Healthy Homestead Design."
+        },
+        {
+          "name": "The Farmers Land Trust",
+          "role": "Ian McSweeney and Kristina Villa",
+          "image": "/images/logo-colour-farmland-commons.jpg",
+          "clickableImage": true,
+          "bio": "A national nonprofit organization working to support farmland protection, transition, and secure access for farmers through the innovative Farmland Commons model."
         }
       ]
     },
