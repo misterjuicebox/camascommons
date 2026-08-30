@@ -244,7 +244,12 @@ function formatParagraph(text: string) {
                   <!-- DONATE COLUMN CARD -->
                   <div class="support-card support-card-donate">
                     <div>
-                      <h3 class="support-card-header">{section.donateTitle || "DONATE"}</h3>
+                      <div id="pledge-donate" class="support-card-top-button">
+                        <Button variant="green" size="lg" href={section.donateUrl || "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA"} target="_blank">
+                          {section.donateButtonText || "DONATE NOW"}
+                        </Button>
+                      </div>
+
                       {section.donateIntro && <p class="support-card-intro" set:html={formatParagraph(section.donateIntro)}></p>}
                       
                       {section.donateBullets && (
@@ -256,7 +261,7 @@ function formatParagraph(text: string) {
                       )}
                     </div>
 
-                    <div id="pledge-donate" class="support-action-wrapper">
+                    <div class="support-action-wrapper">
                       <Button variant="green" size="lg" href={section.donateUrl || "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA"} target="_blank">
                         {section.donateButtonText || "DONATE NOW"}
                       </Button>
@@ -266,7 +271,12 @@ function formatParagraph(text: string) {
                   <!-- PLEDGE COLUMN CARD -->
                   <div class="support-card support-card-pledge">
                     <div>
-                      <h3 class="support-card-header">{section.pledgeTitle || "PLEDGE"}</h3>
+                      <div class="support-card-top-button">
+                        <Button variant="rose" size="lg" href={section.pledgeUrl || "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header"} target="_blank">
+                          {section.pledgeButtonText || "MAKE A PLEDGE"}
+                        </Button>
+                      </div>
+
                       {section.pledgeIntro && <p class="support-card-intro" set:html={formatParagraph(section.pledgeIntro)}></p>}
                       
                       {section.pledgeBullets && (
