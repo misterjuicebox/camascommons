@@ -229,7 +229,7 @@ function formatParagraph(text: string) {
 
           {section.type === 'pledge_donate_block' && (
             <!-- Dedicated Symmetrical Support Section (DONATE vs PLEDGE) -->
-            <section id="pledge-donate" class="pledge-donate-section">
+            <section class="pledge-donate-section">
               <div class="pledge-donate-card">
                 {section.title && <h2 class="section-title text-center margin-bottom">{section.title}</h2>}
 
@@ -240,7 +240,7 @@ function formatParagraph(text: string) {
                 )}
 
                 <!-- Symmetrical 2-Column Grid for DONATE vs PLEDGE -->
-                <div class="support-grid">
+                <div id="pledge-donate" class="support-grid">
                   <!-- DONATE COLUMN CARD -->
                   <div class="support-card support-card-donate">
                     <div>
