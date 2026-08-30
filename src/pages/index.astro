@@ -240,7 +240,7 @@ function formatParagraph(text: string) {
                 )}
 
                 <!-- Symmetrical 2-Column Grid for DONATE vs PLEDGE -->
-                <div id="pledge-donate" class="support-grid">
+                <div class="support-grid">
                   <!-- DONATE COLUMN CARD -->
                   <div class="support-card support-card-donate">
                     <div>
@@ -256,9 +256,11 @@ function formatParagraph(text: string) {
                       )}
                     </div>
 
-                    <Button variant="green" size="lg" href={section.donateUrl || "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA"} target="_blank">
-                      {section.donateButtonText || "DONATE NOW"}
-                    </Button>
+                    <div id="pledge-donate" class="support-action-wrapper">
+                      <Button variant="green" size="lg" href={section.donateUrl || "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA"} target="_blank">
+                        {section.donateButtonText || "DONATE NOW"}
+                      </Button>
+                    </div>
                   </div>
 
                   <!-- PLEDGE COLUMN CARD -->
@@ -276,9 +278,11 @@ function formatParagraph(text: string) {
                       )}
                     </div>
 
-                    <Button variant="rose" size="lg" href={section.pledgeUrl || "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header"} target="_blank">
-                      {section.pledgeButtonText || "MAKE A PLEDGE"}
-                    </Button>
+                    <div class="support-action-wrapper">
+                      <Button variant="rose" size="lg" href={section.pledgeUrl || "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header"} target="_blank">
+                        {section.pledgeButtonText || "MAKE A PLEDGE"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
