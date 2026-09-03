@@ -39,6 +39,14 @@ collections:
                   - { label: "Signature Note", name: "signature", widget: "string", default: "— Ally & Guisepi", required: false }
                   - { label: "Section Photo", name: "image", widget: "image", default: "/images/Main.jpeg", required: false }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
+              - label: "Fundraising Thermometer Section"
+                name: "thermometer_block"
+                widget: "object"
+                fields:
+                  - { label: "Section Title", name: "title", widget: "string", default: "Land Acquisition Campaign Progress", required: false }
+                  - { label: "Target Goal Amount ($)", name: "targetAmount", widget: "number", default: 1500000, required: false }
+                  - { label: "Currently Raised Amount ($)", name: "raisedAmount", widget: "number", default: 410000, required: false }
+                  - { label: "Subtitle Note", name: "subtitle", widget: "text", default: "Our goal is to raise $1.5 million by late-September for our Land Bank proposal. All pledges and donations are tax-deductible.", required: false }
               - label: "Custom Content Section"
                 name: "custom_section"
                 widget: "object"

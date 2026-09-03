@@ -5,6 +5,7 @@ import Button from '../components/Button.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import Slideshow from '../components/Slideshow.astro';
 import SEO from '../components/SEO.astro';
+import Thermometer from '../components/Thermometer.astro';
 
 // Load all FAQ files dynamically from src/content/faqs/*.json
 const faqModules = import.meta.glob('../content/faqs/*.json', { eager: true });
@@ -18,6 +19,13 @@ const defaultSections = [
     welcomeText: siteData.welcomeText,
     signature: '— Ally & Guisepi',
     image: '/images/Main.jpeg'
+  },
+  {
+    type: 'thermometer_block',
+    title: 'Land Acquisition Campaign Progress',
+    targetAmount: 1500000,
+    raisedAmount: 410000,
+    subtitle: 'Our goal is to raise $1.5 million by late-September for our Land Bank proposal. All pledges and donations are tax-deductible.'
   },
   {
     type: 'custom_section',
@@ -173,6 +181,16 @@ function formatParagraph(text: string) {
                 </div>
               </div>
             </div>
+          )}
+
+          {section.type === 'thermometer_block' && (
+            <!-- Vertical Thermometer Section -->
+            <Thermometer 
+              targetAmount={section.targetAmount || 1500000} 
+              raisedAmount={section.raisedAmount || 410000}
+              title={section.title || "Land Acquisition Campaign Progress"}
+              subtitle={section.subtitle}
+            />
           )}
 
           {section.type === 'custom_section' && (
