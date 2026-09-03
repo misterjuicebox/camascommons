@@ -21,13 +21,6 @@ const defaultSections = [
     image: '/images/Main.jpeg'
   },
   {
-    type: 'thermometer_block',
-    title: 'Land Acquisition Campaign Progress',
-    targetAmount: 1500000,
-    raisedAmount: 410000,
-    subtitle: 'Our goal is to raise $1.5 million by late-September for our Land Bank proposal. All pledges and donations are tax-deductible.'
-  },
-  {
     type: 'custom_section',
     title: (siteData as any).titleWhatIsCamasCommons || 'What is Camas Commons?',
     content: siteData.whatIsCamasCommons,
@@ -251,11 +244,15 @@ function formatParagraph(text: string) {
               <div class="pledge-donate-card">
                 {section.title && <h2 class="section-title text-center margin-bottom">{section.title}</h2>}
 
-                {section.image && section.image.trim() !== '' && (
-                  <div class="pledge-section-photo margin-bottom">
-                    <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="320px" clickable={Boolean(section.clickableImage)} />
-                  </div>
-                )}
+                <!-- Vertical Thermometer replacing Camas flower -->
+                <div class="pledge-section-thermometer margin-bottom">
+                  <Thermometer 
+                    targetAmount={section.targetAmount || (siteData as any).targetAmount || 1500000} 
+                    raisedAmount={section.raisedAmount || (siteData as any).raisedAmount || 410000}
+                    standalone={false}
+                    showCta={false}
+                  />
+                </div>
 
                 <!-- Symmetrical 2-Column Grid for DONATE vs PLEDGE -->
                 <div class="support-grid">

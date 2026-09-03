@@ -23,6 +23,8 @@ collections:
         fields:
           - { label: "Site Title & Header", name: "siteTitle", widget: "string" }
           - { label: "Tagline / Subtitle", name: "tagline", widget: "string" }
+          - { label: "Currently Raised Amount ($)", name: "raisedAmount", widget: "number", default: 410000, required: false }
+          - { label: "Target Goal Amount ($)", name: "targetAmount", widget: "number", default: 1500000, required: false }
           - { label: "SMS / Social Preview Title (og:title)", name: "ogTitle", widget: "string", required: false }
           - { label: "SMS / Social Preview Description (og:description)", name: "ogDescription", widget: "text", required: false }
           - { label: "SMS / Social Preview Image (og:image)", name: "ogImage", widget: "image", required: false }
@@ -103,6 +105,8 @@ collections:
                 widget: "object"
                 fields:
                   - { label: "Section Main Title", name: "title", widget: "string", default: "Support Camas Commons — Pledge or Donate", required: false }
+                  - { label: "Currently Raised Amount ($)", name: "raisedAmount", widget: "number", default: 410000, required: false }
+                  - { label: "Target Goal Amount ($)", name: "targetAmount", widget: "number", default: 1500000, required: false }
                   - { label: "Donate Column Title", name: "donateTitle", widget: "string", default: "DONATE", required: false }
                   - { label: "Donate Column Intro", name: "donateIntro", widget: "text", default: "All donations provide necessary financial support leading up to and at the time of the submission deadline:", required: false }
                   - { label: "Donate Bullet Points (One per line)", name: "donateBullets", widget: "text", default: "Purchasing Power - it is very important that we raise as much funds as we can in this window in order to be considered seriously as a purchaser.\nStart Up Costs - leading up to the submission deadline\nIf Selected - donations will go to the purchase of the land & associated costs\nIf Not Selected - donations will stay in the public realm & go towards a similar project", required: false }

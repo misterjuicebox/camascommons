@@ -1,4 +1,6 @@
 {
+  "raisedAmount": 410000,
+  "targetAmount": 1500000,
   "ogTitle": "Camas Commons - A Regenerative Farming Land Trust",
   "ogImage": "/images/Main.jpeg",
   "ogDescription": "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
@@ -9,13 +11,6 @@
       "signature": "— Ally & Guisepi",
       "image": "/images/Main.jpeg",
       "clickableImage": false
-    },
-    {
-      "type": "thermometer_block",
-      "title": "Land Acquisition Campaign Progress",
-      "targetAmount": 1500000,
-      "raisedAmount": 410000,
-      "subtitle": "Our goal is to raise $1.5 million by late-September for our Land Bank proposal. All pledges and donations are tax-deductible."
     },
     {
       "type": "custom_section",
@@ -131,9 +126,19 @@
       "pledgeBullets": "Proposal Strength - we need as many pledges as possible for the mid-September proposal deadline to convey that we have raised enough money to be a serious purchaser.\nFunds Timeline - pledged funds are relied upon to be available at the time of purchase at the end of December 2026.\nTax-Deductible - all pledges & donations are tax-deductible through our partner On Sacred Ground Land Trust.\nCommunity Impact - every pledged dollar helps preserve 40 acres of farmland in perpetuity.",
       "clickableImage": false,
       "type": "pledge_donate_block",
+      "raisedAmount": 410000,
+      "targetAmount": 1500000,
       "image": "/images/camasflow.png",
       "donateIntro": "All donations provide necessary financial support leading up to and at the time of the submission deadline:",
       "pledgeTitle": "PLEDGE"
+    },
+    {
+      "type": "custom_section",
+      "title": "Camas Wildflower",
+      "content": "Camas (KAM-uhs) is a wildflower of great importance to Indigenous people across the San Juan Islands and the broader northwest. As an ode to this wildflower, and as a reminder of the connection between the land's well-being and our own well-being, we honor this plant in our name.",
+      "image": "/images/camasflow.png",
+      "clickableImage": true,
+      "style": "story"
     },
     {
       "type": "advisory_block",

@@ -6,13 +6,17 @@ interface Props {
   raisedAmount?: number;
   title?: string;
   subtitle?: string;
+  standalone?: boolean;
+  showCta?: boolean;
 }
 
 const {
   targetAmount = 1500000,
   raisedAmount = 410000,
-  title = "Land Acquisition Campaign Progress",
-  subtitle = "Our goal is to raise $1.5 million by late-September for our Land Bank proposal. All pledges and donations are tax-deductible."
+  title,
+  subtitle,
+  standalone = true,
+  showCta = true
 } = Astro.props;
 
 // Calculate fill percentage (capped 0 - 100%)
@@ -33,13 +37,14 @@ const formatShortCurrency = (val: number) => {
 };
 ---
 
-<section id="campaign-progress" class="thermometer-section">
-  <div class="thermometer-card">
-    <div class="section-header text-center">
-      <span class="location-tag">LIVE FUNDRAISING TRACKER</span>
-      <h2 class="section-title">{title}</h2>
-      {subtitle && <p class="section-subtitle">{subtitle}</p>}
-    </div>
+<div class={`thermometer-container ${standalone ? 'is-standalone' : 'is-embedded'}`}>
+  <div class={standalone ? 'thermometer-card' : 'thermometer-inner-wrapper'}>
+    {(title || subtitle) && (
+      <div class="section-header text-center">
+        {title && <h2 class="section-title">{title}</h2>}
+        {subtitle && <p class="section-subtitle">{subtitle}</p>}
+      </div>
+    )}
 
     <div class="thermometer-layout">
       <!-- Vertical Thermometer Box -->
@@ -144,16 +149,18 @@ const formatShortCurrency = (val: number) => {
           </div>
         </div>
 
-        <div class="cta-wrapper">
-          <p class="cta-note">Help us protect 40 acres of San Juan Island farmland in perpetuity.</p>
-          <Button variant="rose" size="lg" href="#pledge-donate">
-            PLEDGE or DONATE
-          </Button>
-        </div>
+        {showCta && (
+          <div class="cta-wrapper">
+            <p class="cta-note">Help us protect 40 acres of San Juan Island farmland in perpetuity.</p>
+            <Button variant="rose" size="lg" href="#pledge-donate">
+              PLEDGE or DONATE
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <style>
   /* Camas Color Theme Definitions for Thermometer */
@@ -165,8 +172,13 @@ const formatShortCurrency = (val: number) => {
     --camas-glow: rgba(78, 91, 166, 0.25);
   }
 
-  .thermometer-section {
+  .thermometer-container.is-standalone {
     margin: 2.5rem 0 3.5rem 0;
+  }
+
+  .thermometer-container.is-embedded {
+    margin: 1.5rem 0 2rem 0;
+    width: 100%;
   }
 
   .thermometer-card {
@@ -175,6 +187,10 @@ const formatShortCurrency = (val: number) => {
     border-radius: var(--radius-paper, 8px);
     padding: 2.5rem 2rem;
     box-shadow: var(--shadow-paper, 0 4px 20px -2px rgba(36, 71, 47, 0.05));
+  }
+
+  .thermometer-inner-wrapper {
+    padding: 0.5rem 0;
   }
 
   .section-subtitle {
@@ -191,7 +207,7 @@ const formatShortCurrency = (val: number) => {
     align-items: center;
     justify-content: center;
     gap: 3.5rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     flex-wrap: wrap;
   }
 
@@ -438,7 +454,7 @@ const formatShortCurrency = (val: number) => {
     font-weight: 600;
     color: var(--color-text-muted, #566459);
     margin-left: 4px;
-    display: none; /* Shown in top limit & callout for cleaner visual */
+    display: none;
   }
 
   /* Info Summary Box Right Column */
