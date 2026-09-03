@@ -240,7 +240,7 @@ function formatParagraph(text: string) {
 
           {section.type === 'pledge_donate_block' && (
             <!-- Dedicated Symmetrical Support Section (DONATE vs PLEDGE) -->
-            <section class="pledge-donate-section">
+            <section id="pledge-donate" class="pledge-donate-section">
               <div class="pledge-donate-card">
                 {section.title && <h2 class="section-title text-center margin-bottom">{section.title}</h2>}
 
@@ -259,7 +259,7 @@ function formatParagraph(text: string) {
                   <!-- DONATE COLUMN CARD -->
                   <div class="support-card support-card-donate">
                     <div>
-                      <div id="pledge-donate" class="support-card-top-button">
+                      <div class="support-card-top-button">
                         <Button variant="green" size="lg" href={section.donateUrl || "https://www.paypal.com/donate/?hosted_button_id=RAKDSTT7ZDGKA"} target="_blank">
                           {section.donateButtonText || "DONATE NOW"}
                         </Button>
