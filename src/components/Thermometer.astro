@@ -1,0 +1,521 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  targetAmount?: number;
+  raisedAmount?: number;
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  targetAmount = 1500000,
+  raisedAmount = 410000,
+  title = "Land Acquisition Campaign Progress",
+  subtitle = "Our goal is to raise $1.5 million by late-September for our Land Bank proposal. All pledges and donations are tax-deductible."
+} = Astro.props;
+
+// Calculate fill percentage (capped 0 - 100%)
+const fillPercentage = Math.min(Math.max((raisedAmount / targetAmount) * 100, 0), 100);
+
+const formatCurrency = (val: number) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+};
+
+const formatShortCurrency = (val: number) => {
+  if (val >= 1000000) {
+    return `$${(val / 1000000).toLocaleString('en-US', { maximumFractionDigits: 2 })} Million`;
+  }
+  if (val >= 1000) {
+    return `$${(val / 1000).toLocaleString('en-US', { maximumFractionDigits: 0 })}K`;
+  }
+  return formatCurrency(val);
+};
+---
+
+<section id="campaign-progress" class="thermometer-section">
+  <div class="thermometer-card">
+    <div class="section-header text-center">
+      <span class="location-tag">LIVE FUNDRAISING TRACKER</span>
+      <h2 class="section-title">{title}</h2>
+      {subtitle && <p class="section-subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="thermometer-layout">
+      <!-- Vertical Thermometer Box -->
+      <div class="thermometer-visual-container">
+        
+        <!-- Goal Header Label at Top -->
+        <div class="thermometer-top-goal-badge">
+          <span class="goal-label-title">GOAL</span>
+          <span class="goal-label-amount">{formatShortCurrency(targetAmount)}</span>
+        </div>
+
+        <!-- Main Vertical Thermometer Outer Shell -->
+        <div class="thermometer-wrapper">
+          
+          <!-- Top Stem Limit Marker -->
+          <div class="top-limit-pointer">
+            <span class="pointer-line-top"></span>
+            <span class="pointer-text-top">{formatShortCurrency(targetAmount)} Goal</span>
+          </div>
+
+          <!-- Vertical Tube + Bulb Assembly -->
+          <div class="thermometer-glass">
+            
+            <!-- Glass Tube Track -->
+            <div class="thermometer-tube">
+              <!-- Camas Purple/Blue Liquid Fill Column -->
+              <div 
+                class="thermometer-liquid-fill" 
+                style={`height: ${fillPercentage}%;`}
+                aria-valuenow={raisedAmount}
+                aria-valuemin="0"
+                aria-valuemax={targetAmount}
+                role="progressbar"
+              >
+                <!-- Meniscus Shine Top Edge -->
+                <div class="liquid-meniscus"></div>
+              </div>
+            </div>
+
+            <!-- Bulb at Bottom -->
+            <div class="thermometer-bulb">
+              <div class="bulb-liquid-fill"></div>
+              <div class="bulb-reflection"></div>
+            </div>
+
+            <!-- Raised Amount Callout Label Next to Top of Liquid Fill -->
+            <div 
+              class="raised-amount-callout" 
+              style={`bottom: calc(56px + (270px * ${fillPercentage / 100}));`}
+            >
+              <div class="callout-pointer-line"></div>
+              <div class="callout-badge">
+                <span class="callout-amount">{formatCurrency(raisedAmount)}</span>
+                <span class="callout-label">RAISED</span>
+                <span class="callout-percent">{fillPercentage.toFixed(1)}% of Goal</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Ticks & Scale Markings along the tube height -->
+          <div class="thermometer-scale">
+            <div class="scale-tick tick-100" style="bottom: 326px;">
+              <span class="tick-line"></span>
+              <span class="tick-text">{formatShortCurrency(targetAmount)}</span>
+            </div>
+            <div class="scale-tick tick-75" style="bottom: 258.5px;">
+              <span class="tick-line"></span>
+              <span class="tick-text">{formatShortCurrency(targetAmount * 0.75)}</span>
+            </div>
+            <div class="scale-tick tick-50" style="bottom: 191px;">
+              <span class="tick-line"></span>
+              <span class="tick-text">{formatShortCurrency(targetAmount * 0.5)}</span>
+            </div>
+            <div class="scale-tick tick-25" style="bottom: 123.5px;">
+              <span class="tick-line"></span>
+              <span class="tick-text">{formatShortCurrency(targetAmount * 0.25)}</span>
+            </div>
+            <div class="scale-tick tick-0" style="bottom: 56px;">
+              <span class="tick-line"></span>
+              <span class="tick-text">$0</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Stats Summary & CTA Box -->
+      <div class="thermometer-info-box">
+        <div class="progress-stats-summary">
+          <div class="summary-stat-row">
+            <span class="stat-lbl">Target Goal:</span>
+            <span class="stat-val goal-val">{formatCurrency(targetAmount)}</span>
+          </div>
+          <div class="summary-stat-row">
+            <span class="stat-lbl">Currently Raised:</span>
+            <span class="stat-val raised-val">{formatCurrency(raisedAmount)}</span>
+          </div>
+          <div class="summary-stat-row">
+            <span class="stat-lbl">Remaining to Goal:</span>
+            <span class="stat-val remaining-val">{formatCurrency(targetAmount - raisedAmount)}</span>
+          </div>
+        </div>
+
+        <div class="cta-wrapper">
+          <p class="cta-note">Help us protect 40 acres of San Juan Island farmland in perpetuity.</p>
+          <Button variant="rose" size="lg" href="#pledge-donate">
+            PLEDGE or DONATE
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Camas Color Theme Definitions for Thermometer */
+  :root {
+    --camas-purple-blue: #4E5BA6;
+    --camas-purple-light: #6875DB;
+    --camas-purple-deep: #384282;
+    --camas-purple-gradient: linear-gradient(180deg, #6B77E6 0%, #4E5BA6 50%, #394385 100%);
+    --camas-glow: rgba(78, 91, 166, 0.25);
+  }
+
+  .thermometer-section {
+    margin: 2.5rem 0 3.5rem 0;
+  }
+
+  .thermometer-card {
+    background: var(--color-card-paper, #FFFDF9);
+    border: 1px solid var(--color-border-paper, #E6DCCE);
+    border-radius: var(--radius-paper, 8px);
+    padding: 2.5rem 2rem;
+    box-shadow: var(--shadow-paper, 0 4px 20px -2px rgba(36, 71, 47, 0.05));
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-text-muted, #566459);
+    max-width: 620px;
+    margin: 0.5rem auto 1.75rem auto;
+    line-height: 1.6;
+  }
+
+  .thermometer-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* Thermometer Container */
+  .thermometer-visual-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-top: 0.5rem;
+  }
+
+  .thermometer-top-goal-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--camas-purple-blue);
+    color: #ffffff;
+    padding: 0.35rem 1.1rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px var(--camas-glow);
+    margin-bottom: 1.25rem;
+    border: 2px solid #ffffff;
+  }
+
+  .goal-label-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    opacity: 0.9;
+  }
+
+  .goal-label-amount {
+    font-family: var(--font-serif, serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  /* Thermometer Glass Structure */
+  .thermometer-wrapper {
+    position: relative;
+    width: 260px;
+    height: 400px;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .top-limit-pointer {
+    position: absolute;
+    top: 0px;
+    left: 14px;
+    display: flex;
+    align-items: center;
+    z-index: 5;
+  }
+
+  .pointer-line-top {
+    width: 44px;
+    height: 2px;
+    background: var(--camas-purple-blue);
+  }
+
+  .pointer-text-top {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--camas-purple-blue);
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+
+  /* Glass Outer Container */
+  .thermometer-glass {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    width: 32px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Vertical Glass Tube */
+  .thermometer-tube {
+    position: absolute;
+    top: 0;
+    width: 32px;
+    height: 330px;
+    background: rgba(243, 236, 224, 0.4);
+    border: 3px solid var(--camas-purple-blue);
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Camas Color Liquid Column Fill */
+  .thermometer-liquid-fill {
+    width: 100%;
+    background: var(--camas-purple-gradient);
+    border-radius: 0;
+    position: relative;
+    transition: height 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .liquid-meniscus {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50% 50% 0 0;
+  }
+
+  /* Round Bulb at Bottom */
+  .thermometer-bulb {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 64px;
+    background: rgba(243, 236, 224, 0.4);
+    border: 3px solid var(--camas-purple-blue);
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 2;
+    box-shadow: 0 4px 14px var(--camas-glow);
+  }
+
+  .bulb-liquid-fill {
+    width: 100%;
+    height: 100%;
+    background: var(--camas-purple-gradient);
+    border-radius: 50%;
+  }
+
+  .bulb-reflection {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Raised Amount Callout Badge Next to Top of Liquid Fill */
+  .raised-amount-callout {
+    position: absolute;
+    left: 36px;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    transform: translateY(50%);
+    transition: bottom 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .callout-pointer-line {
+    width: 24px;
+    height: 2px;
+    background: var(--camas-purple-blue);
+    position: relative;
+  }
+
+  .callout-pointer-line::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background: var(--camas-purple-blue);
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+  }
+
+  .callout-badge {
+    background: #ffffff;
+    border: 2px solid var(--camas-purple-blue);
+    border-radius: 8px;
+    padding: 0.4rem 0.85rem;
+    box-shadow: 0 6px 18px rgba(78, 91, 166, 0.2);
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+  }
+
+  .callout-amount {
+    font-family: var(--font-serif, serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--camas-purple-blue);
+    line-height: 1.1;
+  }
+
+  .callout-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--color-rose-terracotta, #C5746D);
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .callout-percent {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #566459);
+  }
+
+  /* Thermometer Scale Ticks */
+  .thermometer-scale {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 380px;
+    width: 60px;
+    pointer-events: none;
+  }
+
+  .scale-tick {
+    position: absolute;
+    left: 2px;
+    display: flex;
+    align-items: center;
+    transform: translateY(50%);
+  }
+
+  .tick-line {
+    width: 12px;
+    height: 1.5px;
+    background: rgba(78, 91, 166, 0.4);
+  }
+
+  .tick-text {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #566459);
+    margin-left: 4px;
+    display: none; /* Shown in top limit & callout for cleaner visual */
+  }
+
+  /* Info Summary Box Right Column */
+  .thermometer-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 320px;
+  }
+
+  .progress-stats-summary {
+    background: var(--color-bg-paper, #FAF6F0);
+    border: 1px solid var(--color-border-paper, #E6DCCE);
+    border-radius: var(--radius-paper, 8px);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .summary-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+  }
+
+  .stat-lbl {
+    color: var(--color-text-muted, #566459);
+    font-weight: 500;
+  }
+
+  .stat-val {
+    font-weight: 700;
+    font-family: var(--font-serif, serif);
+    font-size: 1.1rem;
+  }
+
+  .raised-val {
+    color: var(--camas-purple-blue);
+    font-size: 1.25rem;
+  }
+
+  .goal-val {
+    color: var(--color-green-deep, #24472F);
+  }
+
+  .remaining-val {
+    color: var(--color-rose-terracotta, #C5746D);
+  }
+
+  .cta-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .cta-note {
+    font-size: 0.9rem;
+    color: var(--color-text-muted, #566459);
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 640px) {
+    .thermometer-card {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .thermometer-layout {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .thermometer-wrapper {
+      width: 240px;
+    }
+  }
+</style>
