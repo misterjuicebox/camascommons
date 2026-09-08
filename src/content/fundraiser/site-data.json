@@ -133,9 +133,9 @@
     },
     {
       "type": "custom_section",
-      "title": "Camas Wildflower",
-      "content": "Camas (KAM-uhs) is a wildflower of great importance to Indigenous people across the San Juan Islands and the broader northwest. As an ode to this wildflower, and as a reminder of the connection between the land's well-being and our own well-being, we honor this plant in our name.",
-      "image": "/images/camasflow.png",
+      "title": "",
+      "content": "",
+      "image": "/images/giving-tree.jpg",
       "clickableImage": true,
       "style": "story"
     },
