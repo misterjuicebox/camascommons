@@ -140,6 +140,14 @@
       "style": "story"
     },
     {
+      "type": "custom_section",
+      "title": "",
+      "content": "",
+      "image": "/images/giving-garden.jpg",
+      "clickableImage": true,
+      "style": "story"
+    },
+    {
       "type": "advisory_block",
       "title": "Advisory Committee",
       "members": [
