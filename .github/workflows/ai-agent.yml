@@ -3,10 +3,15 @@ name: AI Agent Task Execution
 on:
   issues:
     types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue Number to process'
+        required: false
 
 jobs:
   execute-ai-task:
-    if: contains(github.event.issue.labels.*.name, 'ai-agent-task')
+    if: ${{ contains(toJson(github.event.issue.labels), 'ai-agent-task') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -31,7 +36,7 @@ jobs:
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -44,7 +49,7 @@ jobs:
           git status
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "🤖 [AI Agent]: Processed client request (Issue #${{ github.event.issue.number }})"
+            git commit -m "🤖 [AI Agent]: Processed client request (Issue #${{ github.event.issue.number || inputs.issue_number }})"
             git push origin dev
           else
             echo "No code changes were made by the AI Agent."

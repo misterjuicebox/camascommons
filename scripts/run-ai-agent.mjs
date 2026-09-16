@@ -2,12 +2,32 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-const issueTitle = process.env.ISSUE_TITLE || '';
-const issueBody = process.env.ISSUE_BODY || '';
+let issueTitle = process.env.ISSUE_TITLE || '';
+let issueBody = process.env.ISSUE_BODY || '';
 const issueNumber = process.env.ISSUE_NUMBER || '';
 const geminiApiKey = process.env.GEMINI_API_KEY || '';
 const githubToken = process.env.GITHUB_TOKEN || '';
 const repoName = process.env.GITHUB_REPOSITORY || 'misterjuicebox/camascommons';
+
+// If title/body were not provided in env, fetch them dynamically from GitHub API
+if (issueNumber && (!issueTitle || !issueBody) && githubToken) {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repoName}/issues/${issueNumber}`, {
+      headers: {
+        'Authorization': `Bearer ${githubToken}`,
+        'User-Agent': 'CamasCommons-AI-Agent'
+      }
+    });
+    if (res.ok) {
+      const issueData = await res.json();
+      issueTitle = issueData.title || issueTitle;
+      issueBody = issueData.body || issueBody;
+      console.log(`Fetched issue #${issueNumber} details from GitHub API.`);
+    }
+  } catch (err) {
+    console.error('Error fetching issue details:', err);
+  }
+}
 
 console.log(`🤖 Starting AI Agent processing for Issue #${issueNumber}: "${issueTitle}"`);
 
