@@ -107,15 +107,19 @@
         line-height: 1;
       }
 
-      /* Floating Analytics & AI Request Buttons Container */
+      /* Floating Analytics & AI Request Buttons Container (Only shown when authenticated) */
       .fab-container {
         position: fixed;
         bottom: 24px;
         left: 24px;
         z-index: 99990;
-        display: flex;
+        display: none; /* Hidden by default until user is logged in */
         align-items: center;
         gap: 12px;
+      }
+
+      .fab-container.authenticated {
+        display: flex;
       }
 
       #analytics-fab, #agent-request-fab {
@@ -726,6 +730,37 @@
             statusMsg.textContent = '❌ Connection error. Please try again later.';
           });
       }
+
+      function checkAuthState() {
+        var fabContainer = document.querySelector('.fab-container');
+        if (!fabContainer) return;
+
+        var user = localStorage.getItem('netlify-cms-user') || localStorage.getItem('decap-cms-user');
+        if (user) {
+          try {
+            var userData = JSON.parse(user);
+            if (userData && (userData.token || userData.user)) {
+              fabContainer.classList.add('authenticated');
+              return;
+            }
+          } catch(e) {}
+        }
+
+        // Also check if Decap CMS main UI root has loaded collections view
+        var ncRoot = document.getElementById('nc-root');
+        if (ncRoot && !ncRoot.querySelector('button[class*="login"]')) {
+          var hasCollection = ncRoot.querySelector('[class*="Sidebar"]') || ncRoot.querySelector('[class*="AppHeader"]');
+          if (hasCollection) {
+            fabContainer.classList.add('authenticated');
+            return;
+          }
+        }
+
+        fabContainer.classList.remove('authenticated');
+      }
+
+      checkAuthState();
+      setInterval(checkAuthState, 800);
     </script>
   </body>
 </html>
