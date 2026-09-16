@@ -1,0 +1,51 @@
+name: AI Agent Task Execution
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  execute-ai-task:
+    if: contains(github.event.issue.labels.*.name, 'ai-agent-task')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout Repository (dev branch)
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: Run AI Agent Script
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/run-ai-agent.mjs
+
+      - name: Commit and Push Changes to dev
+        run: |
+          git config user.name "CamasCommons AI Agent"
+          git config user.email "ai-agent@camascommons.org"
+          git status
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "🤖 [AI Agent]: Processed client request (Issue #${{ github.event.issue.number }})"
+            git push origin dev
+          else
+            echo "No code changes were made by the AI Agent."
+          fi
