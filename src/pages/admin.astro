@@ -107,16 +107,22 @@
         line-height: 1;
       }
 
-      /* Floating Analytics Button */
-      #analytics-fab {
+      /* Floating Analytics & AI Request Buttons Container */
+      .fab-container {
         position: fixed;
         bottom: 24px;
         left: 24px;
         z-index: 99990;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      #analytics-fab, #agent-request-fab {
         background: #24472F;
         color: #FFFFFF;
         border: 2px solid #E6DCCE;
-        padding: 10px 20px;
+        padding: 10px 18px;
         border-radius: 30px;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-size: 0.88rem;
@@ -126,151 +132,141 @@
         transition: transform 0.2s ease, background-color 0.2s ease;
       }
 
+      #agent-request-fab {
+        background: #C5746D;
+        border-color: #F8ECEB;
+        box-shadow: 0 8px 24px rgba(197, 116, 109, 0.35);
+      }
+
       #analytics-fab:hover {
         transform: translateY(-2px);
         background: #193321;
       }
 
-      /* Analytics Modal Styling */
-      .analytics-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 999999;
-        background: rgba(28, 42, 32, 0.75);
-        backdrop-filter: blur(5px);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
+      #agent-request-fab:hover {
+        transform: translateY(-2px);
+        background: #b06059;
       }
 
-      .analytics-backdrop.active {
+      /* Form inputs inside modal */
+      .form-group {
         display: flex;
-        animation: fadeIn 0.2s ease-out;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 14px;
       }
 
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+      .form-group label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #24472F;
       }
 
-      .analytics-card {
-        background: #FAF6F0;
-        width: 100%;
-        max-width: 680px;
-        border-radius: 14px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-        border: 2px solid #E6DCCE;
-        padding: 24px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        max-height: 90vh;
-        overflow-y: auto;
-      }
-
-      .analytics-card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #E6DCCE;
-        margin-bottom: 16px;
-      }
-
-      .analytics-close {
-        background: transparent;
-        border: none;
-        font-size: 1.4rem;
-        color: #7A887E;
-        cursor: pointer;
-      }
-
-      .analytics-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 18px;
-      }
-
-      .analytics-controls select {
-        padding: 6px 12px;
+      .form-group input, .form-group textarea, .form-group select {
+        padding: 10px 12px;
         border-radius: 6px;
         border: 1px solid #E6DCCE;
         background: #FFFDF9;
-        font-weight: 600;
+        font-family: inherit;
+        font-size: 0.9rem;
         color: #1C2A20;
-        cursor: pointer;
       }
 
-      .analytics-body-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+      .form-group textarea {
+        resize: vertical;
+        min-height: 90px;
       }
 
-      .stat-box {
-        background: #FFFDF9;
-        border: 1px solid #E6DCCE;
-        border-radius: 10px;
-        padding: 16px;
-        text-align: center;
-      }
-
-      .stat-number {
-        display: block;
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #24472F;
-        line-height: 1;
-        margin-bottom: 6px;
-      }
-
-      .stat-label {
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: #566459;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      .analytics-list-box {
-        grid-column: span 1;
-        background: #FFFDF9;
-        border: 1px solid #E6DCCE;
-        border-radius: 10px;
-        padding: 16px;
-      }
-
-      .analytics-list-box h4 {
-        margin: 0 0 12px 0;
-        font-size: 0.92rem;
-        color: #24472F;
+      .submit-request-btn {
+        width: 100%;
+        background: #24472F;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.95rem;
         font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        margin-top: 8px;
       }
 
-      .analytics-data-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        font-size: 0.85rem;
-      }
-
-      .analytics-data-list li {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid #F3ECE0;
-        color: #1C2A20;
-      }
-
-      .analytics-data-list li:last-child {
-        border-bottom: none;
+      .submit-request-btn:hover {
+        background: #193321;
       }
     </style>
 
-    <!-- Floating Analytics Trigger Button -->
-    <button id="analytics-fab" onclick="openAnalyticsModal()">
-      📊 Site Analytics
-    </button>
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+      <button id="analytics-fab" onclick="openAnalyticsModal()">
+        📊 Site Analytics
+      </button>
+      <button id="agent-request-fab" onclick="openAgentRequestModal()">
+        🤖 Request AI Change
+      </button>
+    </div>
+
+    <!-- AI Change Request Modal Backdrop & Window -->
+    <div id="agent-request-modal" class="analytics-backdrop">
+      <div class="analytics-card" style="max-width: 560px;">
+        <div class="analytics-card-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5rem;">🤖</span>
+            <div>
+              <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1C2A20;">Request AI Agent Change</h2>
+              <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #566459;">Changes will be built and previewed on dev.camascommons.org</p>
+            </div>
+          </div>
+          <button class="analytics-close" onclick="closeAgentRequestModal()">✕</button>
+        </div>
+
+        <form id="agent-request-form" onsubmit="handleAgentRequestSubmit(event)">
+          <!-- Honeypot anti-bot field -->
+          <div style="display:none;" aria-hidden="true">
+            <input type="text" name="website_url" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="req-name">Your Name</label>
+              <input type="text" id="req-name" name="clientName" placeholder="e.g. Ally or Guise" required />
+            </div>
+            <div class="form-group">
+              <label for="req-email">Your Email</label>
+              <input type="email" id="req-email" name="clientEmail" placeholder="e.g. ally@camascommons.org" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="req-target">Target Page / Section</label>
+            <select id="req-target" name="affectedPage">
+              <option value="Homepage / Main">Homepage / Main Site</option>
+              <option value="Header & Navbar">Header & Navigation Menu</option>
+              <option value="Footer">Footer & Social Links</option>
+              <option value="FAQs Section">FAQs & Questions</option>
+              <option value="Fundraiser Tracker">Fundraiser Tracker / Thermometer</option>
+              <option value="New Page / Layout">New Custom Page or Layout</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="req-title">Summary / Request Title</label>
+            <input type="text" id="req-title" name="requestTitle" placeholder="e.g. Add newsletter signup block to footer" required />
+          </div>
+
+          <div class="form-group">
+            <label for="req-desc">Detailed Description</label>
+            <textarea id="req-desc" name="requestDescription" placeholder="Describe the exact changes, text, colors, or new elements you'd like the AI Agent to build..." required></textarea>
+          </div>
+
+          <button type="submit" id="req-submit-btn" class="submit-request-btn">
+            🚀 Submit Request to AI Agent
+          </button>
+
+          <div id="req-status-msg" style="margin-top: 14px; font-size: 0.88rem; font-weight: 600; text-align: center; display: none;"></div>
+        </form>
+      </div>
+    </div>
 
     <!-- Analytics Modal Backdrop & Window -->
     <div id="analytics-modal" class="analytics-backdrop">
@@ -532,6 +528,67 @@
             referrersCountEl.textContent = 'Active';
             referrersListEl.innerHTML = '<li><span>Direct / Social Visits</span> <strong>Active</strong></li>';
             pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
+          });
+      }
+
+      function openAgentRequestModal() {
+        var modal = document.getElementById('agent-request-modal');
+        if (modal) {
+          modal.classList.add('active');
+        }
+      }
+
+      function closeAgentRequestModal() {
+        var modal = document.getElementById('agent-request-modal');
+        if (modal) {
+          modal.classList.remove('active');
+        }
+      }
+
+      function handleAgentRequestSubmit(e) {
+        e.preventDefault();
+        var form = document.getElementById('agent-request-form');
+        var submitBtn = document.getElementById('req-submit-btn');
+        var statusMsg = document.getElementById('req-status-msg');
+
+        if (!form || !submitBtn || !statusMsg) return;
+
+        var formData = new FormData(form);
+        var payload = Object.fromEntries(formData.entries());
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Sending request to AI Agent...';
+        statusMsg.style.display = 'none';
+
+        fetch('/api/request-change', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🚀 Submit Request to AI Agent';
+
+            statusMsg.style.display = 'block';
+
+            if (data && data.success) {
+              statusMsg.style.color = '#24472F';
+              var issueText = data.issueNumber ? ' Task Issue #' + data.issueNumber + ' created!' : '';
+              statusMsg.innerHTML = '✅ Request received!' + issueText + '<br/><span style="font-weight:400; font-size:0.82rem;">The AI Agent will apply your changes to <a href="https://dev.camascommons.org" target="_blank" style="color:#C5746D; font-weight:700;">dev.camascommons.org</a> shortly.</span>';
+              form.reset();
+            } else {
+              statusMsg.style.color = '#C5746D';
+              statusMsg.textContent = '❌ ' + (data.error || 'Failed to submit request. Please try again.');
+            }
+          })
+          .catch(function(err) {
+            console.error('Request submission error:', err);
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🚀 Submit Request to AI Agent';
+            statusMsg.style.display = 'block';
+            statusMsg.style.color = '#C5746D';
+            statusMsg.textContent = '❌ Connection error. Please try again later.';
           });
       }
     </script>
