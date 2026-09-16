@@ -82,7 +82,7 @@ function getRepositoryContext() {
   return contextText;
 }
 
-// 2. Call Gemini 2.5 Flash API
+// 2. Call Gemini API with model fallback
 async function generateCodeEdits(prompt, repoContext) {
   const systemInstruction = `You are an expert full-stack Astro & web developer working on the Camas Commons website (dev branch).
 Your job is to read a client request and output modified code files to satisfy the user's request precisely.
@@ -107,33 +107,47 @@ ${issueBody}
 Codebase Context:
 ${repoContext}`;
 
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+  const candidateModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  let lastError = null;
 
-  const response = await fetch(apiUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: `${systemInstruction}\n\n${userPrompt}` }]
-        }
-      ],
-      generationConfig: {
-        temperature: 0.2,
-        responseMimeType: 'application/json'
+  for (const model of candidateModels) {
+    try {
+      console.log(`Trying Gemini model: ${model}...`);
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: `${systemInstruction}\n\n${userPrompt}` }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.2,
+            responseMimeType: 'application/json'
+          }
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        return JSON.parse(textOutput);
+      } else {
+        const errText = await response.text();
+        console.warn(`Model ${model} warning (${response.status}): ${errText}`);
+        lastError = new Error(`Gemini API error for model ${model}: ${errText}`);
       }
-    })
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Gemini API error (${response.status}): ${errText}`);
+    } catch (err) {
+      console.warn(`Model ${model} exception:`, err);
+      lastError = err;
+    }
   }
 
-  const data = await response.json();
-  const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  return JSON.parse(textOutput);
+  throw lastError || new Error('Failed to generate code edits with available Gemini models.');
 }
 
 // 3. Helper to post GitHub comments
