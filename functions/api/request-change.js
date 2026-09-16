@@ -1,8 +1,61 @@
 export async function onRequestPost(context) {
   try {
     const request = context.request;
-    const origin = new URL(request.url).origin;
 
+    // 1. Strict Server-Side Authentication Check
+    const authHeader = request.headers.get('Authorization') || '';
+    const userToken = authHeader.replace(/^Bearer\s+/i, '').trim();
+
+    if (!userToken) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: '401 Unauthorized: You must be logged into the CMS to submit requests.',
+      }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Verify token with GitHub API
+    const ghUserResp = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${userToken}`,
+        'User-Agent': 'CamasCommons-Auth-Verifier',
+      },
+    });
+
+    if (!ghUserResp.ok) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: '401 Unauthorized: Invalid or expired GitHub session token.',
+      }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const authenticatedUser = await ghUserResp.json();
+    const githubUsername = authenticatedUser.login;
+
+    // Verify user has collaborator access to misterjuicebox/camascommons
+    const repoAuthResp = await fetch(`https://api.github.com/repos/misterjuicebox/camascommons/collaborators/${githubUsername}`, {
+      headers: {
+        'Authorization': `token ${userToken}`,
+        'User-Agent': 'CamasCommons-Auth-Verifier',
+      },
+    });
+
+    if (!repoAuthResp.ok && authenticatedUser.login !== 'misterjuicebox') {
+      return new Response(JSON.stringify({
+        success: false,
+        error: `403 Forbidden: GitHub user @${githubUsername} does not have repository access to Camas Commons.`,
+      }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // 2. Parse request payload
     let body;
     const contentType = request.headers.get('content-type') || '';
     if (contentType.includes('application/json')) {
@@ -21,7 +74,7 @@ export async function onRequestPost(context) {
       website_url // Honeypot trap
     } = body;
 
-    // 1. Anti-Spam Honeypot Trap
+    // Anti-Spam Honeypot Trap
     if (website_url && website_url.trim() !== '') {
       console.warn('Bot request blocked via honeypot field.');
       return new Response(JSON.stringify({ success: true, message: 'Request submitted successfully!' }), {
@@ -30,7 +83,7 @@ export async function onRequestPost(context) {
       });
     }
 
-    // 2. Input Validation
+    // Input Validation
     if (!requestTitle || !requestDescription) {
       return new Response(JSON.stringify({ success: false, error: 'Please provide both a summary and detailed description for your request.' }), {
         status: 400,
@@ -38,17 +91,17 @@ export async function onRequestPost(context) {
       });
     }
 
-    const name = clientName && clientName.trim() ? clientName.trim() : 'Camas Commons Admin';
-    const email = clientEmail && clientEmail.trim() ? clientEmail.trim() : 'info@camascommons.org';
+    const name = clientName && clientName.trim() ? clientName.trim() : (authenticatedUser.name || githubUsername);
+    const email = clientEmail && clientEmail.trim() ? clientEmail.trim() : (authenticatedUser.email || 'info@camascommons.org');
     const pageTarget = affectedPage && affectedPage.trim() ? affectedPage.trim() : 'General / Homepage';
     const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
 
-    // 3. Post Issue to GitHub API if GITHUB_TOKEN is available
-    const githubToken = (context.env && context.env.GITHUB_TOKEN) || null;
+    // 3. Post Issue to GitHub API using server token or user token
+    const githubToken = (context.env && context.env.GITHUB_TOKEN) || userToken;
 
     const issueBody = `## 🤖 Client Change Request
 
-**Requested By:** ${name} (<${email}>)  
+**Requested By:** ${name} (@${githubUsername} <${email}>)  
 **Target Page/Section:** \`${pageTarget}\`  
 **Date Submitted:** ${timestamp} (PT)  
 **Target Environment:** \`dev.camascommons.org\` (Branch: \`dev\`)  
@@ -64,47 +117,42 @@ ${requestDescription.trim()}
 *Note: Execute this task on the \`dev\` branch. Once built and pushed, preview at [https://dev.camascommons.org](https://dev.camascommons.org).*
 `;
 
-    if (githubToken) {
-      const ghResp = await fetch('https://api.github.com/repos/misterjuicebox/camascommons/issues', {
-        method: 'POST',
-        headers: {
-          'Authorization': `token ${githubToken.trim()}`,
-          'Content-Type': 'application/json',
-          'User-Agent': 'CamasCommons-ClientRequest-Agent',
-        },
-        body: JSON.stringify({
-          title: `🤖 [Client Request]: ${requestTitle.trim()}`,
-          body: issueBody,
-          labels: ['client-request', 'ai-agent-task'],
-        }),
-      });
-
-      const ghData = await ghResp.json();
-
-      if (ghResp.ok && ghData.html_url) {
-        return new Response(JSON.stringify({
-          success: true,
-          message: 'Request submitted successfully! Created task issue #' + ghData.number + '.',
-          issueUrl: ghData.html_url,
-          issueNumber: ghData.number,
-        }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      } else {
-        console.error('GitHub API error:', ghData);
-      }
-    }
-
-    // Fallback response if GITHUB_TOKEN is not yet set up in Cloudflare env vars
-    return new Response(JSON.stringify({
-      success: true,
-      message: 'Request submitted successfully! The AI Agent has received your request for dev.camascommons.org.',
-      summary: requestTitle.trim(),
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
+    const ghResp = await fetch('https://api.github.com/repos/misterjuicebox/camascommons/issues', {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${githubToken.trim()}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'CamasCommons-ClientRequest-Agent',
+      },
+      body: JSON.stringify({
+        title: `🤖 [Client Request]: ${requestTitle.trim()}`,
+        body: issueBody,
+        labels: ['client-request', 'ai-agent-task'],
+      }),
     });
+
+    const ghData = await ghResp.json();
+
+    if (ghResp.ok && ghData.html_url) {
+      return new Response(JSON.stringify({
+        success: true,
+        message: 'Request submitted successfully! Created task issue #' + ghData.number + '.',
+        issueUrl: ghData.html_url,
+        issueNumber: ghData.number,
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } else {
+      console.error('GitHub API error creating issue:', ghData);
+      return new Response(JSON.stringify({
+        success: false,
+        error: ghData.message || 'Failed to create GitHub Issue for change request.',
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
   } catch (err) {
     console.error('Error in request-change function:', err);
