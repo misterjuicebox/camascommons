@@ -413,13 +413,14 @@ function formatParagraph(text: string) {
       ))}
     </main>
 
-
-
     <!-- Handcrafted Footer -->
     <footer class="editorial-footer">
       <div class="container footer-inner text-center">
         <p class="footer-title">CAMAS COMMONS — A Regenerative Farming Land Trust</p>
         <p class="footer-sub">San Juan Island, Washington • <a href="mailto:info@camascommons.org" class="editorial-link">info@camascommons.org</a></p>
+        <div class="bootsy-credit-block">
+          <p class="bootsy-credit-text">bootsy made this</p>
+        </div>
       </div>
     </footer>
   </body>
@@ -696,6 +697,24 @@ function formatParagraph(text: string) {
     margin-bottom: 0.75rem;
   }
 
+  .bootsy-credit-block {
+    margin-top: 1.25rem;
+    padding: 0.6rem 1.25rem;
+    background: var(--color-card-paper);
+    border: 1px solid var(--color-border-paper);
+    border-radius: var(--radius-paper);
+    display: inline-block;
+    box-shadow: var(--shadow-paper);
+  }
+
+  .bootsy-credit-text {
+    font-family: var(--font-serif);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-green-deep);
+    margin: 0;
+    letter-spacing: 0.03em;
+  }
 
   @media (max-width: 640px) {
     .hero-title {
