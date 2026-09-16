@@ -107,7 +107,7 @@ ${issueBody}
 Codebase Context:
 ${repoContext}`;
 
-  const candidateModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  const candidateModels = ['gemini-3.6-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
   let lastError = null;
 
   for (const model of candidateModels) {
