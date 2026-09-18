@@ -50,6 +50,18 @@
       "clickableImage": false,
       "items": [
         {
+          "q": "What does a land trust do, and why are we using one?",
+          "a": "Affordability and preservation of active farmland in order to make sure it remains active farmland are the primary reasons we are using a land trust model. \n\nA land trust is very limited in what it can do. In the model we are using, it can hold title to the land, sign leases with leaseholders, collect lease payments from leaseholders, and pay for 3 things: property taxes, property insurance, and some shared maintenance costs. Because only actual costs are covered, leases remain affordable permanently.\n",
+          "image": "",
+          "clickableImage": true
+        },
+        {
+          "q": "Why don’t you take out a loan? ",
+          "a": "Taking out a loan to purchase the land would limit our project in two ways: first, it would make it far less affordable to farmers. And second, the land cannot actually enter into a land trust when it is being used as collateral for a loan. This is because a land trust puts land into conservation, and keeps it out of the speculative real estate market. It therefore cannot accept land that is being used as collateral, because if for some reason the loan was defaulted on, then the land could be taken to fulfill the debt. Therefore, there cannot be debt on the land when creating a land trust. ",
+          "image": "",
+          "clickableImage": true
+        },
+        {
           "q": "What is this land all about?",
           "a": "This 120-acre farm has seen a lot — an historic dairy, an eccentric follower of the spiritual leader Ramtha, a golf course, and an organic farm. For the past 20 years, this farm has been known as Talking Horse Ranch, after the famed “talking horse” purchased by previous owner Ernie Kanzler Jr. from the channeler of his spiritual guru, Ramtha.\n\nIn the last decade, the farm has been under-managed and kept running at a low-idle. Most of the infrastructure is in disrepair, but not beyond the point-of-no-return.\n\nDespite all this, the land is a wonderfully magical place — with excellent topography, landscape, a seasonal creek, 6 ponds, enchanting forests, and incredibly cool & quirky buildings & landscaping. Most of the developed land is south facing slope with excellent sun. A large barn offers 13,000 square feet of usable indoor space. These are just a few of the significant attributes.\n\n40 of the 120 acres will be purchased for Camas Commons, with the other 80 acres entering into perpetual conservation through the San Juan Conservation Land Bank. Together, public access will be included in this plan with a walking trail that connects the Beaverton Marsh Preserve to the top of Beaver Hill, through Camas Commons.",
           "image": "/images/hay.jpeg",
