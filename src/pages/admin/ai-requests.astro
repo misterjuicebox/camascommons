@@ -431,7 +431,11 @@ import Button from '../../components/Button.astro';
         font-weight: 700;
         cursor: pointer;
         border: none;
+<<<<<<< HEAD
+        transition: background 0.2s ease;
+=======
         transition: background 0.2s ease, border-color 0.2s ease;
+>>>>>>> dev
       }
 
       .btn-approve {
@@ -453,6 +457,8 @@ import Button from '../../components/Button.astro';
         background: var(--color-rose-light);
       }
 
+<<<<<<< HEAD
+=======
       .inline-confirm-box {
         display: flex;
         align-items: center;
@@ -536,6 +542,7 @@ import Button from '../../components/Button.astro';
         to { transform: rotate(360deg); }
       }
 
+>>>>>>> dev
       .state-loading, .state-empty {
         text-align: center;
         padding: 40px 20px;
@@ -607,8 +614,13 @@ import Button from '../../components/Button.astro';
         var actionsHtml = '';
         if (req.status === 'Ready for Review' || req.status === 'Pending') {
           actionsHtml = `
+<<<<<<< HEAD
+            <button class="btn-action btn-approve" onclick="approveChange(${req.id})">Approve & Merge to Main</button>
+            <button class="btn-action btn-discard" onclick="discardChange(${req.id})">Discard Change</button>
+=======
             <button class="btn-action btn-approve" onclick="showApproveConfirm(${req.id})">Approve & Merge to Main</button>
             <button class="btn-action btn-discard" onclick="showDiscardConfirm(${req.id})">Discard Change</button>
+>>>>>>> dev
           `;
         }
 
@@ -626,7 +638,11 @@ import Button from '../../components/Button.astro';
               <div class="staging-indicator">
                 Staging Preview: <a href="https://dev.camascommons.org" target="_blank" rel="noopener">dev.camascommons.org</a>
               </div>
+<<<<<<< HEAD
+              <div class="action-group">
+=======
               <div class="action-group" id="action-group-${req.id}">
+>>>>>>> dev
                 ${actionsHtml}
               </div>
             </div>
@@ -691,6 +707,11 @@ import Button from '../../components/Button.astro';
           });
       }
 
+<<<<<<< HEAD
+      function approveChange(issueNumber) {
+        var token = getUserToken();
+        if (!token || !confirm('Are you sure you want to approve request #' + issueNumber + ' and merge it to the live production site (camascommons.org)?')) return;
+=======
       function showApproveConfirm(issueNumber) {
         var el = document.getElementById('action-group-' + issueNumber);
         if (!el) return;
@@ -734,6 +755,7 @@ import Button from '../../components/Button.astro';
             <span class="spinner"></span> Merging dev to main & triggering build...
           </div>
         `;
+>>>>>>> dev
 
         fetch('/api/approve-change', {
           method: 'POST',
@@ -746,6 +768,22 @@ import Button from '../../components/Button.astro';
           .then(function(res) { return res.json(); })
           .then(function(data) {
             if (data && data.success) {
+<<<<<<< HEAD
+              alert('Request #' + issueNumber + ' approved and merged to main successfully! Production build triggered.');
+              loadRequests();
+            } else {
+              alert('Error approving request: ' + (data.error || 'Unknown error'));
+            }
+          })
+          .catch(function(err) {
+            alert('Connection error approving request.');
+          });
+      }
+
+      function discardChange(issueNumber) {
+        var token = getUserToken();
+        if (!token || !confirm('Are you sure you want to discard request #' + issueNumber + '?')) return;
+=======
               el.innerHTML = `
                 <div class="inline-status-success">
                   Approved & Merged! Production build triggered.
@@ -781,6 +819,7 @@ import Button from '../../components/Button.astro';
             <span class="spinner"></span> Discarding request...
           </div>
         `;
+>>>>>>> dev
 
         fetch('/api/discard-change', {
           method: 'POST',
@@ -793,6 +832,16 @@ import Button from '../../components/Button.astro';
           .then(function(res) { return res.json(); })
           .then(function(data) {
             if (data && data.success) {
+<<<<<<< HEAD
+              alert('Request #' + issueNumber + ' discarded.');
+              loadRequests();
+            } else {
+              alert('Error discarding request: ' + (data.error || 'Unknown error'));
+            }
+          })
+          .catch(function(err) {
+            alert('Connection error discarding request.');
+=======
               el.innerHTML = `
                 <div class="inline-status-success">
                   Request discarded.
@@ -815,6 +864,7 @@ import Button from '../../components/Button.astro';
                 <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Retry</button>
               </div>
             `;
+>>>>>>> dev
           });
       }
 
