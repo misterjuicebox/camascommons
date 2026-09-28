@@ -87,13 +87,36 @@ export async function onRequestPost(context) {
 
     if (!mergeResp.ok && mergeResp.status !== 204) {
       console.error('Merge error:', mergeData);
+      let errorMsg = mergeData.message || 'Failed to merge dev branch to main.';
+      if (mergeResp.status === 409) {
+        errorMsg = 'Merge conflict detected between staging (dev) and production (main). Direct edits on main may have conflicted. Please contact developer to resolve.';
+      }
       return new Response(JSON.stringify({
         success: false,
-        error: mergeData.message || 'Failed to merge dev branch to main.'
+        error: errorMsg
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
+    }
+
+    // 2. Automatically sync main back into dev to prevent future branch divergence & conflicts
+    try {
+      await fetch('https://api.github.com/repos/misterjuicebox/camascommons/merges', {
+        method: 'POST',
+        headers: {
+          'Authorization': `token ${githubToken.trim()}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'CamasCommons-Approve-Handler'
+        },
+        body: JSON.stringify({
+          base: 'dev',
+          head: 'main',
+          commit_message: `Sync main back to dev after approving Issue #${issueNumber}`
+        })
+      });
+    } catch (syncErr) {
+      console.warn('Post-approve branch sync warning:', syncErr);
     }
 
     // 2. Comment on GitHub Issue
