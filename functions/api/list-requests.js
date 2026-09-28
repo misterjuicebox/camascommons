@@ -53,13 +53,40 @@ export async function onRequestGet(context) {
       });
     }
 
-    // Fetch issues tagged client-request
-    const issuesResp = await fetch('https://api.github.com/repos/misterjuicebox/camascommons/issues?labels=client-request&state=all&per_page=50', {
-      headers: {
-        'Authorization': `token ${userToken}`,
-        'User-Agent': 'CamasCommons-Request-Lister'
-      }
-    });
+    // Fetch issues tagged client-request, latest dev commit, and live Cloudflare deployment info
+    const [issuesResp, devCommitResp, buildInfoResp] = await Promise.all([
+      fetch('https://api.github.com/repos/misterjuicebox/camascommons/issues?labels=client-request&state=all&per_page=50', {
+        headers: {
+          'Authorization': `token ${userToken}`,
+          'User-Agent': 'CamasCommons-Request-Lister'
+        }
+      }),
+      fetch('https://api.github.com/repos/misterjuicebox/camascommons/commits/dev', {
+        headers: {
+          'Authorization': `token ${userToken}`,
+          'User-Agent': 'CamasCommons-Request-Lister'
+        }
+      }).catch(() => null),
+      fetch('https://dev.camascommons.org/api/build-info', {
+        headers: { 'Cache-Control': 'no-cache, no-store' }
+      }).catch(() => null)
+    ]);
+
+    let latestDevSha = null;
+    if (devCommitResp && devCommitResp.ok) {
+      try {
+        const devCommitData = await devCommitResp.json();
+        latestDevSha = devCommitData.sha;
+      } catch (e) {}
+    }
+
+    let liveCommitSha = null;
+    if (buildInfoResp && buildInfoResp.ok) {
+      try {
+        const buildData = await buildInfoResp.json();
+        liveCommitSha = buildData.commitSha;
+      } catch (e) {}
+    }
 
     if (!issuesResp.ok) {
       const errData = await issuesResp.json();
@@ -98,7 +125,9 @@ export async function onRequestGet(context) {
           const hasComplete = comments.some(c => c.body && (c.body.includes('AI Agent Task Complete') || c.body.includes('Live Preview')));
           const hasError = comments.some(c => c.body && c.body.includes('AI Agent Execution Error'));
           if (hasComplete) {
-            status = 'Ready for Review';
+            // Check if Cloudflare Pages deployment has finished publishing latest commit to staging
+            const isDeploying = latestDevSha && liveCommitSha && liveCommitSha !== 'local-dev' && liveCommitSha !== latestDevSha;
+            status = isDeploying ? 'Deploying to Staging' : 'Ready for Review';
           } else if (hasError) {
             status = 'Error';
           }
