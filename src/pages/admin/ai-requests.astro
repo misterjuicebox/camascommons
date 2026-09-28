@@ -431,7 +431,7 @@ import Button from '../../components/Button.astro';
         font-weight: 700;
         cursor: pointer;
         border: none;
-        transition: background 0.2s ease;
+        transition: background 0.2s ease, border-color 0.2s ease;
       }
 
       .btn-approve {
@@ -451,6 +451,89 @@ import Button from '../../components/Button.astro';
 
       .btn-discard:hover {
         background: var(--color-rose-light);
+      }
+
+      .inline-confirm-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #F9F6F0;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #E6DCCD;
+      }
+
+      .confirm-prompt {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text-charcoal, #2B2625);
+      }
+
+      .btn-approve-confirm {
+        background: var(--color-green-deep);
+        color: #FFFFFF;
+      }
+
+      .btn-approve-confirm:hover {
+        background: var(--color-green-hover);
+      }
+
+      .btn-discard-confirm {
+        background: var(--color-rose-terracotta);
+        color: #FFFFFF;
+      }
+
+      .btn-discard-confirm:hover {
+        background: var(--color-rose-hover);
+      }
+
+      .btn-cancel {
+        background: transparent;
+        border: 1px solid #C0B7AA;
+        color: #555555;
+      }
+
+      .btn-cancel:hover {
+        background: #EBE4D8;
+      }
+
+      .inline-status-busy, .inline-status-success, .inline-status-error {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 6px;
+      }
+
+      .inline-status-busy {
+        color: var(--color-green-deep);
+        background: #EAF2EC;
+      }
+
+      .inline-status-success {
+        color: #1E4620;
+        background: #E2F0E3;
+      }
+
+      .inline-status-error {
+        color: #8B251E;
+        background: #FCEBEA;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(0,0,0,0.15);
+        border-left-color: currentColor;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
       }
 
       .state-loading, .state-empty {
@@ -524,8 +607,8 @@ import Button from '../../components/Button.astro';
         var actionsHtml = '';
         if (req.status === 'Ready for Review' || req.status === 'Pending') {
           actionsHtml = `
-            <button class="btn-action btn-approve" onclick="approveChange(${req.id})">Approve & Merge to Main</button>
-            <button class="btn-action btn-discard" onclick="discardChange(${req.id})">Discard Change</button>
+            <button class="btn-action btn-approve" onclick="showApproveConfirm(${req.id})">Approve & Merge to Main</button>
+            <button class="btn-action btn-discard" onclick="showDiscardConfirm(${req.id})">Discard Change</button>
           `;
         }
 
@@ -543,7 +626,7 @@ import Button from '../../components/Button.astro';
               <div class="staging-indicator">
                 Staging Preview: <a href="https://dev.camascommons.org" target="_blank" rel="noopener">dev.camascommons.org</a>
               </div>
-              <div class="action-group">
+              <div class="action-group" id="action-group-${req.id}">
                 ${actionsHtml}
               </div>
             </div>
@@ -608,9 +691,49 @@ import Button from '../../components/Button.astro';
           });
       }
 
-      function approveChange(issueNumber) {
+      function showApproveConfirm(issueNumber) {
+        var el = document.getElementById('action-group-' + issueNumber);
+        if (!el) return;
+        el.innerHTML = `
+          <div class="inline-confirm-box">
+            <span class="confirm-prompt">Merge request #${issueNumber} to live site?</span>
+            <button class="btn-action btn-approve-confirm" onclick="executeApprove(${issueNumber})">Confirm & Deploy</button>
+            <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Cancel</button>
+          </div>
+        `;
+      }
+
+      function showDiscardConfirm(issueNumber) {
+        var el = document.getElementById('action-group-' + issueNumber);
+        if (!el) return;
+        el.innerHTML = `
+          <div class="inline-confirm-box">
+            <span class="confirm-prompt">Discard request #${issueNumber}?</span>
+            <button class="btn-action btn-discard-confirm" onclick="executeDiscard(${issueNumber})">Confirm Discard</button>
+            <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Cancel</button>
+          </div>
+        `;
+      }
+
+      function resetCardActions(issueNumber) {
+        var el = document.getElementById('action-group-' + issueNumber);
+        if (!el) return;
+        el.innerHTML = `
+          <button class="btn-action btn-approve" onclick="showApproveConfirm(${issueNumber})">Approve & Merge to Main</button>
+          <button class="btn-action btn-discard" onclick="showDiscardConfirm(${issueNumber})">Discard Change</button>
+        `;
+      }
+
+      function executeApprove(issueNumber) {
         var token = getUserToken();
-        if (!token || !confirm('Are you sure you want to approve request #' + issueNumber + ' and merge it to the live production site (camascommons.org)?')) return;
+        var el = document.getElementById('action-group-' + issueNumber);
+        if (!token || !el) return;
+
+        el.innerHTML = `
+          <div class="inline-status-busy">
+            <span class="spinner"></span> Merging dev to main & triggering build...
+          </div>
+        `;
 
         fetch('/api/approve-change', {
           method: 'POST',
@@ -623,20 +746,41 @@ import Button from '../../components/Button.astro';
           .then(function(res) { return res.json(); })
           .then(function(data) {
             if (data && data.success) {
-              alert('Request #' + issueNumber + ' approved and merged to main successfully! Production build triggered.');
-              loadRequests();
+              el.innerHTML = `
+                <div class="inline-status-success">
+                  Approved & Merged! Production build triggered.
+                </div>
+              `;
+              setTimeout(loadRequests, 1500);
             } else {
-              alert('Error approving request: ' + (data.error || 'Unknown error'));
+              el.innerHTML = `
+                <div class="inline-status-error">
+                  Error: ${escapeHtml(data.error || 'Failed to approve')}
+                  <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Retry</button>
+                </div>
+              `;
             }
           })
           .catch(function(err) {
-            alert('Connection error approving request.');
+            el.innerHTML = `
+              <div class="inline-status-error">
+                Connection error.
+                <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Retry</button>
+              </div>
+            `;
           });
       }
 
-      function discardChange(issueNumber) {
+      function executeDiscard(issueNumber) {
         var token = getUserToken();
-        if (!token || !confirm('Are you sure you want to discard request #' + issueNumber + '?')) return;
+        var el = document.getElementById('action-group-' + issueNumber);
+        if (!token || !el) return;
+
+        el.innerHTML = `
+          <div class="inline-status-busy">
+            <span class="spinner"></span> Discarding request...
+          </div>
+        `;
 
         fetch('/api/discard-change', {
           method: 'POST',
@@ -649,14 +793,28 @@ import Button from '../../components/Button.astro';
           .then(function(res) { return res.json(); })
           .then(function(data) {
             if (data && data.success) {
-              alert('Request #' + issueNumber + ' discarded.');
-              loadRequests();
+              el.innerHTML = `
+                <div class="inline-status-success">
+                  Request discarded.
+                </div>
+              `;
+              setTimeout(loadRequests, 1200);
             } else {
-              alert('Error discarding request: ' + (data.error || 'Unknown error'));
+              el.innerHTML = `
+                <div class="inline-status-error">
+                  Error: ${escapeHtml(data.error || 'Failed to discard')}
+                  <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Retry</button>
+                </div>
+              `;
             }
           })
           .catch(function(err) {
-            alert('Connection error discarding request.');
+            el.innerHTML = `
+              <div class="inline-status-error">
+                Connection error.
+                <button class="btn-action btn-cancel" onclick="resetCardActions(${issueNumber})">Retry</button>
+              </div>
+            `;
           });
       }
 
