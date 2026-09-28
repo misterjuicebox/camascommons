@@ -74,7 +74,7 @@ function formatParagraph(text: string) {
   );
   // Convert plain URLs starting with http(s) (if not already inside an href)
   formatted = formatted.replace(
-    /(?<!href="|href='|>)(https?:\/\/[^\s<]+)/g,
+    /(?<!href=\"|href='|>)((https?:\/\/[^\s<]+))/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
   );
   // Convert inline :flower: or [flower] shortcodes into blue flower icon
