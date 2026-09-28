@@ -1,0 +1,667 @@
+---
+import Button from '../../components/Button.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Agent Requests - Camas Commons Admin</title>
+  </head>
+  <body>
+    <div class="admin-app">
+      <!-- Admin Top Navigation Header -->
+      <header class="admin-header">
+        <div class="admin-header-inner">
+          <div class="brand-title">Camas Commons Admin</div>
+          <nav class="admin-nav">
+            <a href="/admin" class="nav-link">Content CMS</a>
+            <a href="/admin/ai-requests" class="nav-link active">AI Agent Requests</a>
+            <a href="https://dev.camascommons.org" target="_blank" rel="noopener" class="nav-link staging-link">Staging Site</a>
+            <a href="https://camascommons.org" target="_blank" rel="noopener" class="nav-link live-link">Live Site</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="admin-main">
+        <div class="container">
+          <!-- Page Header -->
+          <div class="page-title-box">
+            <h1 class="page-title">AI Agent Change Requests</h1>
+            <p class="page-subtitle">Submit non-CMS code change requests to the AI agent, preview builds on staging, and approve changes to production.</p>
+          </div>
+
+          <!-- Section 1: Submit Request Form -->
+          <section class="admin-card margin-bottom">
+            <div class="card-header">
+              <h2 class="card-title">Submit New Request</h2>
+              <p class="card-subtitle">Changes will be built and previewed automatically on dev.camascommons.org</p>
+            </div>
+
+            <form id="ai-request-form" onsubmit="handleRequestSubmit(event)">
+              <div style="display:none;" aria-hidden="true">
+                <input type="text" name="website_url" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="req-name">Your Name</label>
+                  <input type="text" id="req-name" name="clientName" placeholder="e.g. Ally or Guise" required />
+                </div>
+                <div class="form-group">
+                  <label for="req-email">Your Email</label>
+                  <input type="email" id="req-email" name="clientEmail" placeholder="e.g. ally@camascommons.org" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="req-target">Target Page / Section</label>
+                <select id="req-target" name="affectedPage">
+                  <option value="Homepage / Main">Homepage / Main Site</option>
+                  <option value="Header & Navbar">Header & Navigation Menu</option>
+                  <option value="Footer">Footer & Social Links</option>
+                  <option value="FAQs Section">FAQs & Questions</option>
+                  <option value="Fundraiser Tracker">Fundraiser Tracker / Thermometer</option>
+                  <option value="New Page / Layout">New Custom Page or Layout</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="req-title">Summary / Request Title</label>
+                <input type="text" id="req-title" name="requestTitle" placeholder="e.g. Add newsletter signup block to footer" required />
+              </div>
+
+              <div class="form-group">
+                <label for="req-desc">Detailed Description</label>
+                <textarea id="req-desc" name="requestDescription" placeholder="Describe the exact changes, text, colors, or new elements you want the AI agent to build..." required></textarea>
+              </div>
+
+              <div class="form-actions">
+                <Button type="submit" id="submit-btn" variant="green" size="md">
+                  Submit Request to AI Agent
+                </Button>
+              </div>
+              <div id="form-status" class="form-status-msg"></div>
+            </form>
+          </section>
+
+          <!-- Section 2: Request History & Management Table -->
+          <section class="admin-card">
+            <div class="card-header flex-between">
+              <div>
+                <h2 class="card-title">Request Status & Approvals</h2>
+                <p class="card-subtitle">Review changes built by the AI agent on staging before merging to production.</p>
+              </div>
+              <button onclick="loadRequests()" class="btn-refresh">Refresh List</button>
+            </div>
+
+            <div id="requests-loading" class="state-loading">Loading requests...</div>
+            <div id="requests-empty" class="state-empty" style="display:none;">No AI agent change requests found.</div>
+
+            <div id="requests-container" class="requests-list" style="display:none;">
+              <!-- Dynamic request cards populated via JS -->
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <style is:global>
+      :root {
+        --color-green-deep: #24472F;
+        --color-green-light: #EBF3ED;
+        --color-green-hover: #193321;
+        --color-rose-terracotta: #C5746D;
+        --color-rose-light: #F8ECEB;
+        --color-bg-paper: #FAF6F0;
+        --color-card-paper: #FFFDF9;
+        --color-border-paper: #E6DCCE;
+        --color-text-ink: #1C2A20;
+        --color-text-muted: #566459;
+        --font-serif: "Fraunces", Georgia, serif;
+        --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-bg-paper);
+        color: var(--color-text-ink);
+        font-family: var(--font-sans);
+        line-height: 1.5;
+      }
+
+      .admin-app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .admin-header {
+        background: #1C2A20;
+        color: #FFFFFF;
+        padding: 14px 24px;
+        border-bottom: 3px solid var(--color-rose-terracotta);
+      }
+
+      .admin-header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand-title {
+        font-family: var(--font-serif);
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        letter-spacing: 0.04em;
+      }
+
+      .admin-nav {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .nav-link {
+        color: #A3B8A8;
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .nav-link:hover, .nav-link.active {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-link.staging-link {
+        color: #E6DCCE;
+        border: 1px solid rgba(230, 220, 206, 0.3);
+      }
+
+      .nav-link.live-link {
+        background: var(--color-rose-terracotta);
+        color: #FFFFFF;
+      }
+
+      .admin-main {
+        flex: 1;
+        padding: 32px 20px;
+      }
+
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+
+      .page-title-box {
+        margin-bottom: 28px;
+      }
+
+      .page-title {
+        font-family: var(--font-serif);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-green-deep);
+        margin: 0 0 6px 0;
+      }
+
+      .page-subtitle {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--color-text-muted);
+      }
+
+      .admin-card {
+        background: var(--color-card-paper);
+        border: 1px solid var(--color-border-paper);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      }
+
+      .margin-bottom {
+        margin-bottom: 28px;
+      }
+
+      .card-header {
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--color-border-paper);
+      }
+
+      .card-header.flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--color-green-deep);
+        margin: 0 0 4px 0;
+      }
+
+      .card-subtitle {
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+        margin: 0;
+      }
+
+      .btn-refresh {
+        background: transparent;
+        border: 1px solid var(--color-border-paper);
+        color: var(--color-green-deep);
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-refresh:hover {
+        background: var(--color-green-light);
+      }
+
+      /* Form Layout */
+      .form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .form-group label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--color-green-deep);
+      }
+
+      .form-group input, .form-group textarea, .form-group select {
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid var(--color-border-paper);
+        background: #FFFFFF;
+        font-family: inherit;
+        font-size: 0.92rem;
+        color: var(--color-text-ink);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .form-actions {
+        margin-top: 8px;
+      }
+
+      .form-status-msg {
+        margin-top: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      /* Request List & Card Styles */
+      .requests-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .request-item {
+        background: #FFFFFF;
+        border: 1px solid var(--color-border-paper);
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .request-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .request-item-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--color-text-ink);
+        margin: 0 0 4px 0;
+      }
+
+      .request-item-meta {
+        font-size: 0.82rem;
+        color: var(--color-text-muted);
+      }
+
+      /* Status Badges */
+      .badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+      }
+
+      .badge-pending {
+        background: #FFF4E5;
+        color: #B76E00;
+        border: 1px solid #FFE0B2;
+      }
+
+      .badge-review {
+        background: #E3F2FD;
+        color: #0D47A1;
+        border: 1px solid #BBDEFB;
+      }
+
+      .badge-approved {
+        background: var(--color-green-light);
+        color: var(--color-green-deep);
+        border: 1px solid #C8E6C9;
+      }
+
+      .badge-discarded {
+        background: var(--color-rose-light);
+        color: var(--color-rose-terracotta);
+        border: 1px solid #FFCDD2;
+      }
+
+      .request-body {
+        font-size: 0.92rem;
+        color: var(--color-text-ink);
+        background: var(--color-bg-paper);
+        padding: 12px 16px;
+        border-radius: 6px;
+        border: 1px solid var(--color-border-paper);
+        white-space: pre-line;
+      }
+
+      .request-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px solid #F3ECE0;
+      }
+
+      .staging-indicator {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-green-deep);
+      }
+
+      .staging-indicator a {
+        color: var(--color-rose-terracotta);
+        text-decoration: underline;
+        font-weight: 700;
+      }
+
+      .action-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-action {
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        transition: background 0.2s ease;
+      }
+
+      .btn-approve {
+        background: var(--color-green-deep);
+        color: #FFFFFF;
+      }
+
+      .btn-approve:hover {
+        background: var(--color-green-hover);
+      }
+
+      .btn-discard {
+        background: transparent;
+        border: 1px solid var(--color-rose-terracotta);
+        color: var(--color-rose-terracotta);
+      }
+
+      .btn-discard:hover {
+        background: var(--color-rose-light);
+      }
+
+      .state-loading, .state-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+      }
+    </style>
+
+    <script is:inline>
+      function getUserToken() {
+        try {
+          var user = localStorage.getItem('netlify-cms-user') || localStorage.getItem('decap-cms-user');
+          if (user) {
+            var userData = JSON.parse(user);
+            if (userData && userData.token) return userData.token;
+            if (userData && userData.user && userData.user.token) return userData.user.token;
+          }
+        } catch (e) {}
+        return null;
+      }
+
+      function loadRequests() {
+        var token = getUserToken();
+        var loadingEl = document.getElementById('requests-loading');
+        var emptyEl = document.getElementById('requests-empty');
+        var containerEl = document.getElementById('requests-container');
+
+        if (!token) {
+          loadingEl.textContent = 'Please log into the CMS to view requests.';
+          return;
+        }
+
+        loadingEl.style.display = 'block';
+        emptyEl.style.display = 'none';
+        containerEl.style.display = 'none';
+
+        fetch('/api/list-requests', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            loadingEl.style.display = 'none';
+
+            if (data && data.success && data.requests && data.requests.length > 0) {
+              containerEl.style.display = 'flex';
+              containerEl.innerHTML = data.requests.map(renderRequestCard).join('');
+            } else {
+              emptyEl.style.display = 'block';
+            }
+          })
+          .catch(function(err) {
+            console.error('Error loading requests:', err);
+            loadingEl.textContent = 'Failed to load change requests.';
+          });
+      }
+
+      function renderRequestCard(req) {
+        var badgeClass = 'badge-pending';
+        var statusLabel = req.status;
+
+        if (req.status === 'Ready for Review') {
+          badgeClass = 'badge-review';
+        } else if (req.status === 'Approved') {
+          badgeClass = 'badge-approved';
+        } else if (req.status === 'Discarded') {
+          badgeClass = 'badge-discarded';
+        }
+
+        var actionsHtml = '';
+        if (req.status === 'Ready for Review' || req.status === 'Pending') {
+          actionsHtml = `
+            <button class="btn-action btn-approve" onclick="approveChange(${req.id})">Approve & Merge to Main</button>
+            <button class="btn-action btn-discard" onclick="discardChange(${req.id})">Discard Change</button>
+          `;
+        }
+
+        return `
+          <div class="request-item">
+            <div class="request-header">
+              <div>
+                <h3 class="request-item-title">#${req.id} — ${escapeHtml(req.title)}</h3>
+                <div class="request-item-meta">Requested by ${escapeHtml(req.requestedBy)} • Section: ${escapeHtml(req.targetSection)} • ${new Date(req.createdAt).toLocaleString()}</div>
+              </div>
+              <span class="badge ${badgeClass}">${statusLabel}</span>
+            </div>
+            <div class="request-body">${escapeHtml(cleanDescription(req.description))}</div>
+            <div class="request-footer">
+              <div class="staging-indicator">
+                Staging Preview: <a href="https://dev.camascommons.org" target="_blank" rel="noopener">dev.camascommons.org</a>
+              </div>
+              <div class="action-group">
+                ${actionsHtml}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function escapeHtml(str) {
+        return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function cleanDescription(desc) {
+        if (!desc) return '';
+        return desc.replace(/## 🤖 Client Change Request[\s\S]*?### 📝 Request Details:\s*/, '').replace(/\*Note: Execute this task[\s\S]*/, '').trim();
+      }
+
+      function handleRequestSubmit(e) {
+        e.preventDefault();
+        var token = getUserToken();
+        var form = document.getElementById('ai-request-form');
+        var submitBtn = document.getElementById('submit-btn');
+        var statusEl = document.getElementById('form-status');
+
+        if (!token) {
+          statusEl.style.color = '#C5746D';
+          statusEl.textContent = 'Authentication error: Please log into the CMS to submit requests.';
+          return;
+        }
+
+        var formData = new FormData(form);
+        var payload = Object.fromEntries(formData.entries());
+
+        submitBtn.disabled = true;
+        statusEl.style.color = '#566459';
+        statusEl.textContent = 'Submitting request to AI agent...';
+
+        fetch('/api/request-change', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify(payload)
+        })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            submitBtn.disabled = false;
+            if (data && data.success) {
+              statusEl.style.color = '#24472F';
+              statusEl.textContent = 'Request submitted successfully! Task issue #' + (data.issueNumber || '') + ' created.';
+              form.reset();
+              setTimeout(loadRequests, 1000);
+            } else {
+              statusEl.style.color = '#C5746D';
+              statusEl.textContent = 'Error: ' + (data.error || 'Failed to submit request.');
+            }
+          })
+          .catch(function(err) {
+            submitBtn.disabled = false;
+            statusEl.style.color = '#C5746D';
+            statusEl.textContent = 'Connection error. Please try again.';
+          });
+      }
+
+      function approveChange(issueNumber) {
+        var token = getUserToken();
+        if (!token || !confirm('Are you sure you want to approve request #' + issueNumber + ' and merge it to the live production site (camascommons.org)?')) return;
+
+        fetch('/api/approve-change', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ issueNumber: issueNumber })
+        })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.success) {
+              alert('Request #' + issueNumber + ' approved and merged to main successfully! Production build triggered.');
+              loadRequests();
+            } else {
+              alert('Error approving request: ' + (data.error || 'Unknown error'));
+            }
+          })
+          .catch(function(err) {
+            alert('Connection error approving request.');
+          });
+      }
+
+      function discardChange(issueNumber) {
+        var token = getUserToken();
+        if (!token || !confirm('Are you sure you want to discard request #' + issueNumber + '?')) return;
+
+        fetch('/api/discard-change', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ issueNumber: issueNumber })
+        })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.success) {
+              alert('Request #' + issueNumber + ' discarded.');
+              loadRequests();
+            } else {
+              alert('Error discarding request: ' + (data.error || 'Unknown error'));
+            }
+          })
+          .catch(function(err) {
+            alert('Connection error discarding request.');
+          });
+      }
+
+      document.addEventListener('DOMContentLoaded', loadRequests);
+      setTimeout(loadRequests, 500);
+    </script>
+  </body>
+</html>
