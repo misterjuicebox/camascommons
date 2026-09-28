@@ -82,7 +82,7 @@ function getRepositoryContext() {
   return contextText;
 }
 
-// 2. Call Gemini API with model fallback
+// 2. Call Gemini API with dynamic model discovery
 async function generateCodeEdits(prompt, repoContext) {
   const systemInstruction = `You are an expert full-stack Astro & web developer working on the Camas Commons website (dev branch).
 Your job is to read a client request and output modified code files to satisfy the user's request precisely.
@@ -107,7 +107,31 @@ ${issueBody}
 Codebase Context:
 ${repoContext}`;
 
-  const candidateModels = ['gemini-3.6-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  // Default candidate model fallback list
+  let candidateModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-2.0-flash-exp', 'gemini-1.5-pro-latest'];
+
+  // Query Google AI Studio API for available models enabled for this API key
+  try {
+    const listModelsUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiApiKey}`;
+    const listRes = await fetch(listModelsUrl);
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      if (listData && listData.models && Array.isArray(listData.models)) {
+        const activeModels = listData.models
+          .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
+          .map(m => m.name.replace(/^models\//, ''))
+          .filter(m => m.includes('flash') || m.includes('pro'));
+
+        if (activeModels.length > 0) {
+          candidateModels = [...new Set([...activeModels, ...candidateModels])];
+          console.log('Discovered active Gemini API models:', candidateModels);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Could not list Gemini models dynamically:', err);
+  }
+
   let lastError = null;
 
   for (const model of candidateModels) {
@@ -213,7 +237,7 @@ async function main() {
 
     // Run build check
     console.log('Verifying Astro build...');
-    execSync('npm run build', { stdio: 'inherit' });
+    execSync('ASTRO_TELEMETRY_DISABLED=1 npx astro build', { stdio: 'inherit' });
 
     console.log('Build succeeded! Modifications ready for git commit.');
 
@@ -223,8 +247,6 @@ async function main() {
       `The following files were updated on the \`dev\` branch:\n${fileListText}\n\n` +
       `🚀 **Live Preview:** [https://dev.camascommons.org](https://dev.camascommons.org) (or [https://dev.camascommons.pages.dev](https://dev.camascommons.pages.dev))`
     );
-
-    await closeGitHubIssue();
 
   } catch (err) {
     console.error('Error executing AI Agent:', err);
