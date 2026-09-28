@@ -12,30 +12,101 @@
   </head>
   <body>
     <style is:global>
+      /* Top Admin Header Bar */
+      .admin-top-nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 44px;
+        background: #1C2A20;
+        color: #FFFFFF;
+        z-index: 999990;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        border-bottom: 2px solid #C5746D;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Offset Decap CMS container so it renders cleanly below top bar */
+      #nc-root {
+        margin-top: 44px !important;
+      }
+
+      .admin-nav-brand {
+        font-family: "Fraunces", Georgia, serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #FFFFFF;
+        letter-spacing: 0.03em;
+      }
+
+      .admin-nav-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .admin-nav-btn {
+        color: #A3B8A8;
+        font-size: 0.84rem;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 5px 12px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+
+      .admin-nav-btn:hover {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .admin-nav-btn.active {
+        color: #FFFFFF;
+        background: rgba(255, 255, 255, 0.15);
+        font-weight: 700;
+      }
+
+      .admin-nav-btn.btn-outline {
+        border: 1px solid rgba(230, 220, 206, 0.3);
+        color: #E6DCCE;
+      }
+
+      .admin-nav-btn.btn-primary {
+        background: #C5746D;
+        color: #FFFFFF;
+        font-weight: 700;
+      }
+
+      .admin-nav-btn.btn-primary:hover {
+        background: #b06059;
+      }
+
       /* Sticky Top Deployment Progress Bar */
       #deploy-top-bar {
         position: fixed;
-        top: 0;
+        top: 44px;
         left: 0;
         right: 0;
         z-index: 999999;
         background: #1C2A20;
         color: #FFFFFF;
-        padding: 12px 24px;
+        padding: 10px 24px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         display: none;
-        border-bottom: 3px solid #C5746D;
+        border-bottom: 2px solid #C5746D;
       }
 
       #deploy-top-bar.active {
         display: block;
-        animation: slideDown 0.3s ease-out;
-      }
-
-      @keyframes slideDown {
-        from { transform: translateY(-100%); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
       }
 
       .top-bar-content {
@@ -51,15 +122,15 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 0.92rem;
+        font-size: 0.88rem;
         font-weight: 600;
         flex: 1;
       }
 
       .top-bar-track {
         flex: 1;
-        max-width: 320px;
-        height: 8px;
+        max-width: 280px;
+        height: 7px;
         background: rgba(255, 255, 255, 0.2);
         border-radius: 4px;
         overflow: hidden;
@@ -83,76 +154,23 @@
         background: #C5746D;
         color: #FFFFFF;
         text-decoration: none;
-        padding: 6px 14px;
-        border-radius: 6px;
-        font-size: 0.85rem;
+        padding: 5px 12px;
+        border-radius: 4px;
+        font-size: 0.82rem;
         font-weight: 700;
         display: none;
-        align-items: center;
-        gap: 6px;
-        transition: background 0.2s ease;
-      }
-
-      .top-bar-view-btn:hover {
-        background: #b06059;
       }
 
       .top-bar-close-btn {
         background: transparent;
         border: none;
         color: #A3B8A8;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         cursor: pointer;
         padding: 0 4px;
-        line-height: 1;
       }
 
-      /* Floating Analytics & AI Request Buttons Container (Only shown when authenticated) */
-      .fab-container {
-        position: fixed;
-        bottom: 24px;
-        left: 24px;
-        z-index: 99990;
-        display: none; /* Hidden by default until user is logged in */
-        align-items: center;
-        gap: 12px;
-      }
-
-      .fab-container.authenticated {
-        display: flex;
-      }
-
-      #analytics-fab, #agent-request-fab {
-        background: #24472F;
-        color: #FFFFFF;
-        border: 2px solid #E6DCCE;
-        padding: 10px 18px;
-        border-radius: 30px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 0.88rem;
-        font-weight: 700;
-        cursor: pointer;
-        box-shadow: 0 8px 24px rgba(36, 71, 47, 0.35);
-        transition: transform 0.2s ease, background-color 0.2s ease;
-      }
-
-      #agent-request-fab {
-        background: #C5746D;
-        border-color: #F8ECEB;
-        box-shadow: 0 8px 24px rgba(197, 116, 109, 0.35);
-      }
-
-      #analytics-fab:hover {
-        transform: translateY(-2px);
-        background: #193321;
-      }
-
-      #agent-request-fab:hover {
-        transform: translateY(-2px);
-        background: #b06059;
-      }
-
-      /* Analytics & Request Modal Backdrop & Card Styling */
+      /* Analytics Modal Backdrop & Card */
       .analytics-backdrop {
         position: fixed;
         inset: 0;
@@ -167,19 +185,13 @@
 
       .analytics-backdrop.active {
         display: flex;
-        animation: fadeIn 0.2s ease-out;
-      }
-
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
       }
 
       .analytics-card {
         background: #FAF6F0;
         width: 100%;
         max-width: 680px;
-        border-radius: 14px;
+        border-radius: 12px;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
         border: 2px solid #E6DCCE;
         padding: 24px;
@@ -192,7 +204,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 16px;
+        padding-bottom: 14px;
         border-bottom: 1px solid #E6DCCE;
         margin-bottom: 16px;
       }
@@ -200,7 +212,7 @@
       .analytics-close {
         background: transparent;
         border: none;
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         color: #7A887E;
         cursor: pointer;
       }
@@ -286,60 +298,12 @@
       .analytics-data-list li:last-child {
         border-bottom: none;
       }
-
-      /* Form inputs inside modal */
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-bottom: 14px;
-      }
-
-      .form-group label {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #24472F;
-      }
-
-      .form-group input, .form-group textarea, .form-group select {
-        padding: 10px 12px;
-        border-radius: 6px;
-        border: 1px solid #E6DCCE;
-        background: #FFFDF9;
-        font-family: inherit;
-        font-size: 0.9rem;
-        color: #1C2A20;
-      }
-
-      .form-group textarea {
-        resize: vertical;
-        min-height: 90px;
-      }
-
-      .submit-request-btn {
-        width: 100%;
-        background: #24472F;
-        color: #FFFFFF;
-        border: none;
-        padding: 12px;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        margin-top: 8px;
-      }
-
-      .submit-request-btn:hover {
-        background: #193321;
-      }
     </style>
 
     <!-- Sticky Top Deployment Progress Bar -->
     <div id="deploy-top-bar">
       <div class="top-bar-content">
         <div class="top-bar-left">
-          <span id="deploy-top-icon">🚀</span>
           <span id="deploy-top-msg">Publishing changes to Cloudflare Pages...</span>
           <div class="top-bar-track">
             <div id="deploy-top-fill" class="top-bar-fill"></div>
@@ -348,27 +312,16 @@
         </div>
         <div class="top-bar-right">
           <a id="deploy-top-view-btn" href="https://camascommons.org" target="_blank" rel="noopener" class="top-bar-view-btn">
-            View Live Site ↗
+            View Live Site
           </a>
           <button class="top-bar-close-btn" onclick="document.getElementById('deploy-top-bar').classList.remove('active')">✕</button>
         </div>
       </div>
     </div>
 
-    <!-- Netlify / Decap CMS Script -->
+    <!-- Decap CMS Script -->
     <script is:inline src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
     <script is:inline>
-      var initialDataHash = null;
-
-      // Capture pre-save baseline data hash from live site
-      function updateBaselineHash() {
-        fetch('https://camascommons.org/site-data.json?t=' + Date.now())
-          .then(function(r) { return r.text(); })
-          .then(function(t) { initialDataHash = t; })
-          .catch(function() {});
-      }
-      updateBaselineHash();
-
       if (window.CMS) {
         if (window.createReactClass && window.h) {
           var PreviewPlaceholder = window.createReactClass({
@@ -381,7 +334,6 @@
           window.CMS.registerPreviewTemplate("faqs", PreviewPlaceholder);
         }
 
-        // Listen for postSave / publish events in Decap CMS
         window.CMS.registerEventListener({
           name: 'postSave',
           handler: function() {
@@ -395,24 +347,20 @@
         var fill = document.getElementById('deploy-top-fill');
         var percent = document.getElementById('deploy-top-percent');
         var msg = document.getElementById('deploy-top-msg');
-        var icon = document.getElementById('deploy-top-icon');
         var viewBtn = document.getElementById('deploy-top-view-btn');
 
         if (!topBar) return;
 
-        // Reset UI state
         topBar.classList.add('active');
         fill.style.width = '10%';
         fill.style.background = '#C5746D';
         percent.textContent = '10%';
-        icon.textContent = '🚀';
         msg.textContent = 'Publishing commit to Cloudflare Pages...';
         viewBtn.style.display = 'none';
 
         var startTime = Date.now();
         var currentPct = 10;
 
-        // Smooth progress animation while Cloudflare is building
         var progressInterval = setInterval(function() {
           if (currentPct < 94) {
             currentPct += 1;
@@ -424,16 +372,13 @@
         function markComplete() {
           clearInterval(progressInterval);
           clearInterval(pollInterval);
-
           fill.style.width = '100%';
           fill.style.background = '#4CAF50';
           percent.textContent = '100%';
-          icon.textContent = '✅';
           msg.textContent = 'Verified Live on Cloudflare Pages!';
           viewBtn.style.display = 'inline-flex';
         }
 
-        // Poll Cloudflare API via Worker proxy every 2.5 seconds
         var pollInterval = setInterval(function() {
           var elapsedSec = Math.round((Date.now() - startTime) / 1000);
 
@@ -441,7 +386,6 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
               if (data && data.success && data.result && data.result.length > 0) {
-                // Find deployment created AFTER user clicked Publish (subtract 12s for clock tolerance)
                 var newDeploy = data.result.find(function(dep) {
                   var createdMs = new Date(dep.created_on).getTime();
                   return createdMs >= (startTime - 12000);
@@ -450,8 +394,6 @@
                 if (newDeploy) {
                   var stageName = (newDeploy.latest_stage && newDeploy.latest_stage.name) || '';
                   var status = (newDeploy.latest_stage && newDeploy.latest_stage.status) || newDeploy.status;
-
-                  console.log('New Cloudflare Deployment Stage/Status:', stageName, status);
 
                   if (status === 'success' || (stageName === 'deploy' && status === 'success')) {
                     markComplete();
@@ -464,21 +406,18 @@
                     msg.textContent = 'Cloudflare Pages: Building (' + (stageName || 'active') + ')...';
                   }
                 } else {
-                  // New build hasn't registered in API yet (first 5-10s)
                   msg.textContent = 'Cloudflare Pages: Triggering build runner (' + elapsedSec + 's)...';
                 }
               } else if (elapsedSec >= 45) {
                 markComplete();
               }
             })
-            .catch(function(err) {
-              console.log('Polling Cloudflare API...', err);
-              if (elapsedSec >= 45) {
-                markComplete();
-              }
+            .catch(function() {
+              if (elapsedSec >= 45) markComplete();
             });
         }, 2500);
       }
+
       function getUserToken() {
         try {
           var user = localStorage.getItem('netlify-cms-user') || localStorage.getItem('decap-cms-user');
@@ -493,98 +432,40 @@
 
       function mountAuthenticatedUI() {
         var token = getUserToken();
-        var existingContainer = document.querySelector('.fab-container');
+        var existingNav = document.querySelector('.admin-top-nav-bar');
 
         if (!token) {
-          if (existingContainer) existingContainer.remove();
-          var m1 = document.getElementById('agent-request-modal');
-          if (m1) m1.remove();
+          if (existingNav) existingNav.remove();
           var m2 = document.getElementById('analytics-modal');
           if (m2) m2.remove();
           return;
         }
 
-        if (existingContainer) return; // Already mounted
+        if (existingNav) return; // Already mounted
 
-        // 1. Mount FAB buttons
-        var fabDiv = document.createElement('div');
-        fabDiv.className = 'fab-container authenticated';
-        fabDiv.innerHTML = `
-          <button id="analytics-fab" onclick="openAnalyticsModal()">📊 Site Analytics</button>
-          <button id="agent-request-fab" onclick="openAgentRequestModal()">🤖 Request AI Change</button>
-        `;
-        document.body.appendChild(fabDiv);
-
-        // 2. Mount Request Modal
-        var reqModal = document.createElement('div');
-        reqModal.id = 'agent-request-modal';
-        reqModal.className = 'analytics-backdrop';
-        reqModal.innerHTML = `
-          <div class="analytics-card" style="max-width: 560px;">
-            <div class="analytics-card-header">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">🤖</span>
-                <div>
-                  <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1C2A20;">Request AI Agent Change</h2>
-                  <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #566459;">Changes will be built and previewed on dev.camascommons.org</p>
-                </div>
-              </div>
-              <button class="analytics-close" onclick="closeAgentRequestModal()">✕</button>
-            </div>
-            <form id="agent-request-form" onsubmit="handleAgentRequestSubmit(event)">
-              <div style="display:none;" aria-hidden="true">
-                <input type="text" name="website_url" tabindex="-1" autocomplete="off" />
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div class="form-group">
-                  <label for="req-name">Your Name</label>
-                  <input type="text" id="req-name" name="clientName" placeholder="e.g. Ally or Guise" required />
-                </div>
-                <div class="form-group">
-                  <label for="req-email">Your Email</label>
-                  <input type="email" id="req-email" name="clientEmail" placeholder="e.g. ally@camascommons.org" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="req-target">Target Page / Section</label>
-                <select id="req-target" name="affectedPage">
-                  <option value="Homepage / Main">Homepage / Main Site</option>
-                  <option value="Header & Navbar">Header & Navigation Menu</option>
-                  <option value="Footer">Footer & Social Links</option>
-                  <option value="FAQs Section">FAQs & Questions</option>
-                  <option value="Fundraiser Tracker">Fundraiser Tracker / Thermometer</option>
-                  <option value="New Page / Layout">New Custom Page or Layout</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="req-title">Summary / Request Title</label>
-                <input type="text" id="req-title" name="requestTitle" placeholder="e.g. Add newsletter signup block to footer" required />
-              </div>
-              <div class="form-group">
-                <label for="req-desc">Detailed Description</label>
-                <textarea id="req-desc" name="requestDescription" placeholder="Describe the exact changes, text, colors, or new elements you'd like the AI Agent to build..." required></textarea>
-              </div>
-              <button type="submit" id="req-submit-btn" class="submit-request-btn">🚀 Submit Request to AI Agent</button>
-              <div id="req-status-msg" style="margin-top: 14px; font-size: 0.88rem; font-weight: 600; text-align: center; display: none;"></div>
-            </form>
+        // 1. Mount Top Admin Navigation Header (No emojis, no modal buttons)
+        var navHeader = document.createElement('div');
+        navHeader.className = 'admin-top-nav-bar';
+        navHeader.innerHTML = `
+          <div class="admin-nav-brand">Camas Commons Admin</div>
+          <div class="admin-nav-group">
+            <a href="/admin" class="admin-nav-btn active">Content CMS</a>
+            <a href="/admin/ai-requests" class="admin-nav-btn">AI Agent Requests</a>
+            <button class="admin-nav-btn" onclick="openAnalyticsModal()">Site Analytics</button>
+            <a href="https://dev.camascommons.org" target="_blank" rel="noopener" class="admin-nav-btn btn-outline">Staging Site</a>
+            <a href="https://camascommons.org" target="_blank" rel="noopener" class="admin-nav-btn btn-primary">Live Site</a>
           </div>
         `;
-        document.body.appendChild(reqModal);
+        document.body.insertBefore(navHeader, document.body.firstChild);
 
-        // 3. Mount Analytics Modal
+        // 2. Mount Analytics Modal
         var analyticsModal = document.createElement('div');
         analyticsModal.id = 'analytics-modal';
         analyticsModal.className = 'analytics-backdrop';
         analyticsModal.innerHTML = `
           <div class="analytics-card">
             <div class="analytics-card-header">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.4rem;">📊</span>
-                <div>
-                  <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1C2A20;">Camas Commons Traffic Analytics</h2>
-                  <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #566459;">Real-time Cloudflare Web Insights</p>
-                </div>
-              </div>
+              <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #1C2A20;">Camas Commons Traffic Analytics</h2>
               <button class="analytics-close" onclick="closeAnalyticsModal()">✕</button>
             </div>
             <div class="analytics-controls">
@@ -605,11 +486,11 @@
                 <span class="stat-label">Traffic Sources</span>
               </div>
               <div class="analytics-list-box">
-                <h4>🔗 Top Referrers (Traffic Sources)</h4>
+                <h4>Top Referrers (Traffic Sources)</h4>
                 <ul id="analytics-referrers-list" class="analytics-data-list"><li>Loading...</li></ul>
               </div>
               <div class="analytics-list-box">
-                <h4>📄 Top Pages Visited</h4>
+                <h4>Top Pages Visited</h4>
                 <ul id="analytics-pages-list" class="analytics-data-list"><li>Loading...</li></ul>
               </div>
             </div>
@@ -629,9 +510,7 @@
 
       function closeAnalyticsModal() {
         var modal = document.getElementById('analytics-modal');
-        if (modal) {
-          modal.classList.remove('active');
-        }
+        if (modal) modal.classList.remove('active');
       }
 
       function fetchAnalyticsData(days) {
@@ -649,9 +528,7 @@
         pagesListEl.innerHTML = '<li>Loading...</li>';
 
         fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics?days=' + days, {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
+          headers: { 'Authorization': 'Bearer ' + token }
         })
           .then(function(res) { return res.json(); })
           .then(function(data) {
@@ -681,8 +558,7 @@
               pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
             }
           })
-          .catch(function(err) {
-            console.log('Analytics Error:', err);
+          .catch(function() {
             pageviewsEl.textContent = 'Live';
             referrersCountEl.textContent = 'Active';
             referrersListEl.innerHTML = '<li><span>Direct / Social Visits</span> <strong>Active</strong></li>';
@@ -690,79 +566,7 @@
           });
       }
 
-      function openAgentRequestModal() {
-        var modal = document.getElementById('agent-request-modal');
-        if (modal) {
-          modal.classList.add('active');
-        }
-      }
-
-      function closeAgentRequestModal() {
-        var modal = document.getElementById('agent-request-modal');
-        if (modal) {
-          modal.classList.remove('active');
-        }
-      }
-
-      function handleAgentRequestSubmit(e) {
-        e.preventDefault();
-        var token = getUserToken();
-        var form = document.getElementById('agent-request-form');
-        var submitBtn = document.getElementById('req-submit-btn');
-        var statusMsg = document.getElementById('req-status-msg');
-
-        if (!form || !submitBtn || !statusMsg) return;
-
-        if (!token) {
-          statusMsg.style.display = 'block';
-          statusMsg.style.color = '#C5746D';
-          statusMsg.textContent = '❌ Authentication error: Please log into the CMS to submit requests.';
-          return;
-        }
-
-        var formData = new FormData(form);
-        var payload = Object.fromEntries(formData.entries());
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Sending request to AI Agent...';
-        statusMsg.style.display = 'none';
-
-        fetch('/api/request-change', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify(payload)
-        })
-          .then(function(res) { return res.json(); })
-          .then(function(data) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = '🚀 Submit Request to AI Agent';
-
-            statusMsg.style.display = 'block';
-
-            if (data && data.success) {
-              statusMsg.style.color = '#24472F';
-              var issueText = data.issueNumber ? ' Task Issue #' + data.issueNumber + ' created!' : '';
-              statusMsg.innerHTML = '✅ Request received!' + issueText + '<br/><span style="font-weight:400; font-size:0.82rem;">The AI Agent will apply your changes to <a href="https://dev.camascommons.org" target="_blank" style="color:#C5746D; font-weight:700;">dev.camascommons.org</a> shortly.</span>';
-              form.reset();
-            } else {
-              statusMsg.style.color = '#C5746D';
-              statusMsg.textContent = '❌ ' + (data.error || 'Failed to submit request. Please try again.');
-            }
-          })
-          .catch(function(err) {
-            console.error('Request submission error:', err);
-            submitBtn.disabled = false;
-            submitBtn.textContent = '🚀 Submit Request to AI Agent';
-            statusMsg.style.display = 'block';
-            statusMsg.style.color = '#C5746D';
-            statusMsg.textContent = '❌ Connection error. Please try again later.';
-          });
-      }
-
-      setInterval(mountAuthenticatedUI, 800);
+      setInterval(mountAuthenticatedUI, 600);
     </script>
   </body>
 </html>
