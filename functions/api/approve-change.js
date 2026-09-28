@@ -83,7 +83,14 @@ export async function onRequestPost(context) {
       })
     });
 
-    const mergeData = await mergeResp.json();
+    let mergeData = {};
+    if (mergeResp.status !== 204) {
+      try {
+        mergeData = await mergeResp.json();
+      } catch (jsonErr) {
+        console.warn('Could not parse merge response JSON:', jsonErr);
+      }
+    }
 
     if (!mergeResp.ok && mergeResp.status !== 204) {
       console.error('Merge error:', mergeData);
@@ -119,7 +126,7 @@ export async function onRequestPost(context) {
       console.warn('Post-approve branch sync warning:', syncErr);
     }
 
-    // 2. Comment on GitHub Issue
+    // 3. Comment on GitHub Issue
     await fetch(`https://api.github.com/repos/misterjuicebox/camascommons/issues/${issueNumber}/comments`, {
       method: 'POST',
       headers: {
@@ -132,7 +139,7 @@ export async function onRequestPost(context) {
       })
     });
 
-    // 3. Update Issue Labels & State to closed
+    // 4. Update Issue Labels & State to closed
     await fetch(`https://api.github.com/repos/misterjuicebox/camascommons/issues/${issueNumber}`, {
       method: 'PATCH',
       headers: {
@@ -158,7 +165,7 @@ export async function onRequestPost(context) {
     console.error('Error approving change:', err);
     return new Response(JSON.stringify({
       success: false,
-      error: 'An unexpected error occurred while approving change.'
+      error: `An unexpected error occurred: ${err.message || err}`
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
