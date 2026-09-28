@@ -160,19 +160,6 @@ function formatParagraph(text: string) {
         <p class="hero-subtitle">{siteData.tagline}</p>
       </section>
 
-      <!-- Embedded Video Section (Client Requested: https://youtu.be/cr42g0Y3S3A) -->
-      <section class="video-block">
-        <div class="video-wrapper">
-          <iframe 
-            src="https://www.youtube-nocookie.com/embed/cr42g0Y3S3A" 
-            title="Camas Commons Video" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen>
-          </iframe>
-        </div>
-      </section>
-
       {activeSections.map((section: any) => (
         <>
           {section.type === 'welcome_block' && (
@@ -437,32 +424,6 @@ function formatParagraph(text: string) {
 </html>
 
 <style>
-  /* Video Block */
-  .video-block {
-    margin: 2.5rem 0 3.5rem 0;
-  }
-
-  .video-wrapper {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    height: 0;
-    background: var(--color-card-paper);
-    border: 1px solid var(--color-border-paper);
-    border-radius: var(--radius-paper);
-    overflow: hidden;
-    box-shadow: var(--shadow-paper);
-  }
-
-  .video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
   /* Header */
   .editorial-header {
     border-bottom: 1px solid var(--color-border-paper);
