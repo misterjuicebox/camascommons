@@ -107,6 +107,9 @@ export async function onRequestPost(context) {
       });
     }
 
+    // Pause 3 seconds so GitHub fires the main push webhook and Cloudflare Pages queues the production build
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     // 2. Automatically sync main back into dev to prevent future branch divergence & conflicts
     try {
       await fetch('https://api.github.com/repos/misterjuicebox/camascommons/merges', {
