@@ -74,7 +74,7 @@ function formatParagraph(text: string) {
   );
   // Convert plain URLs starting with http(s) (if not already inside an href)
   formatted = formatted.replace(
-    /(?<!href=\"|href='|>)((https?:\/\/[^\s<]+))/g,
+    /(?<!href=\"|href='|>)(https?:\/\/[^\s<]+)/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
   );
   // Convert inline :flower: or [flower] shortcodes into blue flower icon
@@ -173,6 +173,48 @@ function formatParagraph(text: string) {
         </div>
       </div>
 
+      <!-- Client Requested Proposal PDF Link (placed just below the video) -->
+      {((siteData as any).proposalPdf || '/proposal.pdf') && (
+        <aside class="proposal-doc-banner" aria-label="Proposal Document">
+          <div class="proposal-doc-left">
+            <div class="proposal-doc-icon-container" aria-hidden="true">
+              <svg class="proposal-doc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span class="pdf-tag">PDF</span>
+            </div>
+            <div class="proposal-doc-info">
+              <span class="proposal-doc-pill">OFFICIAL PROPOSAL</span>
+              <h2 class="proposal-doc-title">
+                {(siteData as any).proposalPdfHeading || "Our Vision & Plan for Camas Commons"}
+              </h2>
+              <p class="proposal-doc-desc">
+                {(siteData as any).proposalPdfSubtext || "Read our complete proposal to learn more about preserving this historic 40-acre farm in perpetuity."}
+              </p>
+            </div>
+          </div>
+
+          <div class="proposal-doc-action">
+            <a
+              href={(siteData as any).proposalPdf || '/proposal.pdf'}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="proposal-doc-button"
+            >
+              <span class="proposal-doc-btn-text">{(siteData as any).proposalPdfText || "Check out our proposal here"}</span>
+              <svg class="proposal-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </aside>
+      )}
+
       {activeSections.map((section: any) => (
         <>
           {section.type === 'welcome_block' && (
@@ -260,7 +302,7 @@ function formatParagraph(text: string) {
                 <!-- Vertical Thermometer replacing Camas flower -->
                 <div class="pledge-section-thermometer margin-bottom">
                   <Thermometer 
-                    targetAmount={section.targetAmount || (siteData as any).targetAmount || 1500000} 
+                    targetAmount={section.targetAmount || (siteData as any).targetAmount || 1500000}
                     raisedAmount={section.raisedAmount || (siteData as any).raisedAmount || 410000}
                     standalone={false}
                     showCta={false}
@@ -475,7 +517,7 @@ function formatParagraph(text: string) {
 
   /* Homepage YouTube Video Wrapper */
   .homepage-video-wrapper {
-    margin: 1.5rem 0 2.5rem 0;
+    margin: 1.5rem 0 1.25rem 0;
     background: var(--color-card-paper);
     border: 1px solid var(--color-border-paper);
     border-radius: var(--radius-paper);
@@ -499,6 +541,137 @@ function formatParagraph(text: string) {
     width: 100%;
     height: 100%;
     border: 0;
+  }
+
+  /* Proposal PDF Document Callout Banner (below video) */
+  .proposal-doc-banner {
+    margin: 0 0 2.5rem 0;
+    background: linear-gradient(135deg, #1C2A20 0%, #24472F 60%, #1e3a27 100%);
+    border: 2px solid #C5746D;
+    border-radius: var(--radius-paper);
+    padding: 1.6rem 2rem;
+    box-shadow: 0 6px 22px rgba(28, 42, 32, 0.2), 0 2px 6px rgba(197, 116, 109, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .proposal-doc-banner::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(197, 116, 109, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .proposal-doc-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex: 1 1 360px;
+    z-index: 1;
+  }
+
+  .proposal-doc-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .proposal-doc-icon {
+    width: 28px;
+    height: 28px;
+    color: #FAF6F0;
+  }
+
+  .pdf-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #C5746D;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .proposal-doc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .proposal-doc-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #E6DCCE;
+    text-transform: uppercase;
+  }
+
+  .proposal-doc-title {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .proposal-doc-desc {
+    font-size: 0.95rem;
+    color: #D3DEC8;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .proposal-doc-action {
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .proposal-doc-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #C5746D;
+    color: #FFFFFF;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.95rem 1.85rem;
+    border-radius: var(--radius-paper);
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(197, 116, 109, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+  }
+
+  .proposal-doc-button:hover {
+    background: #b06059;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(197, 116, 109, 0.6);
+  }
+
+  .proposal-arrow-icon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  .proposal-doc-button:hover .proposal-arrow-icon {
+    transform: translateX(4px);
   }
 
   .text-center {
@@ -744,6 +917,25 @@ function formatParagraph(text: string) {
     }
     .faq-entry {
       padding: 1.5rem;
+    }
+    .proposal-doc-banner {
+      padding: 1.25rem 1.25rem;
+      gap: 1.25rem;
+    }
+    .proposal-doc-left {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+    .proposal-doc-title {
+      font-size: 1.25rem;
+    }
+    .proposal-doc-action {
+      width: 100%;
+    }
+    .proposal-doc-button {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style>

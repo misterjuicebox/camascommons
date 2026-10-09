@@ -23,6 +23,10 @@ collections:
         fields:
           - { label: "Site Title & Header", name: "siteTitle", widget: "string" }
           - { label: "Tagline / Subtitle", name: "tagline", widget: "string" }
+          - { label: "Proposal PDF Document (Upload PDF)", name: "proposalPdf", widget: "file", default: "/proposal.pdf", required: false, hint: "Upload or choose your proposal PDF here." }
+          - { label: "Proposal Document Link Text", name: "proposalPdfText", widget: "string", default: "Check out our proposal here", required: false, hint: "Button text for the proposal link on the homepage." }
+          - { label: "Proposal Document Heading", name: "proposalPdfHeading", widget: "string", default: "Our Vision & Plan for Camas Commons", required: false }
+          - { label: "Proposal Document Subtext", name: "proposalPdfSubtext", widget: "string", default: "Read our complete proposal to learn more about preserving this historic 40-acre farm in perpetuity.", required: false }
           - { label: "Currently Raised Amount ($)", name: "raisedAmount", widget: "number", default: 410000, required: false }
           - { label: "Target Goal Amount ($)", name: "targetAmount", widget: "number", default: 1500000, required: false }
           - { label: "SMS / Social Preview Title (og:title)", name: "ogTitle", widget: "string", required: false }
