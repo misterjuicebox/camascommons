@@ -244,7 +244,7 @@ function formatParagraph(text: string) {
 
           const token = getUserToken();
 
-          // Only fetch and show the view count if an admin token is present
+          // Only fetch and show the view count if an admin token is present (backend admin view only)
           if (token && viewBadgeWrapper && viewCountEl) {
             viewBadgeWrapper.style.display = 'inline-flex';
             fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/pdf-views', {
