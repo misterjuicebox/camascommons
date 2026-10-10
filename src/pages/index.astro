@@ -74,7 +74,7 @@ function formatParagraph(text: string) {
   );
   // Convert plain URLs starting with http(s) (if not already inside an href)
   formatted = formatted.replace(
-    /(?<!href=\"|href='|>)(https?:\/\/[^\s<]+)/g,
+    /(?<!href=\"|href='|>)((https?:\/\/[^\s<]+))/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
   );
   // Convert inline :flower: or [flower] shortcodes into blue flower icon
@@ -195,7 +195,7 @@ function formatParagraph(text: string) {
               <p class="proposal-doc-desc">
                 {(siteData as any).proposalPdfSubtext || "Read our complete proposal to learn more about preserving this historic 40-acre farm in perpetuity."}
               </p>
-              <div class="proposal-view-count-badge">
+              <div class="proposal-view-count-badge" id="pdf-view-badge-wrapper" style="display: none;">
                 <svg class="view-count-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                   <circle cx="12" cy="12" r="3"></circle>
@@ -226,21 +226,42 @@ function formatParagraph(text: string) {
       <script>
         document.addEventListener('DOMContentLoaded', () => {
           const viewCountEl = document.getElementById('pdf-view-count-val');
+          const viewBadgeWrapper = document.getElementById('pdf-view-badge-wrapper');
           const pdfLink = document.getElementById('proposal-pdf-link');
           
-          // Fetch current proposal view count
-          fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/pdf-views')
-            .then(res => res.json())
-            .then(data => {
-              if (viewCountEl && data && typeof data.views !== 'undefined') {
-                viewCountEl.textContent = Number(data.views).toLocaleString();
-              } else if (viewCountEl) {
-                viewCountEl.textContent = '1,284';
+          // Helper to get Netlify/Decap CMS token
+          function getUserToken() {
+            try {
+              const user = localStorage.getItem('netlify-cms-user') || localStorage.getItem('decap-cms-user');
+              if (user) {
+                const userData = JSON.parse(user);
+                if (userData && userData.token) return userData.token;
+                if (userData && userData.user && userData.user.token) return userData.user.token;
               }
+            } catch (e) {}
+            return null;
+          }
+
+          const token = getUserToken();
+
+          // Only fetch and show the view count if an admin token is present
+          if (token && viewBadgeWrapper && viewCountEl) {
+            viewBadgeWrapper.style.display = 'inline-flex';
+            fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/pdf-views', {
+              headers: { 'Authorization': 'Bearer ' + token }
             })
-            .catch(() => {
-              if (viewCountEl) viewCountEl.textContent = '1,284';
-            });
+              .then(res => res.json())
+              .then(data => {
+                if (data && typeof data.views !== 'undefined') {
+                  viewCountEl.textContent = Number(data.views).toLocaleString();
+                } else {
+                  viewCountEl.textContent = '1,284';
+                }
+              })
+              .catch(() => {
+                viewCountEl.textContent = '1,284';
+              });
+          }
 
           // Track click on proposal PDF
           if (pdfLink) {
