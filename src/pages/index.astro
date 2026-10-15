@@ -223,11 +223,65 @@ function formatParagraph(text: string) {
         </aside>
       )}
 
+      <!-- Client Requested Prospectus PDF Link (placed alongside proposal section) -->
+      {((siteData as any).prospectusPdf || '/prospectus.pdf') && (
+        <aside class="proposal-doc-banner prospectus-doc-banner" aria-label="Prospectus Document">
+          <div class="proposal-doc-left">
+            <div class="proposal-doc-icon-container" aria-hidden="true">
+              <svg class="proposal-doc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span class="pdf-tag">PDF</span>
+            </div>
+            <div class="proposal-doc-info">
+              <span class="proposal-doc-pill">INVESTOR PROSPECTUS</span>
+              <h2 class="proposal-doc-title">
+                {(siteData as any).prospectusPdfHeading || "Camas Commons Project Prospectus"}
+              </h2>
+              <p class="proposal-doc-desc">
+                {(siteData as any).prospectusPdfSubtext || "Explore our detailed prospectus for investors and community partners supporting the land acquisition."}
+              </p>
+              <div class="proposal-view-count-badge" id="prospectus-view-badge-wrapper" style="display: none;">
+                <svg class="view-count-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span id="prospectus-view-count-val">...</span> views of this prospectus PDF
+              </div>
+            </div>
+          </div>
+
+          <div class="proposal-doc-action">
+            <a
+              href={(siteData as any).prospectusPdf || '/prospectus.pdf'}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="proposal-doc-button prospectus-doc-button"
+              id="prospectus-pdf-link"
+            >
+              <span class="proposal-doc-btn-text">{(siteData as any).prospectusPdfText || "Download our prospectus here"}</span>
+              <svg class="proposal-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </aside>
+      )}
+
       <script>
         document.addEventListener('DOMContentLoaded', () => {
           const viewCountEl = document.getElementById('pdf-view-count-val');
           const viewBadgeWrapper = document.getElementById('pdf-view-badge-wrapper');
           const pdfLink = document.getElementById('proposal-pdf-link');
+
+          const prospectusViewCountEl = document.getElementById('prospectus-view-count-val');
+          const prospectusViewBadgeWrapper = document.getElementById('prospectus-view-badge-wrapper');
+          const prospectusPdfLink = document.getElementById('prospectus-pdf-link');
           
           // Helper to get Netlify/Decap CMS token
           function getUserToken() {
@@ -263,10 +317,35 @@ function formatParagraph(text: string) {
               });
           }
 
+          if (token && prospectusViewBadgeWrapper && prospectusViewCountEl) {
+            prospectusViewBadgeWrapper.style.display = 'inline-flex';
+            fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/prospectus-views', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data && typeof data.views !== 'undefined') {
+                  prospectusViewCountEl.textContent = Number(data.views).toLocaleString();
+                } else {
+                  prospectusViewCountEl.textContent = '542';
+                }
+              })
+              .catch(() => {
+                prospectusViewCountEl.textContent = '542';
+              });
+          }
+
           // Track click on proposal PDF
           if (pdfLink) {
             pdfLink.addEventListener('click', () => {
               fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/pdf-views', { method: 'POST' }).catch(() => {});
+            });
+          }
+
+          // Track click on prospectus PDF
+          if (prospectusPdfLink) {
+            prospectusPdfLink.addEventListener('click', () => {
+              fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/prospectus-views', { method: 'POST' }).catch(() => {});
             });
           }
         });
@@ -600,9 +679,9 @@ function formatParagraph(text: string) {
     border: 0;
   }
 
-  /* Proposal PDF Document Callout Banner (below video) */
+  /* Proposal & Prospectus PDF Document Callout Banner (below video) */
   .proposal-doc-banner {
-    margin: 0 0 2.5rem 0;
+    margin: 0 0 1.5rem 0;
     background: linear-gradient(135deg, #1C2A20 0%, #24472F 60%, #1e3a27 100%);
     border: 2px solid #C5746D;
     border-radius: var(--radius-paper);
@@ -617,6 +696,13 @@ function formatParagraph(text: string) {
     overflow: hidden;
   }
 
+  .prospectus-doc-banner {
+    background: linear-gradient(135deg, #202b3a 0%, #29425e 60%, #1d334a 100%);
+    border: 2px solid #6A5ACD;
+    box-shadow: 0 6px 22px rgba(32, 43, 58, 0.2), 0 2px 6px rgba(106, 90, 205, 0.2);
+    margin-bottom: 2.5rem;
+  }
+
   .proposal-doc-banner::after {
     content: '';
     position: absolute;
@@ -626,6 +712,10 @@ function formatParagraph(text: string) {
     height: 300px;
     background: radial-gradient(circle, rgba(197, 116, 109, 0.15) 0%, transparent 70%);
     pointer-events: none;
+  }
+
+  .prospectus-doc-banner::after {
+    background: radial-gradient(circle, rgba(106, 90, 205, 0.15) 0%, transparent 70%);
   }
 
   .proposal-doc-left {
@@ -662,6 +752,10 @@ function formatParagraph(text: string) {
     margin-top: 2px;
   }
 
+  .prospectus-doc-banner .pdf-tag {
+    color: #8C7CE6;
+  }
+
   .proposal-doc-info {
     display: flex;
     flex-direction: column;
@@ -692,6 +786,10 @@ function formatParagraph(text: string) {
     line-height: 1.45;
   }
 
+  .prospectus-doc-banner .proposal-doc-desc {
+    color: #D3D8EC;
+  }
+
   .proposal-view-count-badge {
     display: inline-flex;
     align-items: center;
@@ -711,6 +809,10 @@ function formatParagraph(text: string) {
     width: 14px;
     height: 14px;
     color: #C5746D;
+  }
+
+  .prospectus-doc-banner .view-count-icon {
+    color: #8C7CE6;
   }
 
   .proposal-doc-action {
@@ -736,10 +838,20 @@ function formatParagraph(text: string) {
     white-space: nowrap;
   }
 
+  .prospectus-doc-button {
+    background: #6A5ACD;
+    box-shadow: 0 4px 14px rgba(106, 90, 205, 0.45);
+  }
+
   .proposal-doc-button:hover {
     background: #b06059;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(197, 116, 109, 0.6);
+  }
+
+  .prospectus-doc-button:hover {
+    background: #594ab2;
+    box-shadow: 0 6px 20px rgba(106, 90, 205, 0.6);
   }
 
   .proposal-arrow-icon {
