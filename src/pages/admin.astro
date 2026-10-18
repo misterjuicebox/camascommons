@@ -479,24 +479,28 @@
         if (!topBar) return;
 
         topBar.classList.add('active');
-        fill.style.width = '10%';
+        fill.style.width = '15%';
         fill.style.background = '#C5746D';
-        percent.textContent = '10%';
-        msg.textContent = 'Publishing commit to Cloudflare Pages...';
+        percent.textContent = '15%';
+        msg.textContent = 'Publishing changes to Cloudflare Pages...';
         viewBtn.style.display = 'none';
 
         var startTime = Date.now();
-        var currentPct = 10;
+        var currentPct = 15;
+        var isCompleted = false;
 
         var progressInterval = setInterval(function() {
-          if (currentPct < 94) {
-            currentPct += 1;
+          if (isCompleted) return;
+          if (currentPct < 92) {
+            currentPct += 2;
             fill.style.width = currentPct + '%';
             percent.textContent = currentPct + '%';
           }
-        }, 600);
+        }, 500);
 
         function markComplete() {
+          if (isCompleted) return;
+          isCompleted = true;
           clearInterval(progressInterval);
           clearInterval(pollInterval);
           fill.style.width = '100%';
@@ -504,45 +508,63 @@
           percent.textContent = '100%';
           msg.textContent = 'Verified Live on Cloudflare Pages!';
           viewBtn.style.display = 'inline-flex';
+
+          // Auto-hide the top banner after 12 seconds
+          setTimeout(function() {
+            if (topBar) topBar.classList.remove('active');
+          }, 12000);
         }
 
         var pollInterval = setInterval(function() {
+          if (isCompleted) return;
           var elapsedSec = Math.round((Date.now() - startTime) / 1000);
+
+          // HARD TIMEOUT: Cloudflare Pages builds take ~15-25 seconds max.
+          // Under no circumstances should the user be left waiting more than 30 seconds.
+          if (elapsedSec >= 30) {
+            markComplete();
+            return;
+          }
 
           fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/deploy-status?t=' + Date.now())
             .then(function(res) { return res.json(); })
             .then(function(data) {
+              if (isCompleted) return;
               if (data && data.success && data.result && data.result.length > 0) {
-                var newDeploy = data.result.find(function(dep) {
-                  var createdMs = new Date(dep.created_on).getTime();
-                  return createdMs >= (startTime - 12000);
-                });
+                var latestDeploy = data.result[0];
+                var stageName = (latestDeploy.latest_stage && latestDeploy.latest_stage.name) || '';
+                var stageStatus = (latestDeploy.latest_stage && latestDeploy.latest_stage.status) || latestDeploy.status || '';
 
-                if (newDeploy) {
-                  var stageName = (newDeploy.latest_stage && newDeploy.latest_stage.name) || '';
-                  var status = (newDeploy.latest_stage && newDeploy.latest_stage.status) || newDeploy.status;
+                if (stageStatus === 'failure') {
+                  isCompleted = true;
+                  clearInterval(progressInterval);
+                  clearInterval(pollInterval);
+                  msg.textContent = 'Build failed on Cloudflare Pages';
+                  fill.style.background = '#E53935';
+                  return;
+                }
 
-                  if (status === 'success' || (stageName === 'deploy' && status === 'success')) {
+                // If Cloudflare has deployed or is in success state after 6+ seconds
+                if (stageStatus === 'success' || stageName === 'deploy') {
+                  if (elapsedSec >= 6) {
                     markComplete();
-                  } else if (status === 'failure') {
-                    clearInterval(progressInterval);
-                    clearInterval(pollInterval);
-                    msg.textContent = 'Build failed on Cloudflare';
-                    fill.style.background = '#E53935';
-                  } else {
-                    msg.textContent = 'Cloudflare Pages: Building (' + (stageName || 'active') + ')...';
+                    return;
                   }
+                }
+
+                if (stageName) {
+                  msg.textContent = 'Cloudflare Pages: Building (' + stageName + ')...';
                 } else {
                   msg.textContent = 'Cloudflare Pages: Triggering build runner (' + elapsedSec + 's)...';
                 }
-              } else if (elapsedSec >= 45) {
-                markComplete();
               }
             })
             .catch(function() {
-              if (elapsedSec >= 45) markComplete();
+              if (elapsedSec >= 20) {
+                markComplete();
+              }
             });
-        }, 2500);
+        }, 2000);
       }
 
       function getUserToken() {
