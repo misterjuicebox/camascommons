@@ -21,8 +21,8 @@ collections:
         editor:
           preview: false
         fields:
-          - { label: "Site Title & Header", name: "siteTitle", widget: "string" }
-          - { label: "Tagline / Subtitle", name: "tagline", widget: "string" }
+          - { label: "Site Title & Header", name: "siteTitle", widget: "string", required: false }
+          - { label: "Tagline / Subtitle", name: "tagline", widget: "string", required: false }
           - { label: "Proposal PDF Document (Upload PDF)", name: "proposalPdf", widget: "file", default: "/proposal.pdf", required: false, hint: "Upload or choose your proposal PDF here." }
           - { label: "Proposal Document Link Text", name: "proposalPdfText", widget: "string", default: "Check out our proposal here", required: false, hint: "Button text for the proposal link on the homepage." }
           - { label: "Proposal Document Heading", name: "proposalPdfHeading", widget: "string", default: "Our Vision & Plan for Camas Commons", required: false }
@@ -95,7 +95,7 @@ collections:
                     name: "photos"
                     widget: "list"
                     required: false
-                    field: { label: "Photo", name: "image", widget: "image" }
+                    field: { label: "Photo", name: "image", widget: "image", required: false }
               - label: "Advisory Board & Team Section"
                 name: "advisory_block"
                 widget: "object"
@@ -139,7 +139,7 @@ collections:
     editor:
       preview: false
     fields:
-      - { label: "Order Number (for sorting)", name: "order", widget: "number", default: 10, value_type: "int" }
+      - { label: "Order Number (for sorting)", name: "order", widget: "number", default: 10, value_type: "int", required: false }
       - { label: "Question", name: "q", widget: "string", default: "", required: false }
       - { label: "Answer Paragraphs (Optional)", name: "a", widget: "text", default: "", required: false, hint: "💡 TIP: Press Enter twice (blank line) for paragraph space, or Enter once for a line break." }
       - { label: "Optional Image (e.g. /images/hay.jpeg)", name: "image", widget: "string", default: "", required: false }

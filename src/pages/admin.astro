@@ -29,11 +29,75 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         border-bottom: 2px solid #C5746D;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
       }
 
       /* Offset Decap CMS container so it renders cleanly below top bar */
       #nc-root {
+        position: relative !important;
         margin-top: 44px !important;
+        min-height: calc(100vh - 44px) !important;
+      }
+
+      /*
+        CRITICAL FIX FOR DECAP / NETLIFY CMS TOOLBAR AND HEADERS:
+        Netlify CMS uses position: fixed or position: sticky with top: 0 on its headers.
+        Because position: fixed elements anchor to viewport top: 0, they were previously
+        covered by .admin-top-nav-bar (44px), hiding the top 80% of the Save/Publish button.
+        We explicitly push all Netlify CMS headers and toolbars down to top: 44px.
+      */
+      #nc-root header,
+      #nc-root nav,
+      #nc-root [class*="AppHeader"],
+      #nc-root [class*="EditorHeader"],
+      #nc-root [class*="ToolbarContainer"],
+      #nc-root [class*="ToolbarSection"],
+      #nc-root [class*="Toolbar-"],
+      #nc-root div[class*="Editor"] > nav,
+      #nc-root div[class*="Editor"] > header,
+      #nc-root div[class*="EditorContainer"] > nav {
+        top: 44px !important;
+      }
+
+      /* Ensure sticky header in collection view sticks below our 44px top bar */
+      #nc-root [class*="AppHeader"] {
+        position: sticky !important;
+        top: 44px !important;
+      }
+
+      /* Ensure editor container content starts properly below the 66px toolbar */
+      #nc-root [class*="EditorContainer"] {
+        padding-top: 66px !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Make sure Save and Publish buttons are prominent, fully visible, and interactive */
+      #nc-root [class*="PublishButton"],
+      #nc-root [class*="SaveButton"],
+      #nc-root button[class*="PublishButton"],
+      #nc-root button[class*="SaveButton"] {
+        cursor: pointer !important;
+        font-weight: 700 !important;
+        min-height: 38px !important;
+      }
+
+      /* Ensure the Publish Dropdown menu is on top and clearly visible */
+      #nc-root [class*="DropdownList"],
+      #nc-root [class*="dropdown-list"],
+      #nc-root ul[class*="Dropdown"] {
+        z-index: 999999 !important;
+        margin-top: 6px !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25) !important;
+        border: 1px solid #C5746D !important;
+        background: #FFFFFF !important;
+        border-radius: 6px !important;
+      }
+
+      #nc-root [class*="DropdownItem"],
+      #nc-root li[class*="DropdownItem"] {
+        font-weight: 600 !important;
+        padding: 10px 18px !important;
+        cursor: pointer !important;
       }
 
       .admin-nav-brand {
@@ -334,13 +398,76 @@
           window.CMS.registerPreviewTemplate("faqs", PreviewPlaceholder);
         }
 
-        window.CMS.registerEventListener({
-          name: 'postSave',
-          handler: function() {
-            startLiveVerification();
-          }
-        });
+        if (typeof window.CMS.registerEventListener === 'function') {
+          window.CMS.registerEventListener({
+            name: 'postSave',
+            handler: function() {
+              startLiveVerification();
+            }
+          });
+        }
       }
+
+      // Universal Save / Publish Listener for Netlify CMS & Decap CMS
+      (function setupSaveInterceptor() {
+        var originalFetch = window.fetch;
+        if (typeof originalFetch === 'function') {
+          window.fetch = function() {
+            var args = arguments;
+            var url = (typeof args[0] === 'string') ? args[0] : (args[0] && args[0].url) || '';
+            var options = args[1] || {};
+            var method = (options.method || 'GET').toUpperCase();
+
+            var isGitHubSave = (method === 'PUT' || method === 'POST') &&
+              (url.indexOf('api.github.com') !== -1 || url.indexOf('camascommons') !== -1) &&
+              (url.indexOf('/contents/') !== -1 || url.indexOf('/git/commits') !== -1 || url.indexOf('/git/trees') !== -1);
+
+            return originalFetch.apply(this, args).then(function(res) {
+              if (isGitHubSave && (res.status === 200 || res.status === 201)) {
+                startLiveVerification();
+              }
+              return res;
+            });
+          };
+        }
+
+        var originalOpen = XMLHttpRequest.prototype.open;
+        var originalSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function(method, url) {
+          this._method = method;
+          this._url = url;
+          return originalOpen.apply(this, arguments);
+        };
+        XMLHttpRequest.prototype.send = function() {
+          var xhr = this;
+          xhr.addEventListener('load', function() {
+            var method = (xhr._method || '').toUpperCase();
+            var url = xhr._url || '';
+            var isGitHubSave = (method === 'PUT' || method === 'POST') &&
+              (url.indexOf('api.github.com') !== -1 || url.indexOf('camascommons') !== -1) &&
+              (url.indexOf('/contents/') !== -1 || url.indexOf('/git/commits') !== -1 || url.indexOf('/git/trees') !== -1);
+            if (isGitHubSave && (xhr.status === 200 || xhr.status === 201)) {
+              startLiveVerification();
+            }
+          });
+          return originalSend.apply(this, arguments);
+        };
+      })();
+
+      // Auto-scroll to validation errors if Save or Publish is clicked
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('button, [role="button"]');
+        if (!btn) return;
+        var btnText = (btn.textContent || '').trim().toLowerCase();
+        if (btnText === 'publish' || btnText === 'save' || btnText === 'publish now') {
+          setTimeout(function() {
+            var errorEl = document.querySelector('[class*="ControlError"], [class*="ControlErrors"], [class*="error"], [aria-invalid="true"]');
+            if (errorEl) {
+              errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 250);
+        }
+      }, true);
 
       function startLiveVerification() {
         var topBar = document.getElementById('deploy-top-bar');
