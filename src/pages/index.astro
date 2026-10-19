@@ -14,7 +14,7 @@ const allFaqs = Object.values(faqModules).map((mod: any) => mod.default || mod);
 allFaqs.sort((a: any, b: any) => (a.order || 99) - (b.order || 99));
 
 const defaultSections = [
-  {
+  { 
     type: 'welcome_block',
     welcomeText: siteData.welcomeText,
     signature: '— Ally & Guisepi',
@@ -74,7 +74,7 @@ function formatParagraph(text: string) {
   );
   // Convert plain URLs starting with http(s) (if not already inside an href)
   formatted = formatted.replace(
-    /(?<!href=\"|href='|>)((https?:\/\/[^\s<]+))/g,
+    /(?<!href=\"|href='|>)(https?:\/\/[^\s<]+)/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer" class="editorial-link">$1</a>'
   );
   // Convert inline :flower: or [flower] shortcodes into blue flower icon
@@ -503,12 +503,12 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                       <span class="pdf-tag">PDF</span>
                     </div>
                     <div class="proposal-doc-info">
-                      <span class="proposal-doc-pill">INVESTOR PROSPECTUS</span>
+                      <span class="proposal-doc-pill">{((siteData as any).prospectusPdfBadge || "DONOR PROSPECTUS").replace(/\binvestors?\b/gi, 'DONOR')}</span>
                       <h2 class="proposal-doc-title">
                         {(siteData as any).prospectusPdfHeading || "Camas Commons Project Prospectus"}
                       </h2>
                       <p class="proposal-doc-desc">
-                        {(siteData as any).prospectusPdfSubtext || "Explore our detailed prospectus for investors and community partners supporting the land acquisition."}
+                        {((siteData as any).prospectusPdfSubtext || "Explore our detailed prospectus for donors and community partners supporting the land acquisition.").replace(/\binvestors\b/gi, 'donors').replace(/\binvestor\b/gi, 'donor')}
                       </p>
                       <div class="proposal-view-count-badge" id="prospectus-view-badge-wrapper" style="display: none;">
                         <svg class="view-count-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
