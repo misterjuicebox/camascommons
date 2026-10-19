@@ -1,24 +1,16 @@
 {
-  "openLetterHeading": "Open Letter from Camas Commons",
-  "openLetterBadge": "Status of our proposal",
-  "openLetterSubtext": "It's time to share a little about our journey thus far. We would have met our fundraising goal a while ago but...",
-  "openLetterPdf": "/open-letter.pdf",
-  "openLetterPdfText": "Open Letter (PDF)",
-  "openLetterAudio": "/open-letter-audio.m4a",
-  "openLetterAudioText": "Open Letter (Audio)",
-  "openLetterVisual": "/open-letter-video.mp4",
-  "openLetterVisualText": "Open Letter (Audio w/ Visual)",
-  "youtubeVideoUrl": "https://www.youtube.com/watch?v=i0mKejiujJ4&t=8s",
   "proposalPdf": "/images/camas-commons-land-bank-proposal.pdf",
-  "prospectusPdf": "/images/camas-commons-project-prospectus.pdf",
   "ogTitle": "Camas Commons - A Regenerative Farming Land Trust",
+  "openLetterPdf": "/open-letter.pdf",
   "ogImage": "/images/Main.jpeg",
   "ogDescription": "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
+  "openLetterAudio": "/open-letter-audio.m4a",
+  "prospectusPdf": "/images/camas-commons-project-prospectus.pdf",
   "targetAmount": 1500000,
   "sections": [
     {
       "type": "welcome_block",
-      "welcomeText": "Establishing Camas Commons isn't just about saving our home for us and our animals, it's about securing the land as a home for other farmers, as well as saving this farm so it remains a community asset.\n\nWelcome to a different model of farming. We are Ally and Guisepi, two land stewards & community enthusiasts committed to creating a future of farming that is regenerative. We believe conservation and agriculture can come together to create a lasting legacy that’s worth fighting for now... This is Camas Commons.",
+      "welcomeText": "Help Camas Commons & the Land Bank secure Talking Horse Ranch as a community asset! \n\nTheir trail. Our Farm. One Land. United in Conservation. \n\nEstablishing Camas Commons isn't just about saving our home and our animals, it's about securing this land as a home for other farmers and saving this farm as a community asset.   \n\nWelcome to a different model of farming. We are Ally and Guisepi, two land stewards & community enthusiasts committed to creating a future of farming that is regenerative. We believe conservation and agriculture can come together to create a lasting legacy that’s worth fighting for now... This is Camas Commons.\n",
       "signature": "— Ally & Guisepi",
       "image": "/images/Main.jpeg",
       "clickableImage": false
@@ -26,7 +18,7 @@
     {
       "type": "custom_section",
       "title": "What is Camas Commons?",
-      "content": "Based at Talking Horse Ranch, Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. In a time when talented young makers and producers are priced out of life on the island, Camas Commons provides affordable land accessibility and housing for young farmers, regenerates the land, and supports the local community with healthy food and community events.\n\n\nWe are entering a tight deadline with the Request For Proposal process from the Land Bank. We aim to maintain being the current occupants & stewards and to nurture the next iteration of this farm. This chapter is not just about us, but will not happen if we aren't here. We're devoted to sharing this land with fellow farmers and producers. ",
+      "content": "Based at Talking Horse Ranch, Camas Commons is a nonprofit regenerative farming land trust being created to provide perpetually affordable residential and agricultural leases to farmers and producers on San Juan Island, WA. In a time when talented young makers and producers are priced out of life on the island, Camas Commons provides affordable land accessibility and homesites for young farmers, regenerates the land, and supports the local community with healthy food, educational opportunities, and community events.\n\nWe are in preliminary negotiations with the Land Bank and on track for selection! We are the ONLY qualifying proposal for the Land Bank’s request for proposals (RFP) to purchase 40 acres of Talking Horse Ranch. They are negotiating solely with us, as we aim to maintain being the current occupants & stewards to nurture the next iteration of this farm. This chapter is not just about us, but will not happen if we aren't here. We’re at the table, help keep us there as we are devoted to sharing this land with fellow farmers and producers to revive this land into a thriving farm.",
       "image": "/images/794230030_10163082047464135_8162959762871503241_n.jpg",
       "clickableImage": false,
       "style": "story"
@@ -56,9 +48,17 @@
       "style": "story"
     },
     {
+      "type": "custom_section",
+      "title": "Land Bank RFP Requirements",
+      "content": "The Land Bank's proposal requirements ensured the 40 acres we inhabit be maintained as an active working farm. This was a huge gesture to farming in our community and commitment to their agricultural policy in action.\n",
+      "image": "/images/image_b57680d4.jpg",
+      "clickableImage": true,
+      "style": "story"
+    },
+    {
       "type": "faq_block",
       "title": "FAQ:",
-      "image": "/images/babygoats.jpeg",
+      "image": "",
       "clickableImage": false,
       "items": [
         {
@@ -273,8 +273,16 @@
     }
   ],
   "tagline": "WHERE CONSERVATION MEETS AGRICULTURE TO CREATE A LASTING LEGACY",
+  "openLetterPdfText": "Open Letter (PDF)",
   "welcomeText": "Welcome to a new model for farming. We are Ally and Guisepi, two land stewards & community enthusiasts committed to continuing on our little island’s tradition of small-scale, regenerative farming for future generations… This is Camas Commons.",
   "raisedAmount": 410000,
+  "openLetterVisual": "/open-letter-video.mp4",
   "siteTitle": "CAMAS COMMONS - A Regenerative Farming Land Trust",
-  "contactEmail": "info@camascommons.org"
+  "openLetterHeading": "Open Letter from Camas Commons",
+  "openLetterAudioText": "Open Letter (Audio)",
+  "openLetterBadge": "Status of our proposal",
+  "youtubeVideoUrl": "https://www.youtube.com/watch?v=i0mKejiujJ4&t=8s",
+  "contactEmail": "info@camascommons.org",
+  "openLetterSubtext": "It's time to share a little about our journey thus far. We would have met our fundraising goal a while ago but...",
+  "openLetterVisualText": "Open Letter (Audio w/ Visual)"
 }
