@@ -243,8 +243,9 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
             size="md"
             href={(siteData as any).openLetterPdf || '/open-letter.pdf'}
             target="_blank"
-            class="open-letter-btn"
+            class="open-letter-btn track-document-click"
             id="open-letter-pdf-btn"
+            data-doc-type="open-letter-pdf"
           >
             <svg class="open-letter-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -260,8 +261,9 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
             size="md"
             href={(siteData as any).openLetterAudio || '/open-letter-audio.m4a'}
             target="_blank"
-            class="open-letter-btn"
+            class="open-letter-btn track-document-click"
             id="open-letter-audio-btn"
+            data-doc-type="open-letter-audio"
           >
             <svg class="open-letter-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 18V5l12-2v13"></path>
@@ -276,8 +278,9 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
             size="md"
             href={(siteData as any).openLetterVisual || '/open-letter-video.mp4'}
             target="_blank"
-            class="open-letter-btn"
+            class="open-letter-btn track-document-click"
             id="open-letter-visual-btn"
+            data-doc-type="open-letter-visual"
           >
             <svg class="open-letter-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="23 7 16 12 23 17 23 7"></polygon>
@@ -338,8 +341,9 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
               href={(siteData as any).proposalPdf || '/proposal.pdf'}
               target="_blank"
               rel="noopener noreferrer"
-              class="proposal-doc-button"
+              class="proposal-doc-button track-document-click"
               id="proposal-pdf-link"
+              data-doc-type="proposal-pdf"
             >
               <span class="proposal-doc-btn-text">{(siteData as any).proposalPdfText || "Check out our proposal here"}</span>
               <svg class="proposal-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -426,6 +430,18 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
               fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/prospectus-views', { method: 'POST' }).catch(() => {});
             });
           }
+
+          // Generic document click analytics tracking (PDFs, audio, videos, etc.)
+          document.querySelectorAll('.track-document-click').forEach(el => {
+            el.addEventListener('click', () => {
+              const docType = el.getAttribute('data-doc-type') || el.getAttribute('href') || 'document';
+              fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/document-click', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ document: docType, timestamp: Date.now() })
+              }).catch(() => {});
+            });
+          });
 
           // Handle Open Letter audio button when no file uploaded yet
           const audioBtn = document.getElementById('open-letter-audio-btn');
@@ -539,8 +555,9 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                       href={(siteData as any).prospectusPdf || '/images/camas-commons-project-prospectus.pdf'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="proposal-doc-button prospectus-doc-button"
+                      class="proposal-doc-button prospectus-doc-button track-document-click"
                       id="prospectus-pdf-link"
+                      data-doc-type="prospectus-pdf"
                     >
                       <span class="proposal-doc-btn-text">{replaceInvestor((siteData as any).prospectusPdfText || "Download our prospectus here")}</span>
                       <svg class="proposal-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
