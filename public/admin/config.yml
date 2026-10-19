@@ -23,6 +23,16 @@ collections:
         fields:
           - { label: "Site Title & Header", name: "siteTitle", widget: "string", required: false }
           - { label: "Tagline / Subtitle", name: "tagline", widget: "string", required: false }
+          - { label: "Open Letter - Heading", name: "openLetterHeading", widget: "string", default: "Open Letter from Camas Commons", required: false }
+          - { label: "Open Letter - Pill Badge", name: "openLetterBadge", widget: "string", default: "Status of our proposal", required: false }
+          - { label: "Open Letter - Description / Subtext", name: "openLetterSubtext", widget: "text", default: "It's time to share a little about our journey thus far. We would have met our fundraising goal a while ago but...", required: false, hint: "Descriptive intro text for the Open Letter banner." }
+          - { label: "Open Letter - PDF Document (Upload PDF)", name: "openLetterPdf", widget: "file", default: "/open-letter.pdf", required: false, hint: "Upload or choose your Open Letter PDF here." }
+          - { label: "Open Letter - PDF Button Label", name: "openLetterPdfText", widget: "string", default: "Open Letter (PDF)", required: false }
+          - { label: "Open Letter - Audio Recording (Upload Audio)", name: "openLetterAudio", widget: "file", required: false, hint: "Upload your Open Letter audio recording (MP3, M4A, etc.) or paste an audio link here." }
+          - { label: "Open Letter - Audio Button Label", name: "openLetterAudioText", widget: "string", default: "Open Letter (Audio)", required: false }
+          - { label: "Open Letter - Audio w/ Visual (Upload or Link Video)", name: "openLetterVisual", widget: "file", required: false, hint: "Upload a video file (MP4) or paste a video link (e.g. YouTube/Vimeo) here." }
+          - { label: "Open Letter - Visual Button Label", name: "openLetterVisualText", widget: "string", default: "Open Letter (Audio w/ Visual)", required: false }
+          - { label: "YouTube Featured Video URL", name: "youtubeVideoUrl", widget: "string", default: "https://www.youtube.com/watch?v=i0mKejiujJ4&t=8s", required: false, hint: "Paste YouTube link (e.g. https://www.youtube.com/watch?v=i0mKejiujJ4&t=8s)" }
           - { label: "Proposal PDF Document (Upload PDF)", name: "proposalPdf", widget: "file", default: "/proposal.pdf", required: false, hint: "Upload or choose your proposal PDF here." }
           - { label: "Proposal Document Link Text", name: "proposalPdfText", widget: "string", default: "Check out our proposal here", required: false, hint: "Button text for the proposal link on the homepage." }
           - { label: "Proposal Document Heading", name: "proposalPdfHeading", widget: "string", default: "Our Vision & Plan for Camas Commons", required: false }
