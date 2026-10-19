@@ -39,8 +39,8 @@ collections:
           - { label: "Proposal Document Subtext", name: "proposalPdfSubtext", widget: "string", default: "Read our complete proposal to learn more about preserving this historic 40-acre farm in perpetuity.", required: false }
           - { label: "Prospectus PDF Document (Upload PDF)", name: "prospectusPdf", widget: "file", default: "/prospectus.pdf", required: false, hint: "Upload or choose your prospectus PDF here." }
           - { label: "Prospectus Document Link Text", name: "prospectusPdfText", widget: "string", default: "Download our prospectus here", required: false, hint: "Button text for the prospectus link in the support section." }
-          - { label: "Prospectus Document Heading", name: "prospectusPdfHeading", widget: "string", default: "Cammas Commons Project Prospectus", required: false }
-          - { label: "Prospectus Document Subtext", name: "prospectusPdfSubtext", widget: "string", default: "Explore our detailed prospectus for investors and community partners supporting the land acquisition.", required: false }
+          - { label: "Prospectus Document Heading", name: "prospectusPdfHeading", widget: "string", default: "Camas Commons Project Prospectus", required: false }
+          - { label: "Prospectus Document Subtext", name: "prospectusPdfSubtext", widget: "string", default: "Explore our detailed prospectus for donors and community partners supporting the land acquisition.", required: false }
           - { label: "Currently Raised Amount ($)", name: "raisedAmount", widget: "number", default: 410000, required: false }
           - { label: "Target Goal Amount ($)", name: "targetAmount", widget: "number", default: 1500000, required: false }
           - { label: "SMS / Social Preview Title (og:title)", name: "ogTitle", widget: "string", required: false }
