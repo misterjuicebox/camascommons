@@ -48,9 +48,17 @@
       "style": "story"
     },
     {
+      "type": "custom_section",
+      "title": "Land Bank RFP Requirements",
+      "content": "The Land Bank's proposal requirements ensured the 40 acres we inhabit be maintained as an active working farm. This was a huge gesture to farming in our community and commitment to their agricultural policy in action.\n",
+      "image": "/images/image_b57680d4.jpg",
+      "clickableImage": true,
+      "style": "story"
+    },
+    {
       "type": "faq_block",
       "title": "FAQ:",
-      "image": "/images/babygoats.jpeg",
+      "image": "",
       "clickableImage": false,
       "items": [
         {
