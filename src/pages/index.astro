@@ -839,51 +839,88 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
     background: linear-gradient(135deg, #2b1f1d 0%, #3e2621 60%, #251614 100%);
     border: 2px solid #D48B70;
     box-shadow: 0 6px 22px rgba(43, 31, 29, 0.25), 0 2px 6px rgba(212, 139, 112, 0.25);
-    margin: 1.5rem 0 1.25rem 0;
+    margin: 1.25rem 0 1.25rem 0;
+    padding: 1rem 1.6rem;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 1.25rem;
+    gap: 0.7rem;
   }
 
   .open-letter-doc-banner::after {
     background: radial-gradient(circle, rgba(212, 139, 112, 0.18) 0%, transparent 70%);
   }
 
+  .open-letter-doc-banner .proposal-doc-left {
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .open-letter-doc-banner .proposal-doc-icon-container {
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+  }
+
+  .open-letter-doc-banner .proposal-doc-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .open-letter-doc-banner .proposal-doc-info {
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+  }
+
   .open-letter-tag {
     color: #E08770;
+    font-size: 0.6rem;
   }
 
   .open-letter-pill {
     color: #F0D7CE;
+    font-size: 0.65rem;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .open-letter-doc-banner .proposal-doc-title {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    margin: 0;
   }
 
   .open-letter-doc-banner .proposal-doc-desc {
     color: #EBDAD4;
+    font-size: 0.92rem;
+    line-height: 1.35;
+    margin: 0;
   }
 
   .open-letter-button-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.55rem;
     width: 100%;
+    margin: 0;
     z-index: 1;
   }
 
   .open-letter-button-grid :global(.btn) {
-    flex: 1 1 200px;
+    flex: 1 1 180px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.55rem;
-    padding: 0.85rem 1.15rem;
-    font-size: 0.95rem;
+    gap: 0.45rem;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.88rem;
     font-weight: 700;
     border-radius: var(--radius-paper);
     background: #C5746D;
     color: #FFFFFF;
     border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 12px rgba(197, 116, 109, 0.35);
+    box-shadow: 0 3px 10px rgba(197, 116, 109, 0.35);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     white-space: nowrap;
@@ -896,8 +933,8 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
   }
 
   .open-letter-btn-icon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
   }
 
@@ -1309,6 +1346,15 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
     .proposal-doc-button {
       width: 100%;
       justify-content: center;
+    }
+    .open-letter-doc-banner {
+      padding: 0.9rem 1rem;
+      gap: 0.65rem;
+    }
+    .open-letter-doc-banner .proposal-doc-left {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
     }
     .open-letter-button-grid :global(.btn) {
       flex: 1 1 100%;
