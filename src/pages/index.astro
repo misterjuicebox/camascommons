@@ -55,6 +55,17 @@ const activeSections = (siteData as any).sections && (siteData as any).sections.
   ? (siteData as any).sections
   : defaultSections;
 
+function replaceInvestor(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/\bINVESTORS\b/g, 'DONORS')
+    .replace(/\bINVESTOR\b/g, 'DONOR')
+    .replace(/\bInvestors\b/g, 'Donors')
+    .replace(/\bInvestor\b/g, 'Donor')
+    .replace(/\binvestors\b/g, 'donors')
+    .replace(/\binvestor\b/g, 'donor');
+}
+
 function formatParagraph(text: string) {
   if (!text) return '';
   let formatted = text.trim();
@@ -82,6 +93,9 @@ function formatParagraph(text: string) {
     /(:flower:|\[flower\]|\(flower\))/gi,
     '<img src="/images/blue-flower-icon.png" alt="Camas Flower" class="inline-flower-icon" />'
   );
+
+  // Ensure donor terminology throughout
+  formatted = replaceInvestor(formatted);
 
   // Link "their agricultural policy" to the official Land Bank policy PDF
   const agPolicyUrl = 'https://sjclandbank.org/wp-content/uploads/2024/10/WEB_SJC-Conservation-Land-Bank-Agriculture-Overview-Objectives-and-Policy-Approved-4-15-22.pdf';
@@ -464,7 +478,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                 {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />}
 
                 <div class="proposal-paper">
-                  {section.title && <h2 class="section-title">{section.title}</h2>}
+                  {section.title && <h2 class="section-title">{replaceInvestor(section.title)}</h2>}
                   {(() => {
                     const paragraphs = typeof section.content === 'string' ? section.content.split(/\r?\n\r?\n+/) : (section.content || []);
                     return (
@@ -503,12 +517,12 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                       <span class="pdf-tag">PDF</span>
                     </div>
                     <div class="proposal-doc-info">
-                      <span class="proposal-doc-pill">{((siteData as any).prospectusPdfBadge || "DONOR PROSPECTUS").replace(/\binvestors?\b/gi, 'DONOR')}</span>
+                      <span class="proposal-doc-pill">{replaceInvestor((siteData as any).prospectusPdfBadge || "DONOR PROSPECTUS")}</span>
                       <h2 class="proposal-doc-title">
-                        {(siteData as any).prospectusPdfHeading || "Camas Commons Project Prospectus"}
+                        {replaceInvestor((siteData as any).prospectusPdfHeading || "Camas Commons Project Prospectus")}
                       </h2>
                       <p class="proposal-doc-desc">
-                        {((siteData as any).prospectusPdfSubtext || "Explore our detailed prospectus for donors and community partners supporting the land acquisition.").replace(/\binvestors\b/gi, 'donors').replace(/\binvestor\b/gi, 'donor')}
+                        {replaceInvestor((siteData as any).prospectusPdfSubtext || "Explore our detailed prospectus for donors and community partners supporting the land acquisition.")}
                       </p>
                       <div class="proposal-view-count-badge" id="prospectus-view-badge-wrapper" style="display: none;">
                         <svg class="view-count-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -528,7 +542,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                       class="proposal-doc-button prospectus-doc-button"
                       id="prospectus-pdf-link"
                     >
-                      <span class="proposal-doc-btn-text">{(siteData as any).prospectusPdfText || "Download our prospectus here"}</span>
+                      <span class="proposal-doc-btn-text">{replaceInvestor((siteData as any).prospectusPdfText || "Download our prospectus here")}</span>
                       <svg class="proposal-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
@@ -542,7 +556,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
               <section class="story-section">
                 {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />}
                 
-                {section.title && <h2 class="section-title">{section.title}</h2>}
+                {section.title && <h2 class="section-title">{replaceInvestor(section.title)}</h2>}
                 <div class="narrative-body">
                   {(typeof section.content === 'string' ? section.content.split(/\r?\n\r?\n+/) : (section.content || [])).map((paragraph: string) => (
                     <p set:html={formatParagraph(paragraph)}></p>

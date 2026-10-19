@@ -38,6 +38,7 @@ collections:
           - { label: "Proposal Document Heading", name: "proposalPdfHeading", widget: "string", default: "Our Vision & Plan for Camas Commons", required: false }
           - { label: "Proposal Document Subtext", name: "proposalPdfSubtext", widget: "string", default: "Read our complete proposal to learn more about preserving this historic 40-acre farm in perpetuity.", required: false }
           - { label: "Prospectus PDF Document (Upload PDF)", name: "prospectusPdf", widget: "file", default: "/prospectus.pdf", required: false, hint: "Upload or choose your prospectus PDF here." }
+          - { label: "Prospectus Badge Pill Text", name: "prospectusPdfBadge", widget: "string", default: "DONOR PROSPECTUS", required: false }
           - { label: "Prospectus Document Link Text", name: "prospectusPdfText", widget: "string", default: "Download our prospectus here", required: false, hint: "Button text for the prospectus link in the support section." }
           - { label: "Prospectus Document Heading", name: "prospectusPdfHeading", widget: "string", default: "Camas Commons Project Prospectus", required: false }
           - { label: "Prospectus Document Subtext", name: "prospectusPdfSubtext", widget: "string", default: "Explore our detailed prospectus for donors and community partners supporting the land acquisition.", required: false }
