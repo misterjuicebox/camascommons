@@ -423,8 +423,12 @@
               (url.indexOf('/contents/') !== -1 || url.indexOf('/git/commits') !== -1 || url.indexOf('/git/trees') !== -1);
 
             return originalFetch.apply(this, args).then(function(res) {
-              if (isGitHubSave && (res.status === 200 || res.status === 201)) {
-                startLiveVerification();
+              if (isGitHubSave) {
+                if (res.status === 200 || res.status === 201) {
+                  startLiveVerification();
+                } else if (res.status >= 400) {
+                  handleSaveError(res.status);
+                }
               }
               return res;
             });
@@ -446,13 +450,42 @@
             var isGitHubSave = (method === 'PUT' || method === 'POST') &&
               (url.indexOf('api.github.com') !== -1 || url.indexOf('camascommons') !== -1) &&
               (url.indexOf('/contents/') !== -1 || url.indexOf('/git/commits') !== -1 || url.indexOf('/git/trees') !== -1);
-            if (isGitHubSave && (xhr.status === 200 || xhr.status === 201)) {
-              startLiveVerification();
+            if (isGitHubSave) {
+              if (xhr.status === 200 || xhr.status === 201) {
+                startLiveVerification();
+              } else if (xhr.status >= 400) {
+                handleSaveError(xhr.status);
+              }
             }
           });
           return originalSend.apply(this, arguments);
         };
       })();
+
+      function handleSaveError(status) {
+        var topBar = document.getElementById('deploy-top-bar');
+        var fill = document.getElementById('deploy-top-fill');
+        var percent = document.getElementById('deploy-top-percent');
+        var msg = document.getElementById('deploy-top-msg');
+        var viewBtn = document.getElementById('deploy-top-view-btn');
+
+        if (!topBar) return;
+        topBar.classList.add('active');
+        fill.style.width = '100%';
+        fill.style.background = '#E53935';
+        percent.textContent = 'Error';
+        viewBtn.style.display = 'none';
+
+        if (status === 409) {
+          msg.textContent = 'Conflict: Remote changes were committed. Please copy your text, refresh the page, and paste it back in.';
+        } else if (status === 403) {
+          msg.textContent = 'Permission Denied (403): Your GitHub account does not have write access to main. Please check repo collaborator permissions.';
+        } else if (status === 401) {
+          msg.textContent = 'Session Expired (401): Please refresh the page and log into GitHub again.';
+        } else {
+          msg.textContent = 'Publish error (' + status + '): Unable to commit changes to GitHub. Please refresh and try again.';
+        }
+      }
 
       // Auto-scroll to validation errors if Save or Publish is clicked
       document.addEventListener('click', function(e) {
