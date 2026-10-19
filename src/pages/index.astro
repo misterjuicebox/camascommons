@@ -229,8 +229,8 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
           <Button
             variant="rose"
             size="md"
-            href={(siteData as any).openLetterAudio || '#'}
-            target={(siteData as any).openLetterAudio ? '_blank' : undefined}
+            href={(siteData as any).openLetterAudio || '/open-letter-audio.m4a'}
+            target="_blank"
             class="open-letter-btn"
             id="open-letter-audio-btn"
           >
@@ -245,7 +245,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
           <Button
             variant="rose"
             size="md"
-            href={(siteData as any).openLetterVisual || (siteData as any).youtubeVideoUrl || 'https://www.youtube.com/watch?v=i0mKejiujJ4&t=8s'}
+            href={(siteData as any).openLetterVisual || '/open-letter-video.mp4'}
             target="_blank"
             class="open-letter-btn"
             id="open-letter-visual-btn"
