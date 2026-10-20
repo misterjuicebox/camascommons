@@ -14,7 +14,7 @@ const allFaqs = Object.values(faqModules).map((mod: any) => mod.default || mod);
 allFaqs.sort((a: any, b: any) => (a.order || 99) - (b.order || 99));
 
 const defaultSections = [
-  { 
+  {
     type: 'welcome_block',
     welcomeText: siteData.welcomeText,
     signature: '— Ally & Guisepi',
@@ -101,13 +101,13 @@ function formatParagraph(text: string) {
   // Ensure donor terminology throughout
   formatted = replaceInvestor(formatted);
 
-  // Link "their agricultural policy" to the official Land Bank policy PDF
+  // Link "Land Bank's Agricultural Policies" / "their agricultural policy" to the official Land Bank policy PDF
   const agPolicyUrl = 'https://sjclandbank.org/wp-content/uploads/2024/10/WEB_SJC-Conservation-Land-Bank-Agriculture-Overview-Objectives-and-Policy-Approved-4-15-22.pdf';
   formatted = formatted.replace(
-    /(<a[^>]*>[\s\S]*?<\/a>)|(their\s+agricultural\s+policy)/gi,
+    /(<a[^>]*>[\s\S]*?<\/a>)|(Land\s+Bank(?:'|’|&#39;)?s?\s+Agricultural\s+Polic(?:ies|y)|their\s+agricultural\s+policy)/gi,
     (match, existingLink, plainText) => {
       if (existingLink) {
-        if (/their\s+agricultural\s+policy/i.test(existingLink)) {
+        if (/(Land\s+Bank(?:'|’|&#39;)?s?\s+Agricultural\s+Polic(?:ies|y)|their\s+agricultural\s+policy)/i.test(existingLink)) {
           return `<a href="${agPolicyUrl}" target="_blank" rel="noopener noreferrer" class="editorial-link">${existingLink.replace(/<\/?a[^>]*>/gi, '')}</a>`;
         }
         return existingLink;
@@ -972,7 +972,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
   }
 
   .open-letter-button-grid {
-    display: flex;
+    display: flex; 
     flex-wrap: wrap;
     gap: 0.75rem;
     width: 100%;
