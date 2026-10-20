@@ -34,8 +34,8 @@
     {
       "type": "custom_section",
       "title": "How can I support this project?",
-      "content": "We are seeking **ANGEL DONORS** prepared to make transformational gifts toward the purchase of the ranch. Your support can help protect this land from speculation, keep it affordable for future farmers and producers, and preserve it in service to the community for generations to come. \n\nThere’s an extensive approval process underway and we're in the midst of it now. We are at an important juncture to secure our purchase. Our success depends on community investment with significant financial support.\n\nOur next major fundraising deadline to meet our goal is November 6th for selection from the Land Bank, before they send it on to the County Council.\n\nIt is an ambitious goal, but the opportunity is extraordinary: to secure the future of Talking Horse Ranch alongside the Land Bank as protected farmland and a lasting community resource. Every contribution brings us closer to joint success.\n",
-      "image": "/images/Long.jpeg",
+      "content": "We are seeking **ANGEL DONORS** prepared to make transformational gifts toward the purchase of the ranch. Your support can help protect this land from speculation, keep it affordable for future farmers and producers, and preserve it in service to the community for generations to come. \n\nThere’s an extensive approval process underway and we're in the midst of it now. We are at an important juncture to secure our purchase. Our success depends on community investment with significant financial support.\n\nOur next major fundraising deadline to meet our goal is November 6th for selection with the Land Bank.\n\nWe're calling in matching funds for total funds raised so far.\nOverall Goal Remains: $1.5M\nTotal Raised: See thermometer below ($520K as of 10/19)\nCalling in $100K+ match donations & grassroots gifts of continued community investment. \nMatch deadline 11/6: $400K-$800K\n\nIt is an ambitious goal, but the opportunity is extraordinary: to secure the future of Talking Horse Ranch alongside the Land Bank as protected farmland, opportunities for multiple farmer-families, and a lasting community resource. Every contribution brings us closer to joint success.\n",
+      "image": "",
       "clickableImage": false,
       "style": "callout"
     },
@@ -142,7 +142,7 @@
       "donateTitle": "DONATE",
       "targetAmount": 1500000,
       "donateButtonText": "DONATE NOW",
-      "raisedAmount": 521326,
+      "raisedAmount": 521926,
       "pledgeIntro": "A pledge is a commitment to donate your specified pledge amount upon selection of our proposal by the Land Bank:",
       "additionalInfo": "To donate via check, please mail to **On Sacred Ground Land Trust, PO Box 1732, Friday Harbor, WA 98250**. Specify **Camas Commons** in the notes.\n\nPlease email questions to info@camascommons.org",
       "pledgeUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdUgYx-Of_IYXaSeiBC3FxrmvJOvT2jL292d3E1l6PLRHarSQ/viewform?usp=header",
@@ -275,7 +275,7 @@
   "tagline": "WHERE CONSERVATION MEETS AGRICULTURE TO CREATE A LASTING LEGACY",
   "openLetterPdfText": "Open Letter (PDF)",
   "welcomeText": "Welcome to a new model for farming. We are Ally and Guisepi, two land stewards & community enthusiasts committed to continuing on our little island’s tradition of small-scale, regenerative farming for future generations… This is Camas Commons.",
-  "raisedAmount": 521326,
+  "raisedAmount": 521926,
   "openLetterVisual": "/open-letter-video.mp4?v=2",
   "siteTitle": "CAMAS COMMONS - A Regenerative Farming Land Trust",
   "openLetterHeading": "Open Letter from Camas Commons",
