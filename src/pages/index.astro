@@ -55,6 +55,10 @@ const activeSections = (siteData as any).sections && (siteData as any).sections.
   ? (siteData as any).sections
   : defaultSections;
 
+const pledgeSection = activeSections.find((s: any) => s.type === 'pledge_donate_block');
+const raisedAmount = pledgeSection?.raisedAmount || (siteData as any).raisedAmount || 521326;
+const targetAmount = pledgeSection?.targetAmount || (siteData as any).targetAmount || 1500000;
+
 function replaceInvestor(text: string): string {
   if (!text) return '';
   return text
@@ -480,9 +484,9 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
           {section.type === 'thermometer_block' && (
             <!-- Vertical Thermometer Section -->
             <Thermometer 
-              targetAmount={section.targetAmount || 1500000} 
-              raisedAmount={section.raisedAmount || 410000}
-              title={section.title || "Land Acquisition Campaign Progress"}
+              targetAmount={section.targetAmount || targetAmount} 
+              raisedAmount={section.raisedAmount || raisedAmount}
+              title={section.title || (siteData as any).campaignProgressTitle || "Land Acquisition Campaign Progress"}
               subtitle={section.subtitle}
             />
           )}
@@ -517,6 +521,15 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                   })()}
                 </div>
               </section>
+
+              <!-- Campaign Progress Thermometer (Client requested below "How can I support?" pink callout box) -->
+              <Thermometer 
+                targetAmount={targetAmount} 
+                raisedAmount={raisedAmount}
+                title={(siteData as any).campaignProgressTitle || "Land Acquisition Campaign Progress"}
+                standalone={true}
+                showCta={true}
+              />
 
               <!-- Client Requested Prospectus PDF Link (placed below "How can I support?" callout and above wedding photo) -->
               {((siteData as any).prospectusPdf || '/images/camas-commons-project-prospectus.pdf') && (
@@ -599,8 +612,8 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                 <!-- Vertical Thermometer replacing Camas flower -->
                 <div class="pledge-section-thermometer margin-bottom">
                   <Thermometer 
-                    targetAmount={section.targetAmount || (siteData as any).targetAmount || 1500000}
-                    raisedAmount={section.raisedAmount || (siteData as any).raisedAmount || 410000}
+                    targetAmount={section.targetAmount || targetAmount}
+                    raisedAmount={section.raisedAmount || raisedAmount}
                     standalone={false}
                     showCta={false}
                   />
