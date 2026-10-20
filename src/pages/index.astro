@@ -609,16 +609,6 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
               <div class="pledge-donate-card">
                 {section.title && <h2 class="section-title text-center margin-bottom">{section.title}</h2>}
 
-                <!-- Vertical Thermometer replacing Camas flower -->
-                <div class="pledge-section-thermometer margin-bottom">
-                  <Thermometer 
-                    targetAmount={section.targetAmount || targetAmount}
-                    raisedAmount={section.raisedAmount || raisedAmount}
-                    standalone={false}
-                    showCta={false}
-                  />
-                </div>
-
                 <!-- Symmetrical 2-Column Grid for DONATE vs PLEDGE -->
                 <div class="support-grid">
                   <!-- DONATE COLUMN CARD -->
