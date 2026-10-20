@@ -41,8 +41,8 @@
     },
     {
       "type": "custom_section",
-      "title": "How Camas Commons Benefits the Community",
-      "content": "~ Offers farmers & producers the ability to affordably live on farmland and to build & own their own homes.\n\n~ Allows other farmers & producers to have access to farmland through affordable agricultural leases. \n\n~ Transitions the farm out of conventional agriculture by adopting regenerative agricultural practices to restore the health of the land as a whole.\n\n~ Creates a more effective use of energy & money through shared resources, infrastructure, and equipment.\n\n~ Supports a more sustainable & affordable approach to farming with different farmers operating their own businesses, which helps utilize the full potential of the land by providing different products & services that serve the farm as a whole, and the community in which we serve.\n\n~ Helps grow island food security.\n\n~ Supports community connection through hands-on education, workshops, and learning exchanges, as well as a variety of events, a farm store and gatherings centered around the seasonal festivities of the farm.\n",
+      "title": "What Your Funds Help Do: A Community Supported Farm (CSF)",
+      "content": "~ Keeps this farm from falling into the hands of a private buyer who doesn't know the land, or sees it only as an investment property, or private bunker.\n~ Secures affordable land access for young, aspiring farmers on the island waiting for these opportunities to exist. \n~ Provides affordable residential opportunities for multiple farming families.\n~ Keeps it affordable – Ensures land access & homesites stay affordable for our young farmers: current buy-ins are set at $50K in the current funding plan (including anticipated donations and loan repayment). The more money we have to pay for the land, the less affordable it is for farmers. At the Land Bank’s current presumed asking price of $1.45M, we'd have to raise our buy-ins to around 150-200K – not affordable. Help us keep it at $50K!\n~ Ensures the 40 acres we inhabit ALSO gets preserved alongside The Land Bank's 80 acres.\n~  Reduces debt – The more money we owe, the longer we go without establishing the land trust. The land cannot enter a land trust for conservation until the debt is paid.\n~ Contributes to Indigenous land tax – funds set aside for supporting Indigenous-led events, education and accessibility.\n~ Transitions this farm to Regenerative Agriculture to start restoring soil health and lead to higher quality food and greater production, without depleting the soils.\n~ Contributes to more local food being produced on our island, offering more food security.\n",
       "image": "/images/wedding_event.jpg",
       "clickableImage": false,
       "style": "story"
@@ -61,6 +61,12 @@
       "image": "",
       "clickableImage": false,
       "items": [
+        {
+          "q": "How Does Camas Commons Benefit the Community?",
+          "a": "~ Offers farmers & producers the ability to affordably live on farmland and to build & own their own homes.\n\n~ Allows other farmers & producers to have access to farmland through affordable agricultural leases. \n\n~ Transitions the farm out of conventional agriculture by adopting regenerative agricultural practices to restore the health of the land as a whole.\n\n~ Creates a more effective use of energy & money through shared resources, infrastructure, and equipment.\n\n~ Supports a more sustainable & affordable approach to farming with different farmers operating their own businesses, which helps utilize the full potential of the land by providing different products & services that serve the farm as a whole, and the community in which we serve.\n\n~ Helps grow island food security.\n\n~ Supports community connection through hands-on education, workshops, and learning exchanges, as well as a variety of events, a farm store and gatherings centered around the seasonal festivities of the farm.",
+          "image": "",
+          "clickableImage": true
+        },
         {
           "q": "What does a land trust do, and why are we using one?",
           "a": "Affordability and preservation of active farmland in order to make sure it remains active farmland are the primary reasons we are using a land trust model. \n\nA land trust is very limited in what it can do. In the model we are using, it can hold title to the land, sign leases with leaseholders, collect lease payments from leaseholders, and pay for 3 things: property taxes, property insurance, and some shared maintenance costs. Because only actual costs are covered, leases remain affordable permanently.\n",
