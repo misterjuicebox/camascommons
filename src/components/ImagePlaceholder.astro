@@ -8,9 +8,10 @@ interface Props {
   height?: string;
   caption?: string;
   clickable?: boolean;
+  alt?: string;
 }
 
-const { label, src, height = '340px', caption, clickable = false } = Astro.props;
+const { label, src, height = '340px', caption, clickable = false, alt } = Astro.props;
 
 // Extract base name from label or src (e.g. "/images/hay.jpeg" -> "hay.jpeg")
 const initialPath = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]/, '').trim();
@@ -48,7 +49,7 @@ const relativeImagePath = `/images/${matchedFilename}`;
 <figure class={`field-photo-frame ${clickable && fileExists ? 'is-clickable' : ''}`} style={`min-height: ${fileExists ? 'auto' : height};`}>
   {fileExists ? (
     <div class="photo-real-wrapper" data-zoom-src={clickable ? relativeImagePath : undefined}>
-      <img src={relativeImagePath} alt={label} class="real-photo-img" loading="lazy" />
+      <img src={relativeImagePath} alt={alt || label} class="real-photo-img" loading="lazy" />
       {clickable && (
         <span class="zoom-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">

@@ -493,7 +493,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
             section.style === 'callout' ? (
               <!-- Highlighted Callout Box -->
               <section class="proposal-callout">
-                {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />}
+                {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} alt={section.imageAlt} height="340px" clickable={Boolean(section.clickableImage)} />}
 
                 <div class="proposal-paper">
                   {section.title && <h2 class="section-title">{replaceInvestor(section.title)}</h2>}
@@ -575,7 +575,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
             ) : (
               <!-- Standard Story Section -->
               <section class="story-section">
-                {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} height="340px" clickable={Boolean(section.clickableImage)} />}
+                {section.image && <ImagePlaceholder src={section.image} label={section.title || '[PHOTO]'} alt={section.imageAlt} height="340px" clickable={Boolean(section.clickableImage)} />}
                 
                 {section.title && <h2 class="section-title">{replaceInvestor(section.title)}</h2>}
                 <div class="narrative-body">

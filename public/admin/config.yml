@@ -76,6 +76,7 @@ collections:
                   - { label: "Content Paragraphs (Optional)", name: "content", widget: "text", default: "", required: false, hint: "💡 TIP: Wrap words in `**double asterisks**` for bold. Press Enter twice (blank line) for paragraph space, or Enter once for a line break. Start lines with ~ or - or * for Camas Flower Bullets." }
                   - { label: "Camas Flower Bullet Points (One per line - Optional)", name: "bulletPoints", widget: "text", required: false, hint: "💡 TIP: Put each bullet on its own line. Start lines with ~ or - or * for blue flower bullets." }
                   - { label: "Section Photo", name: "image", widget: "image", default: "", required: false }
+                  - { label: "Photo Description (Optional)", name: "imageAlt", widget: "text", required: false, hint: "What the photo shows, in words. Read aloud by screen readers and used by search engines and AI. For a flyer or graphic, type out its text." }
                   - { label: "Make Photo Clickable (Click to view full-size)", name: "clickableImage", widget: "boolean", default: true, required: false }
                   - { label: "Section Style / Layout", name: "style", widget: "select", default: "story", options: [
                       { label: "Standard Story Section", value: "story" },
