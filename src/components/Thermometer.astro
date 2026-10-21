@@ -8,6 +8,7 @@ interface Props {
   subtitle?: string;
   standalone?: boolean;
   showCta?: boolean;
+  asOf?: string;
 }
 
 const {
@@ -16,8 +17,15 @@ const {
   title,
   subtitle,
   standalone = true,
-  showCta = true
+  showCta = true,
+  asOf
 } = Astro.props;
+
+// Optional "as of" date for the raised amount (CMS: Raised Amount Updated On)
+const asOfDate = asOf ? new Date(`${String(asOf).slice(0, 10)}T12:00:00Z`) : null;
+const asOfLabel = asOfDate && !isNaN(asOfDate.getTime())
+  ? asOfDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+  : '';
 
 // Calculate fill percentage (capped 0 - 100%)
 const fillPercentage = Math.min(Math.max((raisedAmount / targetAmount) * 100, 0), 100);
@@ -100,6 +108,7 @@ const formatShortCurrency = (val: number) => {
                 <span class="callout-amount">{formatCurrency(raisedAmount)}</span>
                 <span class="callout-label">RAISED</span>
                 <span class="callout-percent">{fillPercentage.toFixed(1)}% of Goal</span>
+                {asOfLabel && <span class="callout-asof">as of {asOfLabel}</span>}
               </div>
             </div>
 
@@ -406,6 +415,12 @@ const formatShortCurrency = (val: number) => {
     background: var(--camas-purple-blue);
     border-radius: 50%;
     border: 2px solid #ffffff;
+  }
+
+  .callout-asof {
+    font-size: 0.68rem;
+    color: var(--color-text-soft, #7A887E);
+    margin-top: 2px;
   }
 
   .callout-badge {

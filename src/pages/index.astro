@@ -484,6 +484,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
             <Thermometer 
               targetAmount={section.targetAmount || targetAmount} 
               raisedAmount={section.raisedAmount || raisedAmount}
+              asOf={section.raisedAmount ? undefined : pledgeSection?.raisedAsOf}
               title={section.title || (siteData as any).campaignProgressTitle || "Land Acquisition Campaign Progress"}
               subtitle={section.subtitle}
             />
@@ -524,6 +525,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
               <Thermometer 
                 targetAmount={targetAmount} 
                 raisedAmount={raisedAmount}
+                asOf={pledgeSection?.raisedAsOf}
                 title={(siteData as any).campaignProgressTitle || "Land Acquisition Campaign Progress"}
                 standalone={true}
                 showCta={true}
