@@ -564,3 +564,134 @@ html {
   color: var(--color-text-main);
   line-height: 1.6;
 }
+
+/* ==========================================================================
+   Dark Mode — applied when <html data-theme="dark"> (set by the header toggle)
+   Rules use `html[data-theme="dark"]` so they outrank component-scoped styles.
+   ========================================================================== */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg-paper: #151A16;
+  --color-bg-subtle: #1B211C;
+  --color-card-paper: #1F2621;
+  --color-border-paper: #323C34;
+  --color-border-subtle: #3A453C;
+
+  /* Green becomes a light sage so headings stay readable on dark backgrounds */
+  --color-green-deep: #A3C9AC;
+  --color-green-hover: #BCD9C3;
+  --color-green-light: #22322A;
+
+  --color-rose-terracotta: #C5746D;
+  --color-rose-hover: #B06059;
+  --color-rose-light: #33221F;
+  --color-rose-border: #5C3B37;
+
+  --color-text-ink: #ECE7DD;
+  --color-text-muted: #B4BDB5;
+  --color-text-soft: #8F9B91;
+
+  --shadow-paper: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+
+  /* Thermometer purple, lightened for contrast */
+  --camas-purple-blue: #7F8CE8;
+}
+
+/* Buttons that use green as a background keep a deep green fill */
+html[data-theme="dark"] .btn-green {
+  background-color: #2F5A3C;
+  border-color: #3B6E4A;
+}
+html[data-theme="dark"] .btn-green:hover {
+  background-color: #3B6E4A;
+}
+
+html[data-theme="dark"] .support-card {
+  background: var(--color-card-paper);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Photo frame tape strip & path hints */
+html[data-theme="dark"] .field-photo-frame::before {
+  background: rgba(120, 110, 95, 0.45);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .photo-path-hint code {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Thermometer: lighter purple for contrast, dark glass and badge */
+html[data-theme="dark"] .thermometer-tube,
+html[data-theme="dark"] .thermometer-bulb {
+  background: rgba(255, 255, 255, 0.05);
+}
+html[data-theme="dark"] .callout-badge {
+  background: var(--color-card-paper);
+}
+
+/* Theme toggle button (header) */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-paper);
+  background: var(--color-card-paper);
+  color: var(--color-text-ink);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  border-color: var(--color-rose-terracotta);
+}
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+.theme-toggle .icon-sun { display: none; }
+html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Small phones: the header has no room for the toggle, so it floats bottom-left */
+@media (max-width: 480px) {
+  .editorial-header .header-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    gap: 0.5rem;
+  }
+  .editorial-header .header-actions .btn {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .theme-toggle {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 60;
+    width: 42px;
+    height: 42px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+}
+
+/* Very small phones (e.g. iPhone SE 1st gen) */
+@media (max-width: 360px) {
+  .editorial-header .header-actions .btn {
+    font-size: 0.72rem;
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
+  }
+  html .editorial-header .brand-title {
+    font-size: 0.95rem;
+  }
+}
