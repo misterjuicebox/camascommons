@@ -1,0 +1,59 @@
+name: Compress Uploaded Images
+
+# Runs when photos are added or replaced (e.g. uploads from the CMS) and commits
+# smaller versions back to the same branch. Commits made with GITHUB_TOKEN don't
+# re-trigger workflows, so this can't loop.
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'public/images/**'
+  workflow_dispatch:
+
+concurrency:
+  group: compress-images-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Compress new or changed images
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "$BEFORE" ] && git cat-file -e "$BEFORE" 2>/dev/null; then
+            git diff --name-only --diff-filter=AM -z "$BEFORE" HEAD -- public/images \
+              | xargs -0 -r node scripts/compress-images.mjs
+          else
+            node scripts/compress-images.mjs
+          fi
+
+      - name: Commit compressed images
+        run: |
+          if [ -z "$(git status --porcelain public/images)" ]; then
+            echo "Nothing to compress."
+            exit 0
+          fi
+          git config user.name "CamasCommons Image Bot"
+          git config user.email "image-bot@camascommons.org"
+          git add public/images
+          git commit -m "chore: Compress uploaded images"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

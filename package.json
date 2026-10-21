@@ -8,12 +8,14 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "compress-images": "node scripts/compress-images.mjs"
   },
   "dependencies": {
     "astro": "^4.16.18"
   },
   "devDependencies": {
-    "decap-server": "^3.9.1"
+    "decap-server": "^3.9.1",
+    "sharp": "^0.33.5"
   }
 }
