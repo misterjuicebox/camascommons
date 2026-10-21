@@ -1,8 +1,6 @@
-// robots.txt, generated at build time. Search engines, AI search and assistants are
-// welcome on the live site; admin and API paths stay out. Any non-main build
-// (dev.camascommons.org, previews) asks every crawler to stay away.
-const branch = process.env.CF_PAGES_BRANCH || '';
-const isPreview = Boolean(branch) && branch !== 'main';
+// robots.txt for camascommons.org. Search engines, AI search and assistants are
+// welcome; admin and API paths stay out. On dev.camascommons.org and previews,
+// functions/_middleware.js replaces this with a "stay away" version.
 
 const live = `# camascommons.org
 User-agent: *
@@ -14,13 +12,8 @@ Disallow: /api/
 Sitemap: https://camascommons.org/sitemap.xml
 `;
 
-const preview = `# Preview build: not for search engines
-User-agent: *
-Disallow: /
-`;
-
 export function GET() {
-  return new Response(isPreview ? preview : live, {
+  return new Response(live, {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });
 }
