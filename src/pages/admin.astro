@@ -775,6 +775,7 @@
                   <span class="stat-label">Donate &amp; pledge clicks</span>
                 </div>
               </div>
+              <p class="analytics-section-note" id="thank-you-note" style="margin: -4px 0 0;"></p>
               <div class="analytics-list-box analytics-wide">
                 <h4>Most clicked</h4>
                 <div class="clicks-table-wrap">
@@ -895,6 +896,9 @@
             visitorsEl.textContent = Number(data.totals.visitors).toLocaleString();
             clicksEl.textContent = Number(data.totals.clicks).toLocaleString();
             givingEl.textContent = Number(data.totals.givingClicks || 0).toLocaleString();
+            var thanks = (data.pages || []).filter(function(p) { return p.target === '/thank-you'; })[0];
+            document.getElementById('thank-you-note').textContent =
+              'Thank-you page visits (gifts completed through PayPal, once PayPal sends donors there): ' + Number(thanks ? thanks.count : 0).toLocaleString();
             var ambassadors = data.ambassadors || [];
             ambassadorEl.innerHTML = ambassadors.length
               ? ambassadors.map(function(row) {

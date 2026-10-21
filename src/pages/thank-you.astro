@@ -1,0 +1,130 @@
+---
+// Where donors land after giving (PayPal's "return to website" setting points here).
+// Not linked from the site and kept out of search engines. Its visits are counted in
+// Admin → Site Analytics, so completed PayPal gifts can be told apart from clicks.
+import '../styles/global.css';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Thank you · Camas Commons</title>
+    <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <main class="thanks">
+      <img src="/images/blue-flower-icon.png" alt="" width="72" height="72" />
+      <h1>Thank you</h1>
+      <p class="lead">Thank you for supporting Camas Commons.</p>
+      <div class="share">
+        <p>Know someone who might want to help? Share the link:</p>
+        <div class="share-row">
+          <input id="share-link" type="text" value="https://camascommons.org" readonly aria-label="Link to share" />
+          <button type="button" id="copy-link">Copy link</button>
+        </div>
+        <p class="copy-status" id="copy-status" aria-live="polite"></p>
+      </div>
+      <a href="/" class="back-link">Back to camascommons.org</a>
+    </main>
+
+    <script>
+      // Count this visit (a completed gift), crediting the ambassador if the donor came through one
+      let via = '';
+      try {
+        const saved = JSON.parse(localStorage.getItem('camas-via') || 'null');
+        if (saved && Date.now() - saved.t < 30 * 86400000) via = saved.v;
+      } catch (e) {}
+
+      const body = JSON.stringify({ kind: 'view', target: '/thank-you', label: 'Thank-you page', ...(via ? { via } : {}) });
+      if (!(navigator.sendBeacon && navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' })))) {
+        fetch('/api/track', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
+      }
+
+      const input = document.getElementById('share-link') as HTMLInputElement;
+      const status = document.getElementById('copy-status');
+      document.getElementById('copy-link')?.addEventListener('click', () => {
+        const done = () => { if (status) status.textContent = 'Copied'; };
+        const fallback = () => { input.select(); if (status) status.textContent = 'Selected: press Copy to copy it'; };
+        if (navigator.clipboard) navigator.clipboard.writeText(input.value).then(done, fallback);
+        else fallback();
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .thanks {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+  h1 {
+    font-family: var(--font-serif);
+    color: var(--color-green-deep);
+    font-size: 2.4rem;
+    margin: 0.5rem 0 0;
+  }
+  .lead {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+  .share {
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 460px;
+  }
+  .share p {
+    color: var(--color-text-muted);
+    margin: 0 0 0.6rem;
+  }
+  .share-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .share-row input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border-paper);
+    border-radius: var(--radius-paper);
+    background: var(--color-card-paper);
+    color: var(--color-text-ink);
+  }
+  .share-row button {
+    font: inherit;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: var(--radius-paper);
+    background: var(--color-rose-terracotta);
+    color: #FFFFFF;
+    cursor: pointer;
+  }
+  .share-row button:hover {
+    background: var(--color-rose-hover);
+  }
+  .copy-status {
+    min-height: 1.2em;
+    font-size: 0.85rem;
+    color: var(--color-text-soft);
+  }
+  .back-link {
+    margin-top: 1rem;
+    color: var(--color-rose-terracotta);
+    font-weight: 600;
+  }
+</style>
