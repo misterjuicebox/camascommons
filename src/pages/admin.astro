@@ -254,7 +254,7 @@
       .analytics-card {
         background: #FAF6F0;
         width: 100%;
-        max-width: 680px;
+        max-width: 860px;
         border-radius: 12px;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
         border: 2px solid #E6DCCE;
@@ -361,6 +361,85 @@
 
       .analytics-data-list li:last-child {
         border-bottom: none;
+      }
+
+      .analytics-section-title {
+        grid-column: 1 / -1;
+        margin: 12px 0 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1C2A20;
+      }
+
+      .analytics-section-note {
+        grid-column: 1 / -1;
+        margin: -8px 0 0;
+        font-size: 0.8rem;
+        color: #566459;
+      }
+
+      .analytics-stats-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .analytics-wide {
+        grid-column: 1 / -1;
+      }
+
+      .clicks-table-wrap {
+        overflow-x: auto;
+      }
+
+      .clicks-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        color: #1C2A20;
+      }
+
+      .clicks-table th {
+        text-align: left;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #566459;
+        padding: 6px 8px;
+        border-bottom: 1px solid #E6DCCE;
+      }
+
+      .clicks-table td {
+        padding: 7px 8px;
+        border-bottom: 1px solid #F3ECE0;
+        vertical-align: top;
+      }
+
+      .clicks-table td.num,
+      .clicks-table th.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .clicks-table .where {
+        display: block;
+        font-size: 0.75rem;
+        color: #7A887E;
+      }
+
+      .analytics-empty {
+        color: #566459;
+        font-size: 0.85rem;
+        padding: 6px 0;
+      }
+
+      @media (max-width: 640px) {
+        .analytics-body-grid,
+        .analytics-stats-row {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
 
@@ -675,6 +754,32 @@
                 <h4>Top Pages Visited</h4>
                 <ul id="analytics-pages-list" class="analytics-data-list"><li>Loading...</li></ul>
               </div>
+
+              <h3 class="analytics-section-title">Clicks on the site</h3>
+              <p class="analytics-section-note" id="clicks-note">Every button, link, FAQ question and photo people click on the homepage.</p>
+              <div class="analytics-stats-row">
+                <div class="stat-box">
+                  <span class="stat-number" id="stat-site-views">—</span>
+                  <span class="stat-label">Page views</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-number" id="stat-site-visitors">—</span>
+                  <span class="stat-label">Visitors</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-number" id="stat-site-clicks">—</span>
+                  <span class="stat-label">Clicks</span>
+                </div>
+              </div>
+              <div class="analytics-list-box analytics-wide">
+                <h4>Most clicked</h4>
+                <div class="clicks-table-wrap">
+                  <table class="clicks-table">
+                    <thead><tr><th>What was clicked</th><th class="num">Clicks</th><th class="num">People</th></tr></thead>
+                    <tbody id="clicks-table-body"><tr><td colspan="3" class="analytics-empty">Loading...</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         `;
@@ -714,37 +819,78 @@
         })
           .then(function(res) { return res.json(); })
           .then(function(data) {
-            if (data && data.success) {
-              pageviewsEl.textContent = data.totalPageviews || '0';
-              referrersCountEl.textContent = data.referrers ? data.referrers.length : '0';
-
-              if (data.referrers && data.referrers.length > 0) {
-                referrersListEl.innerHTML = data.referrers.map(function(item) {
-                  return '<li><span>' + item.name + '</span> <strong>' + item.count + '</strong></li>';
-                }).join('');
-              } else {
-                referrersListEl.innerHTML = '<li><span>Direct / None</span> <strong>Active</strong></li>';
-              }
-
-              if (data.pages && data.pages.length > 0) {
-                pagesListEl.innerHTML = data.pages.map(function(item) {
-                  return '<li><span>' + item.path + '</span> <strong>' + item.count + '</strong></li>';
-                }).join('');
-              } else {
-                pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
-              }
-            } else {
-              pageviewsEl.textContent = 'Live';
-              referrersCountEl.textContent = 'Active';
-              referrersListEl.innerHTML = '<li><span>Direct / Social Visits</span> <strong>Active</strong></li>';
-              pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
-            }
+            if (!data || !data.success) throw new Error('unavailable');
+            pageviewsEl.textContent = data.totalPageviews || '0';
+            referrersCountEl.textContent = data.referrers ? data.referrers.length : '0';
+            referrersListEl.innerHTML = (data.referrers && data.referrers.length)
+              ? data.referrers.map(function(item) {
+                  return '<li><span>' + escapeHtml(item.name) + '</span> <strong>' + escapeHtml(item.count) + '</strong></li>';
+                }).join('')
+              : '<li><span>No referrers recorded</span></li>';
+            pagesListEl.innerHTML = (data.pages && data.pages.length)
+              ? data.pages.map(function(item) {
+                  return '<li><span>' + escapeHtml(item.path) + '</span> <strong>' + escapeHtml(item.count) + '</strong></li>';
+                }).join('')
+              : '<li><span>No pages recorded</span></li>';
           })
           .catch(function() {
-            pageviewsEl.textContent = 'Live';
-            referrersCountEl.textContent = 'Active';
-            referrersListEl.innerHTML = '<li><span>Direct / Social Visits</span> <strong>Active</strong></li>';
-            pagesListEl.innerHTML = '<li><span>/ (Homepage)</span> <strong>Active</strong></li>';
+            pageviewsEl.textContent = '—';
+            referrersCountEl.textContent = '—';
+            referrersListEl.innerHTML = '<li><span>Traffic data unavailable right now</span></li>';
+            pagesListEl.innerHTML = '<li><span>Traffic data unavailable right now</span></li>';
+          });
+
+        fetchClickAnalytics(days, token);
+      }
+
+      function escapeHtml(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, function(c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+
+      // Clicks and page views recorded by this site (functions/api/analytics.js)
+      function fetchClickAnalytics(days, token) {
+        var viewsEl = document.getElementById('stat-site-views');
+        var visitorsEl = document.getElementById('stat-site-visitors');
+        var clicksEl = document.getElementById('stat-site-clicks');
+        var bodyEl = document.getElementById('clicks-table-body');
+        var noteEl = document.getElementById('clicks-note');
+        if (!bodyEl) return;
+
+        viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = '...';
+        bodyEl.innerHTML = '<tr><td colspan="3" class="analytics-empty">Loading...</td></tr>';
+
+        fetch('/api/analytics?days=' + days, { headers: { 'Authorization': 'Bearer ' + token } })
+          .then(function(res) { return res.json().then(function(data) { return { status: res.status, data: data }; }); })
+          .then(function(result) {
+            var data = result.data || {};
+            if (!data.success) {
+              viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = '—';
+              var message = data.setupNeeded
+                ? 'Click tracking isn\'t connected yet: it needs a D1 database bound as ANALYTICS in Cloudflare.'
+                : (data.error || 'Click data unavailable right now.');
+              bodyEl.innerHTML = '<tr><td colspan="3" class="analytics-empty">' + escapeHtml(message) + '</td></tr>';
+              return;
+            }
+            viewsEl.textContent = Number(data.totals.views).toLocaleString();
+            visitorsEl.textContent = Number(data.totals.visitors).toLocaleString();
+            clicksEl.textContent = Number(data.totals.clicks).toLocaleString();
+            if (data.trackingSince) {
+              noteEl.textContent = 'Every button, link, FAQ question and photo people click on the homepage. Tracking since ' + data.trackingSince + '. Visitors are counted once per day.';
+            }
+            bodyEl.innerHTML = data.clicks.length
+              ? data.clicks.map(function(row) {
+                  return '<tr><td>' + escapeHtml(row.label || row.target) +
+                    '<span class="where">' + escapeHtml(row.section || '') + '</span></td>' +
+                    '<td class="num">' + Number(row.count).toLocaleString() + '</td>' +
+                    '<td class="num">' + Number(row.uniques).toLocaleString() + '</td></tr>';
+                }).join('')
+              : '<tr><td colspan="3" class="analytics-empty">No clicks recorded in this timeframe yet.</td></tr>';
+          })
+          .catch(function() {
+            viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = '—';
+            bodyEl.innerHTML = '<tr><td colspan="3" class="analytics-empty">Click data unavailable right now.</td></tr>';
           });
       }
 

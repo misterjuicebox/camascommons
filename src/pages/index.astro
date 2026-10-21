@@ -393,18 +393,44 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
-          // Record a view when someone opens a document (PDFs, audio, video).
-          // sendBeacon still delivers when the click navigates away from the page.
-          document.querySelectorAll('.track-document-click').forEach(el => {
-            el.addEventListener('click', () => {
-              const doc = el.getAttribute('data-doc-type');
-              if (!doc) return;
-              const url = '/api/views/' + doc;
-              if (!(navigator.sendBeacon && navigator.sendBeacon(url))) {
-                fetch(url, { method: 'POST', keepalive: true }).catch(() => {});
-              }
-            });
-          });
+          // Analytics: one page view per load, plus every click on something clickable.
+          // Sent to /api/track (functions/api/track.js); results show in /admin → Site Analytics.
+          // sendBeacon still delivers when the click opens a document or leaves the page.
+          function track(event) {
+            const body = JSON.stringify(event);
+            const blob = new Blob([body], { type: 'application/json' });
+            if (!(navigator.sendBeacon && navigator.sendBeacon('/api/track', blob))) {
+              fetch('/api/track', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
+            }
+          }
+
+          function sectionName(el) {
+            const box = el.closest('header, footer, section, aside, .support-card');
+            if (!box) return 'Page';
+            if (box.matches('header')) return 'Header';
+            if (box.matches('footer')) return 'Footer';
+            const heading = box.querySelector('h2, h3');
+            const name = box.getAttribute('aria-label') || (heading && heading.textContent) || box.id || 'Page';
+            return name.replace(/\s+/g, ' ').trim().replace(/:$/, '');
+          }
+
+          function clickLabel(el) {
+            if (el.matches('[data-zoom-src]')) return 'Enlarge photo: ' + el.getAttribute('data-zoom-src').split('/').pop();
+            const text = (el.getAttribute('aria-label') || el.textContent || el.getAttribute('title') || '').replace(/\s+/g, ' ').trim();
+            return text || el.getAttribute('href') || el.tagName.toLowerCase();
+          }
+
+          track({ kind: 'view', target: location.pathname, label: document.title });
+
+          document.addEventListener('click', (e) => {
+            const el = e.target.closest('a[href], button, summary, [role="button"], [data-zoom-src], [data-track]');
+            if (!el || el.matches('.lightbox-close-btn')) return;
+            const label = clickLabel(el).slice(0, 120);
+            const section = sectionName(el).slice(0, 120);
+            const href = el.getAttribute('href') || el.getAttribute('data-zoom-src') || '';
+            const target = el.getAttribute('data-track') || (section + ' › ' + label);
+            track({ kind: 'click', target, label, section, href });
+          }, { capture: true });
 
           // Handle Open Letter audio button when no file uploaded yet
           const audioBtn = document.getElementById('open-letter-audio-btn');
