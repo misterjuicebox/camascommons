@@ -1,5 +1,5 @@
 {
   "version": 1,
-  "include": ["/", "/index.html", "/robots.txt", "/thank-you", "/thank-you/*", "/admin", "/admin/*", "/404.html", "/api/*"],
+  "include": ["/", "/index.html", "/robots.txt", "/thank-you", "/thank-you/*", "/admin", "/admin/*", "/404.html", "/__dev-login", "/api/*"],
   "exclude": []
 }
