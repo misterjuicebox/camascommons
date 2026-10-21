@@ -120,6 +120,18 @@ collections:
                       { label: "Make Photo Clickable", name: "clickableImage", widget: "boolean", default: true, required: false },
                       { label: "Summary / Bio Text", name: "bio", widget: "text", default: "", required: false, hint: "💡 TIP: Press Enter twice (blank line) for paragraph space, or Enter once for a line break." }
                     ] }
+              - label: "Matching Campaign Box (Deadline, Match Progress & Countdown)"
+                name: "match_block"
+                widget: "object"
+                fields:
+                  - { label: "Heading", name: "title", widget: "string", required: false }
+                  - { label: "Text", name: "content", widget: "text", required: false, hint: "Same formatting as other sections: **bold**, blank line between paragraphs, ~ for flower bullets. Only say a gift is matched once a match is committed." }
+                  - { label: "Deadline", name: "deadline", widget: "datetime", date_format: "MMM D, YYYY", time_format: false, format: "YYYY-MM-DD", required: false }
+                  - { label: "Show Countdown to the Deadline", name: "showCountdown", widget: "boolean", default: true, required: false }
+                  - { label: "Match Goal ($)", name: "matchTarget", widget: "number", required: false, hint: "Leave blank to hide the progress bar." }
+                  - { label: "Match Committed So Far ($)", name: "matchCommitted", widget: "number", required: false }
+                  - { label: "Progress Bar Label (Optional)", name: "progressLabel", widget: "string", required: false, hint: "Shown above the bar, e.g. 'Match commitments so far'." }
+                  - { label: "Button Text (Optional)", name: "buttonText", widget: "string", required: false, hint: "Leave blank for no button. The button scrolls to the Pledge & Donate section." }
               - label: "Pledge & Donate Section (Symmetrical Dual Cards)"
                 name: "pledge_donate_block"
                 widget: "object"

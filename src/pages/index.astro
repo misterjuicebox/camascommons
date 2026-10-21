@@ -65,6 +65,10 @@ const pledgeSection = activeSections.find((s: any) => s.type === 'pledge_donate_
 const raisedAmount = pledgeSection?.raisedAmount || (siteData as any).raisedAmount || 521326;
 const targetAmount = pledgeSection?.targetAmount || (siteData as any).targetAmount || 1500000;
 
+function formatUsd(value: number): string {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+}
+
 function replaceInvestor(text: string): string {
   if (!text) return '';
   return text
@@ -406,6 +410,20 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
+          // Matching Campaign Box countdown, worked out in the visitor's browser so it's never stale
+          document.querySelectorAll('.match-countdown[data-deadline]').forEach(el => {
+            const end = new Date(el.getAttribute('data-deadline') + 'T23:59:59');
+            if (isNaN(end.getTime())) return;
+            const msPerDay = 86400000;
+            const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
+            const days = Math.round((new Date(end.getFullYear(), end.getMonth(), end.getDate()) - startOfToday) / msPerDay);
+            const dateText = end.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+            if (days > 1) el.textContent = days + ' days left · ' + dateText;
+            else if (days === 1) el.textContent = '1 day left · ' + dateText;
+            else if (days === 0) el.textContent = 'Last day · ' + dateText;
+            else el.textContent = 'Ended ' + dateText;
+          });
+
           // Analytics: one page view per load, plus every click on something clickable.
           // Sent to /api/track (functions/api/track.js); results show in /admin → Site Analytics.
           // sendBeacon still delivers when the click opens a document or leaves the page.
@@ -594,6 +612,35 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                 </div>
               </section>
             )
+          )}
+
+          {section.type === 'match_block' && (section.title || section.content || section.deadline || section.matchTarget) && (
+            <!-- Matching Campaign Box (CMS: Matching Campaign Box). Hidden unless added in the CMS. -->
+            <section class="match-block" aria-label={section.title || 'Matching campaign'}>
+              {section.title && <h2 class="match-title">{replaceInvestor(section.title)}</h2>}
+              {section.deadline && section.showCountdown !== false && (
+                <p class="match-countdown" data-deadline={String(section.deadline).slice(0, 10)}></p>
+              )}
+              {section.content && (typeof section.content === 'string' ? section.content.split(/\r?\n\r?\n+/) : section.content).map((p: string) => (
+                <p class="match-text" set:html={formatParagraph(p)}></p>
+              ))}
+              {Number(section.matchTarget) > 0 && (
+                <div class="match-progress">
+                  {section.progressLabel && <div class="match-progress-label">{section.progressLabel}</div>}
+                  <div class="match-bar" role="progressbar" aria-valuemin="0" aria-valuemax={Number(section.matchTarget)} aria-valuenow={Number(section.matchCommitted) || 0}>
+                    <div class="match-bar-fill" style={`width: ${Math.min(100, ((Number(section.matchCommitted) || 0) / Number(section.matchTarget)) * 100)}%`}></div>
+                  </div>
+                  <div class="match-amounts">
+                    <strong>{formatUsd(Number(section.matchCommitted) || 0)}</strong> of {formatUsd(Number(section.matchTarget))}
+                  </div>
+                </div>
+              )}
+              {section.buttonText && (
+                <div class="match-cta">
+                  <Button variant="rose" size="lg" href="#pledge-donate">{section.buttonText}</Button>
+                </div>
+              )}
+            </section>
           )}
 
           {section.type === 'pledge_donate_block' && (
@@ -1336,6 +1383,85 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
   .final-pledge-box {
     margin-top: 2.5rem;
+  }
+
+  /* Matching Campaign Box (match_block) */
+  .match-block {
+    margin: 0 0 2.5rem;
+    padding: 1.75rem 2rem;
+    border: 2px solid var(--color-rose-terracotta);
+    border-radius: var(--radius-paper);
+    background: var(--color-rose-light);
+    text-align: center;
+  }
+
+  .match-title {
+    font-family: var(--font-serif);
+    color: var(--color-green-deep);
+    font-size: 1.7rem;
+    line-height: 1.2;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  .match-countdown {
+    display: inline-block;
+    font-weight: 700;
+    color: var(--color-rose-hover);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin: 0 0 0.9rem;
+  }
+
+  .match-countdown:empty {
+    display: none;
+  }
+
+  .match-text {
+    max-width: 60ch;
+    margin: 0 auto 0.9rem;
+  }
+
+  .match-progress {
+    max-width: 520px;
+    margin: 1.25rem auto 0;
+  }
+
+  .match-progress-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .match-bar {
+    height: 14px;
+    border-radius: 999px;
+    background: var(--color-card-paper);
+    border: 1px solid var(--color-rose-border);
+    overflow: hidden;
+  }
+
+  .match-bar-fill {
+    height: 100%;
+    background: var(--color-rose-terracotta);
+    border-radius: 999px;
+  }
+
+  .match-amounts {
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .match-amounts strong {
+    color: var(--color-text-ink);
+  }
+
+  .match-cta {
+    margin-top: 1.25rem;
   }
 
   /* Footer */
