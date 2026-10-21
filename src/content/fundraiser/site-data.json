@@ -9,6 +9,14 @@
   "targetAmount": 1500000,
   "sections": [
     {
+      "type": "custom_section",
+      "title": "Our Main Objective",
+      "content": "In experiencing our own housing insecurity, and potential loss of our farming operations, it has only made our objective more clear:\n\nTo offer affordable land access and multiple home opportunities to aspiring farmers and farming families the are waiting for the opportunity. \n\nIn older life stages, it is our role to provide pathways for younger generations to succeed. This is at the foundation of Camas Commons. ",
+      "image": "",
+      "clickableImage": true,
+      "style": "story"
+    },
+    {
       "type": "welcome_block",
       "welcomeText": "Camas Commons is the only qualifying proposal for 40 acres of the 120-acre Talking Horse Ranch Land Bank acquisition. \n\nUPDATE: We have heard there is a full cash backup offer waiting for the whole 120 acres if the Land Bank's acquisition falls through. \n\nHelp Camas Commons & the Land Bank secure Talking Horse Ranch as a community asset! \n\nTheir trail. Our Farm. One Land. United in Conservation. \n\nDon't let our island lose this historic community asset to a private buyer who does not know this land, or sees it only as an investment property or private bunker. \n\nHelp land stewardship win!\n\nEstablishing Camas Commons isn't just about saving our home and our animals, it's about securing this land as permanently affordable with homesites for multiple farming families, and ensures the 40-acres is also preserved.   \n\nWelcome to a different model of farming. We are Ally and Guisepi, two land stewards & community enthusiasts committed to creating a future of farming that is regenerative. We believe conservation and agriculture can come together to create a lasting legacy that’s worth fighting for now... This is Camas Commons.\n",
       "signature": "— Ally & Guisepi",
