@@ -24,7 +24,10 @@ export async function onRequestGet({ request, env }) {
   const db = env.ANALYTICS;
   await ensureSchema(db);
 
-  const [views, clicks, daily, firstDay] = await db.batch([
+  // A click that leads to giving: PayPal, the pledge form or the Community Foundation
+  const GIVING = `(href LIKE '%paypal.com%' OR href LIKE '%docs.google.com/forms%' OR href LIKE '%sjicf%')`;
+
+  const [views, clicks, daily, firstDay, ambassadors, giving] = await db.batch([
     db.prepare(
       `SELECT target, MAX(label) AS label, SUM(count) AS count, SUM(uniques) AS uniques
        FROM daily_events WHERE kind = 'view' AND day >= ? GROUP BY target ORDER BY count DESC`
@@ -41,6 +44,17 @@ export async function onRequestGet({ request, env }) {
        FROM daily_events WHERE day >= ? GROUP BY day ORDER BY day`
     ).bind(since),
     db.prepare('SELECT MIN(day) AS day FROM daily_events'),
+    db.prepare(
+      `SELECT via,
+              SUM(CASE WHEN kind = 'view' THEN count ELSE 0 END) AS views,
+              SUM(CASE WHEN kind = 'view' THEN uniques ELSE 0 END) AS visitors,
+              SUM(CASE WHEN kind = 'click' THEN count ELSE 0 END) AS clicks,
+              SUM(CASE WHEN kind = 'click' AND ${GIVING} THEN count ELSE 0 END) AS givingClicks
+       FROM daily_events WHERE day >= ? AND via != '' GROUP BY via ORDER BY views DESC LIMIT 100`
+    ).bind(since),
+    db.prepare(
+      `SELECT COALESCE(SUM(count), 0) AS clicks FROM daily_events WHERE kind = 'click' AND day >= ? AND ${GIVING}`
+    ).bind(since),
   ]);
 
   const sum = (rows, key) => rows.reduce((total, row) => total + (row[key] || 0), 0);
@@ -54,7 +68,9 @@ export async function onRequestGet({ request, env }) {
       views: sum(daily.results, 'views'),
       visitors: sum(daily.results, 'visitors'),
       clicks: sum(daily.results, 'clicks'),
+      givingClicks: giving.results[0]?.clicks || 0,
     },
+    ambassadors: ambassadors.results,
     daily: daily.results,
     pages: views.results,
     clicks: clicks.results,

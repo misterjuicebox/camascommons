@@ -1,5 +1,6 @@
 // POST /api/track — records a page view or a click from the homepage script.
-// Body (JSON): { kind: 'view' | 'click', target, label, section, href }
+// Body (JSON): { kind: 'view' | 'click', target, label, section, href, via }
+// via: the ambassador code from a ?via=name link, if the visitor arrived through one
 import { recordEvent } from '../../lib/analytics-db.js';
 
 const ALLOWED_HOSTS = ['camascommons.org', 'www.camascommons.org', 'dev.camascommons.org', 'localhost', '127.0.0.1'];
@@ -45,6 +46,7 @@ export async function onRequestPost({ request, env }) {
     label: clean(body.label, 120),
     section: clean(body.section, 120),
     href: clean(body.href, 300),
+    via: clean(body.via, 40).toLowerCase().replace(/[^a-z0-9._-]/g, ''),
   });
   return ignore();
 }

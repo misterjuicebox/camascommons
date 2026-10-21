@@ -427,7 +427,24 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
           // Analytics: one page view per load, plus every click on something clickable.
           // Sent to /api/track (functions/api/track.js); results show in /admin → Site Analytics.
           // sendBeacon still delivers when the click opens a document or leaves the page.
+          // Ambassador links (?via=name): remembered for 30 days on this device and
+          // attached to every event, so Admin → Site Analytics can credit the ambassador
+          const via = (() => {
+            const key = 'camas-via';
+            try {
+              const fromUrl = (new URLSearchParams(location.search).get('via') || '').toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 40);
+              if (fromUrl) {
+                localStorage.setItem(key, JSON.stringify({ v: fromUrl, t: Date.now() }));
+                return fromUrl;
+              }
+              const saved = JSON.parse(localStorage.getItem(key) || 'null');
+              if (saved && Date.now() - saved.t < 30 * 86400000) return saved.v;
+            } catch (e) {}
+            return '';
+          })();
+
           function track(event) {
+            if (via) event.via = via;
             const body = JSON.stringify(event);
             const blob = new Blob([body], { type: 'application/json' });
             if (!(navigator.sendBeacon && navigator.sendBeacon('/api/track', blob))) {

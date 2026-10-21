@@ -381,7 +381,7 @@
       .analytics-stats-row {
         grid-column: 1 / -1;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
       }
 
@@ -770,6 +770,10 @@
                   <span class="stat-number" id="stat-site-clicks">—</span>
                   <span class="stat-label">Clicks</span>
                 </div>
+                <div class="stat-box">
+                  <span class="stat-number" id="stat-site-giving">—</span>
+                  <span class="stat-label">Donate &amp; pledge clicks</span>
+                </div>
               </div>
               <div class="analytics-list-box analytics-wide">
                 <h4>Most clicked</h4>
@@ -777,6 +781,16 @@
                   <table class="clicks-table">
                     <thead><tr><th>What was clicked</th><th class="num">Clicks</th><th class="num">People</th></tr></thead>
                     <tbody id="clicks-table-body"><tr><td colspan="3" class="analytics-empty">Loading...</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="analytics-list-box analytics-wide">
+                <h4>Ambassador links</h4>
+                <p class="analytics-section-note" style="margin: -6px 0 10px;">Visits from links like camascommons.org/?via=name. Credited for 30 days after someone opens the link.</p>
+                <div class="clicks-table-wrap">
+                  <table class="clicks-table">
+                    <thead><tr><th>Link (via)</th><th class="num">Visits</th><th class="num">Visitors</th><th class="num">Clicks</th><th class="num">Donate &amp; pledge clicks</th></tr></thead>
+                    <tbody id="ambassador-table-body"><tr><td colspan="5" class="analytics-empty">Loading...</td></tr></tbody>
                   </table>
                 </div>
               </div>
@@ -854,19 +868,23 @@
         var viewsEl = document.getElementById('stat-site-views');
         var visitorsEl = document.getElementById('stat-site-visitors');
         var clicksEl = document.getElementById('stat-site-clicks');
+        var givingEl = document.getElementById('stat-site-giving');
         var bodyEl = document.getElementById('clicks-table-body');
+        var ambassadorEl = document.getElementById('ambassador-table-body');
         var noteEl = document.getElementById('clicks-note');
         if (!bodyEl) return;
 
-        viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = '...';
+        viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = givingEl.textContent = '...';
         bodyEl.innerHTML = '<tr><td colspan="3" class="analytics-empty">Loading...</td></tr>';
+        ambassadorEl.innerHTML = '<tr><td colspan="5" class="analytics-empty">Loading...</td></tr>';
 
         fetch('/api/analytics?days=' + days, { headers: { 'Authorization': 'Bearer ' + token } })
           .then(function(res) { return res.json().then(function(data) { return { status: res.status, data: data }; }); })
           .then(function(result) {
             var data = result.data || {};
             if (!data.success) {
-              viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = '—';
+              viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = givingEl.textContent = '—';
+              ambassadorEl.innerHTML = '<tr><td colspan="5" class="analytics-empty">—</td></tr>';
               var message = data.setupNeeded
                 ? 'Click tracking isn\'t connected yet: it needs a D1 database bound as ANALYTICS in Cloudflare.'
                 : (data.error || 'Click data unavailable right now.');
@@ -876,6 +894,17 @@
             viewsEl.textContent = Number(data.totals.views).toLocaleString();
             visitorsEl.textContent = Number(data.totals.visitors).toLocaleString();
             clicksEl.textContent = Number(data.totals.clicks).toLocaleString();
+            givingEl.textContent = Number(data.totals.givingClicks || 0).toLocaleString();
+            var ambassadors = data.ambassadors || [];
+            ambassadorEl.innerHTML = ambassadors.length
+              ? ambassadors.map(function(row) {
+                  return '<tr><td>' + escapeHtml(row.via) + '</td>' +
+                    '<td class="num">' + Number(row.views || 0).toLocaleString() + '</td>' +
+                    '<td class="num">' + Number(row.visitors || 0).toLocaleString() + '</td>' +
+                    '<td class="num">' + Number(row.clicks || 0).toLocaleString() + '</td>' +
+                    '<td class="num">' + Number(row.givingClicks || 0).toLocaleString() + '</td></tr>';
+                }).join('')
+              : '<tr><td colspan="5" class="analytics-empty">No visits from ambassador links in this timeframe yet.</td></tr>';
             if (data.trackingSince) {
               noteEl.textContent = 'Every button, link, FAQ question and photo people click on the homepage. Tracking since ' + data.trackingSince + '. Visitors are counted once per day.';
             }
@@ -889,7 +918,8 @@
               : '<tr><td colspan="3" class="analytics-empty">No clicks recorded in this timeframe yet.</td></tr>';
           })
           .catch(function() {
-            viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = '—';
+            viewsEl.textContent = visitorsEl.textContent = clicksEl.textContent = givingEl.textContent = '—';
+            ambassadorEl.innerHTML = '<tr><td colspan="5" class="analytics-empty">—</td></tr>';
             bodyEl.innerHTML = '<tr><td colspan="3" class="analytics-empty">Click data unavailable right now.</td></tr>';
           });
       }
