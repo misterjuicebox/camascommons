@@ -8,25 +8,43 @@
 // Changing it signs out every browser that saved the old one.
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import readline from 'node:readline';
 
 const FILE = 'functions/_middleware.js';
 const ITERATIONS = 10000; // must match PBKDF2_ITERATIONS in the middleware
 const MIN_LENGTH = 12;
 
+// Shows the prompt, then reads keys directly so nothing typed or pasted is shown
 function askHidden(question) {
   return new Promise((resolve) => {
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-    let muted = false;
-    rl._writeToOutput = (text) => {
-      if (!muted) rl.output.write(text);
+    process.stdout.write(question);
+    const stdin = process.stdin;
+    stdin.setRawMode(true);
+    stdin.setEncoding('utf8');
+    stdin.resume();
+    let typed = '';
+    const onData = (chunk) => {
+      for (const ch of chunk) {
+        if (ch === '\r' || ch === '\n') {
+          stdin.off('data', onData);
+          stdin.setRawMode(false);
+          stdin.pause();
+          process.stdout.write('\n');
+          resolve(typed);
+          return;
+        }
+        if (ch === '\u0003') {
+          // Ctrl+C
+          process.stdout.write('\nCancelled. Nothing was changed.\n');
+          process.exit(130);
+        }
+        if (ch === '\u007f' || ch === '\b') {
+          typed = typed.slice(0, -1);
+          continue;
+        }
+        if (ch >= ' ') typed += ch;
+      }
     };
-    rl.question(question, (answer) => {
-      rl.output.write('\n');
-      rl.close();
-      resolve(answer);
-    });
-    muted = true;
+    stdin.on('data', onData);
   });
 }
 
