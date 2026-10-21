@@ -1,4 +1,7 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+
 interface Props {
   photos?: (string | { image?: string })[];
   images?: (string | { image?: string })[];
@@ -6,11 +9,11 @@ interface Props {
 
 const { photos, images } = Astro.props;
 
-// Read images from the public/images/slideshow directory via Vite globbing as fallback
-const slideshowModules = import.meta.glob('/public/images/slideshow/*');
-const defaultImages = Object.keys(slideshowModules)
+// Read images from the public/images/slideshow directory as fallback
+const defaultImages = fs.readdirSync(path.join(process.cwd(), 'public/images/slideshow'))
   .filter(file => file.endsWith('.jpeg') || file.endsWith('.jpg') || file.endsWith('.png'))
-  .map(file => file.replace('/public', ''));
+  .sort()
+  .map(file => `/images/slideshow/${file}`);
 
 const rawList = photos || images;
 const imagesList = (rawList && Array.isArray(rawList) && rawList.length > 0)

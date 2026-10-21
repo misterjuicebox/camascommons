@@ -1,4 +1,7 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+
 interface Props {
   label: string;
   src?: string;
@@ -14,9 +17,9 @@ const initialPath = src || label.replace(/\[(PHOTO|IMAGE):\s*/i, '').replace(/\]
 const rawFilename = initialPath.replace(/^\/?(images\/)+/, '');
 const baseNameWithoutExt = rawFilename.replace(/\.[^/.]+$/, '').trim();
 
-// Query files in public/images at build time via Vite globbing (compatible everywhere)
-const imageModules = import.meta.glob('/public/images/*');
-const filenames = Object.keys(imageModules).map((p) => p.replace('/public/images/', ''));
+// List files in public/images at build time (reading the folder directly so the
+// build doesn't copy every image into dist/_astro a second time)
+const filenames = fs.readdirSync(path.join(process.cwd(), 'public/images'));
 
 // Candidate filenames to look for in public/images
 const candidateNames = [
