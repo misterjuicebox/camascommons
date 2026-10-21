@@ -566,7 +566,7 @@ html {
 }
 
 /* ==========================================================================
-   Dark Mode — applied when <html data-theme="dark"> (set by the header toggle)
+   Dark Mode — applied when <html data-theme="dark"> (system setting or header toggle)
    Rules use `html[data-theme="dark"]` so they outrank component-scoped styles.
    ========================================================================== */
 html[data-theme="dark"] {
