@@ -400,14 +400,6 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
-          const viewCountEl = document.getElementById('pdf-view-count-val');
-          const viewBadgeWrapper = document.getElementById('pdf-view-badge-wrapper');
-          const pdfLink = document.getElementById('proposal-pdf-link');
-
-          const prospectusViewCountEl = document.getElementById('prospectus-view-count-val');
-          const prospectusViewBadgeWrapper = document.getElementById('prospectus-view-badge-wrapper');
-          const prospectusPdfLink = document.getElementById('prospectus-pdf-link');
-          
           // Helper to get Netlify/Decap CMS token
           function getUserToken() {
             try {
@@ -423,66 +415,38 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
           const token = getUserToken();
 
-          // Only fetch and show the view count if an admin token is present
-          if (token && viewBadgeWrapper && viewCountEl) {
-            viewBadgeWrapper.style.display = 'inline-flex';
-            fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/pdf-views', {
-              headers: { 'Authorization': 'Bearer ' + token }
-            })
-              .then(res => res.json())
+          // View badges: shown only to signed-in CMS editors, and only when the
+          // counter (functions/api/views/[doc].js) returns a real number
+          function showViewCount(doc, wrapperId, valueId) {
+            const wrapper = document.getElementById(wrapperId);
+            const value = document.getElementById(valueId);
+            if (!wrapper || !value) return;
+            fetch('/api/views/' + doc)
+              .then(res => (res.ok ? res.json() : null))
               .then(data => {
-                if (data && typeof data.views !== 'undefined') {
-                  viewCountEl.textContent = Number(data.views).toLocaleString();
-                } else {
-                  viewCountEl.textContent = '1,284';
+                if (data && data.success && typeof data.views === 'number') {
+                  value.textContent = data.views.toLocaleString();
+                  wrapper.style.display = 'inline-flex';
                 }
               })
-              .catch(() => {
-                viewCountEl.textContent = '1,284';
-              });
+              .catch(() => {});
           }
 
-          if (token && prospectusViewBadgeWrapper && prospectusViewCountEl) {
-            prospectusViewBadgeWrapper.style.display = 'inline-flex';
-            fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/prospectus-views', {
-              headers: { 'Authorization': 'Bearer ' + token }
-            })
-              .then(res => res.json())
-              .then(data => {
-                if (data && typeof data.views !== 'undefined') {
-                  prospectusViewCountEl.textContent = Number(data.views).toLocaleString();
-                } else {
-                  prospectusViewCountEl.textContent = '542';
-                }
-              })
-              .catch(() => {
-                prospectusViewCountEl.textContent = '542';
-              });
+          if (token) {
+            showViewCount('proposal-pdf', 'pdf-view-badge-wrapper', 'pdf-view-count-val');
+            showViewCount('prospectus-pdf', 'prospectus-view-badge-wrapper', 'prospectus-view-count-val');
           }
 
-          // Track click on proposal PDF
-          if (pdfLink) {
-            pdfLink.addEventListener('click', () => {
-              fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/pdf-views', { method: 'POST' }).catch(() => {});
-            });
-          }
-
-          // Track click on prospectus PDF
-          if (prospectusPdfLink) {
-            prospectusPdfLink.addEventListener('click', () => {
-              fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/prospectus-views', { method: 'POST' }).catch(() => {});
-            });
-          }
-
-          // Generic document click analytics tracking (PDFs, audio, videos, etc.)
+          // Record a view when someone opens a document (PDFs, audio, video).
+          // sendBeacon still delivers when the click navigates away from the page.
           document.querySelectorAll('.track-document-click').forEach(el => {
             el.addEventListener('click', () => {
-              const docType = el.getAttribute('data-doc-type') || el.getAttribute('href') || 'document';
-              fetch('https://camascommons-cms-oauth.bootsyeppesen.workers.dev/analytics/document-click', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ document: docType, timestamp: Date.now() })
-              }).catch(() => {});
+              const doc = el.getAttribute('data-doc-type');
+              if (!doc) return;
+              const url = '/api/views/' + doc;
+              if (!(navigator.sendBeacon && navigator.sendBeacon(url))) {
+                fetch(url, { method: 'POST', keepalive: true }).catch(() => {});
+              }
             });
           });
 
