@@ -5,7 +5,13 @@ import Button from '../components/Button.astro';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import Slideshow from '../components/Slideshow.astro';
 import SEO from '../components/SEO.astro';
+import StructuredData from '../components/StructuredData.astro';
 import Thermometer from '../components/Thermometer.astro';
+
+// Cloudflare Pages sets CF_PAGES_BRANCH at build time. Anything other than main
+// (dev.camascommons.org, previews) is kept out of search engines.
+const buildBranch = process.env.CF_PAGES_BRANCH || '';
+const isPreviewBuild = Boolean(buildBranch) && buildBranch !== 'main';
 
 // Load all FAQ files dynamically from src/content/faqs/*.json
 const faqModules = import.meta.glob('../content/faqs/*.json', { eager: true });
@@ -175,8 +181,15 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{siteData.siteTitle}</title>
-    <meta name="description" content={siteData.tagline} />
+    <SEO
+      title={siteData.siteTitle}
+      description={(siteData as any).ogDescription || siteData.tagline}
+      ogTitle={(siteData as any).ogTitle || siteData.siteTitle}
+      ogDescription={(siteData as any).ogDescription || siteData.tagline}
+      ogImage={(siteData as any).ogImage || '/images/Main.jpeg'}
+      noindex={isPreviewBuild}
+    />
+    <StructuredData faqs={((activeSections as any[]).find((s: any) => s.type === 'faq_block')?.items?.length ? (activeSections as any[]).find((s: any) => s.type === 'faq_block').items : allFaqs)} />
 
     <!-- Blue Camas Flower Favicon -->
     <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />

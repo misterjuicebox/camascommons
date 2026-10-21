@@ -1,0 +1,57 @@
+---
+// Shown for any address that doesn't exist (Cloudflare Pages serves 404.html).
+// Without it, unknown addresses returned the homepage with a 200 status.
+import '../styles/global.css';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found · Camas Commons</title>
+    <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <main class="not-found">
+      <img src="/images/blue-flower-icon.png" alt="" width="64" height="64" />
+      <h1>Page not found</h1>
+      <p>We couldn't find that page.</p>
+      <a href="/" class="not-found-link">Go to the Camas Commons homepage</a>
+    </main>
+  </body>
+</html>
+
+<style>
+  .not-found {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+  h1 {
+    font-family: var(--font-serif);
+    color: var(--color-green-deep);
+    font-size: 2rem;
+    margin: 0.5rem 0 0;
+  }
+  p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  .not-found-link {
+    margin-top: 0.75rem;
+    color: var(--color-rose-terracotta);
+    font-weight: 600;
+  }
+</style>

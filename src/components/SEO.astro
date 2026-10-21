@@ -6,6 +6,7 @@ interface Props {
   ogDescription?: string;
   ogImage?: string;
   canonicalUrl?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -14,13 +15,14 @@ const {
   ogTitle = "Help Us Save Talking Horse Ranch — Camas Commons Land Trust",
   ogDescription = "Pledge or donate today to help preserve 40 acres of San Juan Island farmland for perpetually affordable leases & community resilience.",
   ogImage = "/images/Main.jpeg",
+  noindex = false,
 } = Astro.props;
 
-// Dynamically resolve current origin (works seamlessly on localhost:4321, Netlify staging previews, and production)
-const currentOrigin = Astro.url?.origin || "";
-const siteOrigin = currentOrigin || (Astro.site ? Astro.site.origin : "");
+// Always point canonical links and preview images at the live site, so the dev site
+// and localhost never compete with camascommons.org in search results
+const siteOrigin = Astro.site ? Astro.site.origin : "https://camascommons.org";
 
-const canonicalUrl = Astro.props.canonicalUrl || (Astro.url ? Astro.url.href : "/");
+const canonicalUrl = Astro.props.canonicalUrl || new URL(Astro.url.pathname, siteOrigin).href;
 const absoluteOgImage = ogImage.startsWith("http")
   ? ogImage
   : (siteOrigin ? `${siteOrigin}${ogImage.startsWith("/") ? "" : "/"}${ogImage}` : ogImage);
@@ -36,6 +38,7 @@ const imageType = imageExtension === "png" ? "image/png" : "image/jpeg";
 <meta name="description" content={description} />
 <meta name="theme-color" content="#24472F" />
 <link rel="canonical" href={canonicalUrl} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- Open Graph / Facebook / iMessage / SMS Rich Link Previews -->
 <meta property="og:type" content="website" />
@@ -46,8 +49,6 @@ const imageType = imageExtension === "png" ? "image/png" : "image/jpeg";
 <meta property="og:image" content={absoluteOgImage} />
 <meta property="og:image:secure_url" content={absoluteOgImage} />
 <meta property="og:image:type" content={imageType} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="900" />
 <meta property="og:image:alt" content="Ally and Guisepi at Camas Commons" />
 
 <!-- Twitter / X Link Preview Cards -->

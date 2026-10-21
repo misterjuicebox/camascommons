@@ -1,0 +1,87 @@
+---
+// schema.org JSON-LD for search engines and AI search, built from the same CMS
+// content the page shows (site-data.json and the FAQ files), so it never drifts.
+import siteData from '../content/fundraiser/site-data.json';
+
+interface Props {
+  faqs?: { q?: string; a?: string }[];
+}
+
+const { faqs = [] } = Astro.props;
+const data = siteData as any;
+const site = 'https://camascommons.org';
+
+// Markdown and CMS shortcodes → plain text
+const plain = (text = '') =>
+  String(text)
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/(:flower:|\[flower\]|\(flower\))/gi, '')
+    .replace(/^\s*[~*+-]\s*/gm, '')
+    // Same donor wording the page uses (replaceInvestor in index.astro)
+    .replace(/\bINVESTORS\b/g, 'DONORS')
+    .replace(/\bINVESTOR\b/g, 'DONOR')
+    .replace(/\bInvestors\b/g, 'Donors')
+    .replace(/\bInvestor\b/g, 'Donor')
+    .replace(/\binvestors\b/g, 'donors')
+    .replace(/\binvestor\b/g, 'donor')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const pledgeSection = (data.sections || []).find((s: any) => s.type === 'pledge_donate_block') || {};
+const email = data.contactEmail || 'info@camascommons.org';
+
+const organization = {
+  '@type': 'NGO',
+  '@id': `${site}/#organization`,
+  name: 'Camas Commons',
+  url: site,
+  email,
+  logo: `${site}/images/blue-flower-icon.png`,
+  image: `${site}${data.ogImage || '/images/Main.jpeg'}`,
+  description: plain(data.ogDescription || data.tagline),
+  areaServed: { '@type': 'Place', name: 'San Juan Island, Washington' },
+  location: {
+    '@type': 'Place',
+    name: 'Talking Horse Ranch',
+    address: { '@type': 'PostalAddress', addressLocality: 'San Juan Island', addressRegion: 'WA', addressCountry: 'US' },
+  },
+  sponsor: { '@type': 'NGO', name: 'On Sacred Ground Land Trust' },
+  ...(pledgeSection.donateUrl
+    ? {
+        potentialAction: {
+          '@type': 'DonateAction',
+          name: 'Donate to Camas Commons',
+          target: pledgeSection.donateUrl,
+          recipient: { '@id': `${site}/#organization` },
+        },
+      }
+    : {}),
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${site}/#website`,
+  url: site,
+  name: 'Camas Commons',
+  publisher: { '@id': `${site}/#organization` },
+};
+
+const faqPage = faqs.filter((f) => f && f.q && f.a).length
+  ? {
+      '@type': 'FAQPage',
+      '@id': `${site}/#faq`,
+      mainEntity: faqs
+        .filter((f) => f && f.q && f.a)
+        .map((f) => ({
+          '@type': 'Question',
+          name: plain(f.q),
+          acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+        })),
+    }
+  : null;
+
+const graph = { '@context': 'https://schema.org', '@graph': [organization, website, faqPage].filter(Boolean) };
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />
