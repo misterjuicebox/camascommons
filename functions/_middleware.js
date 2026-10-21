@@ -11,9 +11,9 @@
 // which asks for it with hidden typing and rewrites the three values below: a salt, a
 // slow salted hash (PBKDF2) of the password, and a check for the sign-in cookie.
 const LIVE_HOSTS = new Set(['camascommons.org', 'www.camascommons.org']);
-const DEV_PASSWORD_SALT = '7f45a8d9a7c30311f0e2d4408d11f7e0';
-const DEV_PASSWORD_PBKDF2 = 'c3ca917e5fb0cb5333f268f1e89aeee18ee825a57a7166d664331dee0b023782';
-const DEV_COOKIE_CHECK = '3def95f284dfdac54de587062e60dadbcbd000bf5947f3617ef99fab0136b8d3';
+const DEV_PASSWORD_SALT = 'bbb1d2ad3a8f7ae03694333e328a00d0';
+const DEV_PASSWORD_PBKDF2 = '37e74fe03578f267f07120685c37fd1b5e6bb59be0cdb9564994fff4ba1a60bf';
+const DEV_COOKIE_CHECK = '9805ff96b70540522af973a98727006a5714b16641645f424c11f69fccef1a64';
 const PBKDF2_ITERATIONS = 10000;
 const COOKIE_NAME = 'camas_dev';
 const LOGIN_PATH = '/__dev-login';
