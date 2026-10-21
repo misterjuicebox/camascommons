@@ -804,6 +804,7 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
       <div class="container footer-inner text-center">
         <p class="footer-title">CAMAS COMMONS — A Regenerative Farming Land Trust</p>
         <p class="footer-sub">San Juan Island, Washington • <a href="mailto:info@camascommons.org" class="editorial-link">info@camascommons.org</a></p>
+        <p class="footer-credit">This site has no monthly hosting bill · Built by <a href="https://websites.withbootsy.com/?via=camascommons.org" target="_blank" rel="noopener">websites with bootsy</a></p>
       </div>
     </footer>
   </body>
@@ -1420,6 +1421,29 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
   .footer-sub {
     margin-bottom: 0;
+  }
+
+  .footer-credit {
+    margin-top: 1.25rem;
+    font-size: 0.78rem;
+    color: var(--color-text-soft);
+  }
+
+  .footer-credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .footer-credit a:hover {
+    color: var(--color-rose-terracotta);
+  }
+
+  /* Leave room for the floating theme toggle on small phones */
+  @media (max-width: 480px) {
+    .editorial-footer {
+      padding-bottom: 4.5rem;
+    }
   }
 
   @media (max-width: 640px) {
