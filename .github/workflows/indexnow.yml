@@ -1,0 +1,28 @@
+name: Tell Search Engines About Updates (IndexNow)
+
+# After each deploy of main, tells Bing and other IndexNow search engines that the
+# site changed, so updates show up in Bing (and ChatGPT search, which leans on it)
+# within days. The key file public/93237c613f9bc9171eb5b09836982333.txt proves we own the site.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Cloudflare to deploy this commit
+        run: |
+          for i in $(seq 1 40); do
+            live=$(curl -s https://camascommons.org/api/build-info | sed -n 's/.*"commitSha":"\([0-9a-f]*\)".*/\1/p')
+            if [ "$live" = "${GITHUB_SHA}" ]; then echo "Deployed."; exit 0; fi
+            sleep 15
+          done
+          echo "Deploy not seen after 10 minutes; pinging anyway."
+
+      - name: Ping IndexNow
+        run: |
+          curl -s -o /dev/null -w "IndexNow responded %{http_code}\n" -X POST https://api.indexnow.org/indexnow \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{"host":"camascommons.org","key":"93237c613f9bc9171eb5b09836982333","keyLocation":"https://camascommons.org/93237c613f9bc9171eb5b09836982333.txt","urlList":["https://camascommons.org/"]}'
