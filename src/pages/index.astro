@@ -182,14 +182,31 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
     <link rel="icon" type="image/png" href="/images/blue-flower-icon.png" />
     <link rel="apple-touch-icon" href="/images/blue-flower-icon.png" />
 
-    <!-- Apply saved theme before first paint (also honors ?theme=dark|light) -->
+    <!-- Theme: follow the system setting unless the visitor picked one with the toggle
+         (or via ?theme=dark|light). Runs before first paint to avoid a flash. -->
     <script is:inline>
       (function () {
+        var root = document.documentElement;
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        function saved() {
+          try { return localStorage.getItem('theme'); } catch (e) { return null; }
+        }
         try {
           var param = new URLSearchParams(location.search).get('theme');
           if (param === 'dark' || param === 'light') localStorage.setItem('theme', param);
-          if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         } catch (e) {}
+        function apply() {
+          var choice = saved();
+          var dark = choice ? choice === 'dark' : mq.matches;
+          if (dark) root.setAttribute('data-theme', 'dark');
+          else root.removeAttribute('data-theme');
+        }
+        apply();
+        if (mq.addEventListener) mq.addEventListener('change', apply);
+        // Backup for browsers that don't fire 'change' while the tab is in the background
+        document.addEventListener('visibilitychange', function () {
+          if (!document.hidden) apply();
+        });
       })();
     </script>
   </head>
@@ -223,7 +240,12 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
         const dark = root.getAttribute('data-theme') !== 'dark';
         if (dark) root.setAttribute('data-theme', 'dark');
         else root.removeAttribute('data-theme');
-        try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+        // Matching the system setting means "follow the system" again
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        try {
+          if (dark === systemDark) localStorage.removeItem('theme');
+          else localStorage.setItem('theme', dark ? 'dark' : 'light');
+        } catch (e) {}
       });
     </script>
 
