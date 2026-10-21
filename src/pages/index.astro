@@ -369,13 +369,6 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
               <p class="proposal-doc-desc">
                 {(siteData as any).proposalPdfSubtext || "Read our complete proposal to learn more about preserving this historic 40-acre farm in perpetuity."}
               </p>
-              <div class="proposal-view-count-badge" id="pdf-view-badge-wrapper" style="display: none;">
-                <svg class="view-count-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <span id="pdf-view-count-val">...</span> views of this proposal PDF
-              </div>
             </div>
           </div>
 
@@ -400,43 +393,6 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
-          // Helper to get Netlify/Decap CMS token
-          function getUserToken() {
-            try {
-              const user = localStorage.getItem('netlify-cms-user') || localStorage.getItem('decap-cms-user');
-              if (user) {
-                const userData = JSON.parse(user);
-                if (userData && userData.token) return userData.token;
-                if (userData && userData.user && userData.user.token) return userData.user.token;
-              }
-            } catch (e) {}
-            return null;
-          }
-
-          const token = getUserToken();
-
-          // View badges: shown only to signed-in CMS editors, and only when the
-          // counter (functions/api/views/[doc].js) returns a real number
-          function showViewCount(doc, wrapperId, valueId) {
-            const wrapper = document.getElementById(wrapperId);
-            const value = document.getElementById(valueId);
-            if (!wrapper || !value) return;
-            fetch('/api/views/' + doc)
-              .then(res => (res.ok ? res.json() : null))
-              .then(data => {
-                if (data && data.success && typeof data.views === 'number') {
-                  value.textContent = data.views.toLocaleString();
-                  wrapper.style.display = 'inline-flex';
-                }
-              })
-              .catch(() => {});
-          }
-
-          if (token) {
-            showViewCount('proposal-pdf', 'pdf-view-badge-wrapper', 'pdf-view-count-val');
-            showViewCount('prospectus-pdf', 'prospectus-view-badge-wrapper', 'prospectus-view-count-val');
-          }
-
           // Record a view when someone opens a document (PDFs, audio, video).
           // sendBeacon still delivers when the click navigates away from the page.
           document.querySelectorAll('.track-document-click').forEach(el => {
@@ -556,13 +512,6 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
                       <p class="proposal-doc-desc">
                         {replaceInvestor((siteData as any).prospectusPdfSubtext || "Explore our detailed prospectus for donors and community partners supporting the land acquisition.")}
                       </p>
-                      <div class="proposal-view-count-badge" id="prospectus-view-badge-wrapper" style="display: none;">
-                        <svg class="view-count-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        <span id="prospectus-view-count-val">...</span> views of this prospectus PDF
-                      </div>
                     </div>
                   </div>
 
@@ -1085,31 +1034,6 @@ function getYouTubeEmbedUrl(rawUrl?: string): string {
 
   .prospectus-doc-banner .proposal-doc-desc {
     color: #D3D8EC;
-  }
-
-  .proposal-view-count-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.84rem;
-    font-weight: 600;
-    color: #E6DCCE;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-top: 6px;
-    width: fit-content;
-  }
-
-  .view-count-icon {
-    width: 14px;
-    height: 14px;
-    color: #C5746D;
-  }
-
-  .prospectus-doc-banner .view-count-icon {
-    color: #8C7CE6;
   }
 
   .proposal-doc-action {
